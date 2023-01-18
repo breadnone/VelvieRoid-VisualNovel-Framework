@@ -1,0 +1,48 @@
+.comparerBox {
+    flex: 1 0 auto;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+}
+
+.comparerBox > .unity-label {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.boxLabel {
+    -unity-font-style: bold;
+}
+
+.comparerPopup {
+    flex: 1 0 auto;
+    min-width:0;
+    width:0;
+}
+
+.comparerBoxSingle {
+    flex: 1 0 auto;
+    margin-left: 10px;
+    margin-top: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(64, 32, 32);
+}
+
+.comparerBoxSingle.comparerBoxNormal {
+    background-color: rgb(32, 64, 32);
+}
+
+.comparerBoxSingle > .unity-label {
+    color: #fff;
+}
+
+.comparerBoxContainer {
+    flex: 1 0 auto;
+    flex-direction: row;
+}
+
+#main-scroll-view {
+    flex: 1;
+}
