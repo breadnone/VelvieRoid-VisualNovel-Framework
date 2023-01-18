@@ -210,7 +210,7 @@ namespace VIEditor
             rootVisualElement.schedule.Execute(VGraphEntityWindow).ExecuteLater(0);
 
             //Enable MiniMap
-            if (PortsUtils.activeVGraphAssets.graphState.miniMapActiveState)
+            if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVGraphAssets.graphState.miniMapActiveState)
                 rootVisualElement.schedule.Execute(EnableMinimap);
 
             //populate all VBlocks Scripts in VNodes folder
