@@ -6,7 +6,7 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
 2. Blendshapes controller for VRoid character.  
 3. Node-based. No codes required! Fully visual scripting.  
 4. External APIs.  
-5. Dynaic inventory system(optional).
+5. Dynamic inventory system(optional).
   
 ![Alt text](https://github.com/breadnone/VelvieRoid-VisualNovel-Framework/blob/main/VelviE-R/Resources/VProps/img/VelvieRoid-scr-00.png "VelvieRoid main GUI")  
 
