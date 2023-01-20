@@ -2,3 +2,8 @@
 .meta
 Library/
 Logs/
+ProjectSettings/
+Temp/
+.vscode/
+.ionide/
+obj/
