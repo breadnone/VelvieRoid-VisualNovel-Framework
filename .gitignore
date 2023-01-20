@@ -1,5 +1,3 @@
-*.meta
-.meta
 Library/
 Logs/
 ProjectSettings/
