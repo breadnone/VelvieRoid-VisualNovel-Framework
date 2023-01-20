@@ -5,7 +5,7 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
 1. Animated character thumbnail portrait.
 2. Blendshapes controller for VRoid character.  
 3. Node-based. No codes required! Fully visual scripting.  
-4. External APIs.  
+4. External APIs(NOT READY! onprogress).  
 5. Dynamic inventory system(optional).    
 6. 2D & 3D Stages.  
 
