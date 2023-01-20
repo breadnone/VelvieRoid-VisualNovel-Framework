@@ -6,7 +6,8 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
 2. Blendshapes controller for VRoid character.  
 3. Node-based. No codes required! Fully visual scripting.  
 4. External APIs.  
-5. Dynamic inventory system(optional).  
+5. Dynamic inventory system(optional).    
+6. 2D & 3D Stages.  
 
 # How To Instal & Dependencies :
 1. LeanTween ([Unity's Assets Store](https://assetstore.unity.com/packages/tools/animation/leantween-3595))  
