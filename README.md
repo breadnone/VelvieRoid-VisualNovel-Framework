@@ -12,7 +12,8 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
 # How To Instal & Dependencies :
 1. LeanTween ([Unity's Assets Store](https://assetstore.unity.com/packages/tools/animation/leantween-3595))  
 2. Unity's NewtonSoft JSON ([NewtonSoft Json](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.0/manual/index.html))  
-3. UniVRM ([UniVRM git repo](https://github.com/vrm-c/UniVRM))) 
+3. UniVRM ([UniVRM git repo](https://github.com/vrm-c/UniVRM)))  
+4. New inputSystem (instal via package manager)
   
 ![Alt text](https://github.com/breadnone/VelvieRoid-VisualNovel-Framework/blob/main/VelviE-R/Resources/VProps/img/VelvieRoid-scr-00.png "VelvieRoid main GUI")  
 
