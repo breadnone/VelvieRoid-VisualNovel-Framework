@@ -158,6 +158,7 @@ namespace VelvieR
                     if(getDialogs == null || getDialogs.Length == 0)
                     {
                         var tmpDialog = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel"));
+                        UnityEditor.PrefabUtility.UnpackPrefabInstance(tmpDialog, UnityEditor.PrefabUnpackMode.Completely, UnityEditor.InteractionMode.AutomatedAction);
                         activeDialog = tmpDialog.GetComponent<VelvieDialogue>();
                     }
                     else
