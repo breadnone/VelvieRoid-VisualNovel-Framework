@@ -133,7 +133,6 @@ namespace VelvieR
 
             Vector3 fromvstage = fstage.stageTransform.localPosition;
             Vector3 tovstage = tstage.stageTransform.localPosition;
-            Debug.Log(vchara.lastStagePosition + "  ::  ");
             vchara.lastStagePosition = tstage.name;    
             VExtension.CheckTweensToCancel(vchara.root);
 

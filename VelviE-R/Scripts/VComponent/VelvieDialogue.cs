@@ -87,7 +87,6 @@ namespace VelvieR
 
         void Awake()
         {
-            Debug.Log("ON AWAKE = : -> " + textSpeed);
             var AuComs = gameObject.GetComponents<AudioSource>();
 
             if (AuComs.Length == 0)
