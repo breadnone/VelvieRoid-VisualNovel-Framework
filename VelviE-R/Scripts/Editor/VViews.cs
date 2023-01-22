@@ -16,58 +16,61 @@ namespace VIEditor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if (evt.target is GraphView)
+            if(!PortsUtils.PlayMode)
             {
-                evt.menu.AppendAction("Add VNode", (e) => AddVNode("VNode", PortsUtils.VGraph, Vector2.zero, true));
-                evt.menu.AppendAction("Center", (e) => { viewTransform.position = Vector3.zero; viewTransform.scale = Vector3.one; });
-                evt.menu.AppendAction("Clear Selection", (e) => ClearSelection());
-
-                evt.menu.AppendAction("Paste", (e) =>
+                if (evt.target is GraphView)
                 {
-                    if (copied)
-                    {
-                        nodeCache = new List<VNodes>();
-                        AddCacheToList();
+                    evt.menu.AppendAction("Add VNode", (e) => AddVNode("VNode", PortsUtils.VGraph, Vector2.zero, true));
+                    evt.menu.AppendAction("Center", (e) => { viewTransform.position = Vector3.zero; viewTransform.scale = Vector3.one; });
+                    evt.menu.AppendAction("Clear Selection", (e) => ClearSelection());
 
-                        PasteVNodes("rightClickPaste", "unusedData");
-                    }
-                });
-            }
-            else if (evt.target is VNodes vnode)
-            {
-                if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVGraphAssets.graphState.inGroup.Count > 0)
-                {
-                    foreach (var tgroup in PortsUtils.activeVGraphAssets.graphState.inGroup)
+                    evt.menu.AppendAction("Paste", (e) =>
                     {
-                        if (!tgroup.ContainsElement(vnode))
-                            continue;
-
-                        evt.menu.AppendAction("Ungroup", (e) =>
+                        if (copied)
                         {
-                            tgroup.RemoveElement(vnode);
-                        });
+                            nodeCache = new List<VNodes>();
+                            AddCacheToList();
 
-                    }
+                            PasteVNodes("rightClickPaste", "unusedData");
+                        }
+                    });
                 }
-
-                evt.menu.AppendAction("Duplicate", (e) =>
+                else if (evt.target is VNodes vnode)
                 {
-                    if (selection.Count < 2 && selection.Count > 0)
+                    if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVGraphAssets.graphState.inGroup.Count > 0)
                     {
-                        nodeCache = new List<VNodes>();
-                        nodeCache.Add(vnode);
-                        PasteVNodes("rightClickPaste", "unusedData");
-                    }
-                    else if (selection.Count > 1)
-                    {
-                        nodeCache = new List<VNodes>();
-                        AddCacheToList();
-                        PasteVNodes("rightClickPaste", "unusedData");
+                        foreach (var tgroup in PortsUtils.activeVGraphAssets.graphState.inGroup)
+                        {
+                            if (!tgroup.ContainsElement(vnode))
+                                continue;
+
+                            evt.menu.AppendAction("Ungroup", (e) =>
+                            {
+                                tgroup.RemoveElement(vnode);
+                            });
+
+                        }
                     }
 
-                });
+                    evt.menu.AppendAction("Duplicate", (e) =>
+                    {
+                        if (selection.Count < 2 && selection.Count > 0)
+                        {
+                            nodeCache = new List<VNodes>();
+                            nodeCache.Add(vnode);
+                            PasteVNodes("rightClickPaste", "unusedData");
+                        }
+                        else if (selection.Count > 1)
+                        {
+                            nodeCache = new List<VNodes>();
+                            AddCacheToList();
+                            PasteVNodes("rightClickPaste", "unusedData");
+                        }
 
-                evt.menu.AppendAction("Delete", (e) => { DeleteSelectedVNodes("singleDeletion"); });
+                    });
+
+                    evt.menu.AppendAction("Delete", (e) => { DeleteSelectedVNodes("singleDeletion"); });
+                }
             }
         }
         public void AddCacheToList()
@@ -250,7 +253,6 @@ namespace VIEditor
                 dropEventType.text = "EventType";
             else if (vnode.IsGameStarted == EnableState.Scheduler)
                 dropEventType.text = "Scheduler";
-
 
             vnode.titleContainer.Add(dropEventType);
             vnode.style.height = 110;
