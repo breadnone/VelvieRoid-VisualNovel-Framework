@@ -361,8 +361,7 @@ namespace VIEditor
             {
                 vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
                 {
-                    if (!PortsUtils.PlayMode)
-                        ActiveDialog.Remove(vis);
+                    ActiveDialog.Remove(vis);
                 });
             }
             subroot.Add(txtLabel);
@@ -402,8 +401,7 @@ namespace VIEditor
             {
                 vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
                 {
-                    if (!PortsUtils.PlayMode)
-                        ActiveStage.Remove(vis);
+                    ActiveStage.Remove(vis);
                 });
             }
             subroot.Add(txtLabel);
@@ -444,8 +442,7 @@ namespace VIEditor
             {
                 vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
                 {
-                    if (!PortsUtils.PlayMode)
-                        ActiveMenuDialog.Remove(vis);
+                    ActiveMenuDialog.Remove(vis);
                 });
             }
             subroot.Add(txtLabel);
@@ -587,8 +584,7 @@ namespace VIEditor
             {
                 vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
                 {
-                    if (!PortsUtils.PlayMode)
-                        ActivePortrait.Remove(porVar);
+                    ActivePortrait.Remove(porVar);
                 });
             }
             varlist.Add("<None>");
@@ -872,6 +868,9 @@ namespace VIEditor
         }
         public static void RePolAll()
         {
+            if(PortsUtils.PlayMode)
+                return;
+
             if (ActiveCharacter.Count > 0)
                 RePoolCharacter();
             if (ActiveDialog.Count > 0)
