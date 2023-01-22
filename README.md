@@ -11,7 +11,8 @@ This project fully inspired by the legendary Fungus framework.
 5. Dynamic inventory system(optional).    
 6. 2D & 3D Stages.  
 7. VRoid BlendShapes composition.
-8. Built-in ready made functions
+8. Built-in ready made functions.  
+9. Fully async.  
 
 # Installation & Dependencies :
 1. LeanTween ([Unity's Assets Store](https://assetstore.unity.com/packages/tools/animation/leantween-3595))  
