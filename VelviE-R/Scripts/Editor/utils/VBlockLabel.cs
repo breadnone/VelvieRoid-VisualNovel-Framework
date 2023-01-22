@@ -12,10 +12,6 @@ namespace VIEditor
         private bool SetManipulator = false;
         public Label VBlockContent { get; set; }
         public Label VBlockLineNumber { get; set; }
-        public bool isIf{get;set;}
-        public bool isEndIf{get;set;}
-        public bool isWhile{get;set;}
-        public bool isEndWhile{get;set;}
         public bool VBlockToggle
         {
             get
@@ -54,8 +50,8 @@ namespace VIEditor
             this.pickingMode = PickingMode.Position;
             this.style.marginLeft = 0;
             this.style.marginTop = 3;
-            this.style.height = defHeight;
-            this.style.width = defWidth;
+            this.style.height = new StyleLength(new Length(30, LengthUnit.Percent));
+            this.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             this.style.flexDirection = FlexDirection.Row;
             this.name = "VBlock";
 
@@ -80,7 +76,7 @@ namespace VIEditor
             no.style.backgroundColor = Color.red;
             no.style.alignSelf = Align.FlexStart;
             no.style.height = defHeight;
-            no.style.width = 40;
+            no.style.width = new StyleLength(new Length(15, LengthUnit.Percent));
             no.style.borderLeftWidth = 1;
             no.style.borderBottomWidth = 1;
             no.style.borderTopWidth = 1;
@@ -97,7 +93,7 @@ namespace VIEditor
             indicator.style.backgroundColor = Color.yellow;
             indicator.style.alignSelf = Align.FlexStart;
             indicator.style.height = defHeight;
-            indicator.style.width = 40;
+            indicator.style.width = new StyleLength(new Length(15, LengthUnit.Percent));
             indicator.style.borderBottomWidth = 1;
             indicator.style.borderTopWidth = 1;
             indicator.style.borderBottomColor = Color.black;
@@ -114,7 +110,7 @@ namespace VIEditor
 
             content.style.alignSelf = Align.FlexStart;
             content.style.height = defHeight;
-            content.style.width = 170;
+            content.style.width = new StyleLength(new Length(60, LengthUnit.Percent));
 
             //Content ouline
             content.style.borderBottomWidth = 1;
@@ -137,7 +133,7 @@ namespace VIEditor
             toggle.style.color = Color.white;
             toggle.style.alignSelf = Align.FlexStart;
             toggle.style.height = defHeight;
-            toggle.style.width = 40;
+            toggle.style.width = new StyleLength(new Length(10, LengthUnit.Percent));
             toggle.SetEnabled(false);
             vtoggle = toggle;
 
