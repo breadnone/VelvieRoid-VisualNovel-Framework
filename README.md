@@ -8,8 +8,10 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
 4. External APIs(NOT READY! onprogress).  
 5. Dynamic inventory system(optional).    
 6. 2D & 3D Stages.  
+7. VRoid BlendShapes composition.
+8. Built-in ready made functions
 
-# How To Instal & Dependencies :
+# Installation & Dependencies :
 1. LeanTween ([Unity's Assets Store](https://assetstore.unity.com/packages/tools/animation/leantween-3595))  
 2. Unity's NewtonSoft JSON ([NewtonSoft Json](https://docs.unity3d.com/Packages/com.unity.nuget.newtonsoft-json@3.0/manual/index.html))  
 3. UniVRM ([UniVRM git repo](https://github.com/vrm-c/UniVRM)))  
@@ -17,4 +19,8 @@ Unity3D node based/visual scripting framework for visual novels, dialog system, 
   
 ![Alt text](https://github.com/breadnone/VelvieRoid-VisualNovel-Framework/blob/main/VelviE-R/Resources/VProps/img/VelvieRoid-scr-00.png "VelvieRoid main GUI")  
 
-Screenshots & samples (Coming soon!)
+  
+# Issues 
+1. Broken 3D examples
+2. Missing guid due to guid mismatch
+3. Freezing graph layouts after getting out of Play mode while Graphs aren't present.
