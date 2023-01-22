@@ -414,13 +414,6 @@ namespace VIEditor
             delvnodeTool.text = "- VNode";
             toolbarThree.Add(delvnodeTool);
 
-            var tools = new ToolbarMenu { text = "Tools", variant = ToolbarMenu.Variant.Default };
-            if (!PortsUtils.PlayMode)
-            {
-                tools.menu.AppendAction("Group", a => { vgraph.AddGroup(); }, a => DropdownMenuAction.Status.Normal);
-            }
-            toolbarThree.Add(tools);
-
             var toolbarSearchField = new ToolbarSearchField();
             toolbarSearchField.style.cursor = default(UnityEngine.UIElements.Cursor);
 
