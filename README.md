@@ -1,5 +1,7 @@
 # VelvieRoid-VisualNovel-Framework.  
 Unity3D node based/visual scripting framework for visual novels, dialog system, 2D/3d games and fully compatible with VRoid character creator(UniVRM required to be installed as importer).  
+
+This project fully inspired by the legendary Fungus framework.
   
 # Features :  
 1. Animated character thumbnail portrait.
