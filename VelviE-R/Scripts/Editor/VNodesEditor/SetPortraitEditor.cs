@@ -171,7 +171,7 @@ namespace VIEditor
             vis.style.marginBottom = 10;
 
             var lblPortraitName = new Label();
-            lblPortraitName.style.width = 120;
+            lblPortraitName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lblPortraitName.text = "Portrait : ";
             vis.Add(lblPortraitName);
 
@@ -248,15 +248,17 @@ namespace VIEditor
         private VisualElement DrawWait(SetPortrait t)
         {
             var vis = new VisualElement();
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             vis.style.flexDirection = FlexDirection.Row;
             vis.style.marginTop = 10;
             vis.style.marginBottom = 10;
 
             var wait = new Label();
-            wait.style.width = 125;
-            wait.text = "Wait until finished : ";
+            wait.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
+            wait.text = "WaitUntilFinished : ";
 
             var toggle = new Toggle();
+            toggle.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             toggle.value = t.WaitUntilFinished;
 
             if (!PortsUtils.PlayMode)
@@ -274,17 +276,23 @@ namespace VIEditor
         private VisualElement DrawDuration(SetPortrait t)
         {
             var vis = new VisualElement();
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             vis.style.flexDirection = FlexDirection.Row;
             vis.style.marginTop = 5;
             vis.style.marginBottom = 5;
 
             var wait = new Label();
-            wait.style.width = 125;
+            wait.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             wait.text = "Duration : ";
 
+            var visCon = new VisualElement();
+            visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
             var floatField = new FloatField();
-            floatField.style.width = 190;
+            visCon.Add(floatField);
+            floatField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             floatField.value = t.Duration;
+
             if (!PortsUtils.PlayMode)
             {
                 floatField.RegisterValueChangedCallback((x) =>
@@ -292,8 +300,9 @@ namespace VIEditor
                     t.Duration = floatField.value;
                 });
             }
+
             vis.Add(wait);
-            vis.Add(floatField);
+            vis.Add(visCon);
             return vis;
         }
     }
