@@ -202,10 +202,9 @@ namespace VIEditor
                 box.userData = vbind as VBindKey;
                 box.name = "vbindParent";
                 boxes.Add(box);
-
-                box.RegisterCallback<MouseDownEvent>((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if(!PortsUtils.PlayMode)
+                    box.RegisterCallback<MouseDownEvent>((x) =>
                     {
                         SelectedBox = box;
                         box.style.backgroundColor = Color.yellow;
@@ -218,9 +217,8 @@ namespace VIEditor
                                     boxes[i].style.backgroundColor = Color.grey;
                             }
                         }
-                    }
-                });
-
+                    });
+                }
                 box.style.backgroundColor = Color.grey;
                 box.style.marginBottom = 10;
                 box.style.width = 190;
@@ -274,10 +272,9 @@ namespace VIEditor
                 objAction.style.marginLeft = 5;
                 objAction.style.marginRight = 5;
                 objAction.objectType = typeof(GameObject);
-
-                objAction.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if(!PortsUtils.PlayMode)
+                    objAction.RegisterValueChangedCallback((x) =>
                     {
                         vbind.obj = objAction.value as GameObject;
                         //VLocalKeyboardFunction(vbind, objAction, txtMethod);
@@ -286,8 +283,8 @@ namespace VIEditor
                         {
                             VKeyboardMethodsRepopulate(objAction, vbind, dropDmethods);
                         }
-                    }
-                });
+                    });
+                }
 
                 GetAllVInputs();
 
@@ -359,10 +356,9 @@ namespace VIEditor
                 box.userData = vbind as VBindKey;
                 box.name = "vbindParent";
                 boxes.Add(box);
-
-                box.RegisterCallback<MouseDownEvent>((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if(!PortsUtils.PlayMode)
+                    box.RegisterCallback<MouseDownEvent>((x) =>
                     {
                         SelectedBox = box;
                         box.style.backgroundColor = Color.yellow;
@@ -375,9 +371,8 @@ namespace VIEditor
                                     boxes[i].style.backgroundColor = Color.grey;
                             }
                         }
-                    }
-                });
-
+                    });
+                }
                 box.style.backgroundColor = Color.grey;
                 box.style.marginBottom = 10;
                 box.style.width = 190;
@@ -432,10 +427,9 @@ namespace VIEditor
                 objAction.style.marginLeft = 5;
                 objAction.style.marginRight = 5;
                 objAction.objectType = typeof(GameObject);
-
-                objAction.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if(!PortsUtils.PlayMode)
+                    objAction.RegisterValueChangedCallback((x) =>
                     {
                         vbind.obj = objAction.value as GameObject;
                         //VLocalKeyboardFunction(vbind, objAction, txtMethod);
@@ -444,9 +438,8 @@ namespace VIEditor
                         {
                             VKeyboardMethodsRepopulate(objAction, vbind, dropDmethods);
                         }
-                    }
-                });
-
+                    });
+                }
                 GetAllVInputs();
 
                 foreach (var inp in inputs)
@@ -479,7 +472,7 @@ namespace VIEditor
         {
             var obj = objAction.value as GameObject;
 
-            if(obj == null)
+            if (obj == null)
                 return;
 
             var components = obj.GetComponents<Component>();
@@ -556,10 +549,9 @@ namespace VIEditor
                     box.name = "vbindParent";
                     box.userData = otp;
                     boxes.Add(box);
-
-                    box.RegisterCallback<MouseDownEvent>((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if(!PortsUtils.PlayMode)
+                        box.RegisterCallback<MouseDownEvent>((x) =>
                         {
                             SelectedBox = box;
                             box.style.backgroundColor = Color.yellow;
@@ -572,9 +564,8 @@ namespace VIEditor
                                         boxes[i].style.backgroundColor = Color.grey;
                                 }
                             }
-                        }
-                    });
-
+                        });
+                    }
                     box.style.backgroundColor = Color.grey;
                     box.style.marginBottom = 10;
                     box.style.width = 190;
@@ -644,16 +635,14 @@ namespace VIEditor
                     objAction.style.marginRight = 5;
                     objAction.objectType = typeof(GameObject);
                     objAction.value = otp.obj;
-
-                    objAction.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if(!PortsUtils.PlayMode)
+                        objAction.RegisterValueChangedCallback((x) =>
                         {
                             otp.obj = objAction.value as GameObject;
                             VKeyboardMethodsRepopulate(objAction, otp, dropDmethods);
-                        }
-                    });
-
+                        });
+                    }
                     VKeyboardMethodsRepopulate(objAction, otp, dropDmethods);
 
                     box.Add(lblTitle);
@@ -682,10 +671,9 @@ namespace VIEditor
                     box.name = "vbindParent";
                     box.userData = otp;
                     boxes.Add(box);
-
-                    box.RegisterCallback<MouseDownEvent>((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if(!PortsUtils.PlayMode)
+                        box.RegisterCallback<MouseDownEvent>((x) =>
                         {
                             SelectedBox = box;
                             box.style.backgroundColor = Color.yellow;
@@ -698,9 +686,8 @@ namespace VIEditor
                                         boxes[i].style.backgroundColor = Color.grey;
                                 }
                             }
-                        }
-                    });
-
+                        });
+                    }
                     box.style.backgroundColor = Color.grey;
                     box.style.marginBottom = 10;
                     box.style.width = 190;
@@ -770,16 +757,14 @@ namespace VIEditor
                     objAction.style.marginRight = 5;
                     objAction.objectType = typeof(GameObject);
                     objAction.value = otp.obj;
-
-                    objAction.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if(!PortsUtils.PlayMode)
+                        objAction.RegisterValueChangedCallback((x) =>
                         {
                             otp.obj = objAction.value as GameObject;
                             VKeyboardMethodsRepopulate(objAction, otp, dropDmethods);
-                        }
-                    });
-
+                        });
+                    }
                     VKeyboardMethodsRepopulate(objAction, otp, dropDmethods);
 
                     box.Add(lblTitle);
@@ -900,15 +885,16 @@ namespace VIEditor
                 objDelay.value = ipt.Delay;
                 break;
             }
-
-            objDelay.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                foreach (var ipt in inputs)
+                objDelay.RegisterValueChangedCallback((x) =>
                 {
-                    ipt.Delay = objDelay.value;
-                }
-            });
-            
+                    foreach (var ipt in inputs)
+                    {
+                        ipt.Delay = objDelay.value;
+                    }
+                });
+            }
 
             vinputBox.Add(lblDelay);
             vinputBox.Add(objDelay);
@@ -927,18 +913,16 @@ namespace VIEditor
             var objtog = new Toggle();
             objtog.style.width = 170;
             objtog.value = GetSingleInput().EnableKeyboardIo;
-
-            objtog.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objtog.RegisterValueChangedCallback((x) =>
                 {
                     if (inputs.Count > 0)
                     {
                         inputs[0].EnableKeyboardIo = objtog.value;
                     }
-                }
-            });
-
+                });
+            }
             vinputBox.Add(lblDelay);
             vinputBox.Add(objtog);
             return vinputBox;

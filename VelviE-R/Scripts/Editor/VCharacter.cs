@@ -493,7 +493,7 @@ namespace VIEditor
         private VisualElement graph;
         private VisualElement selectedCustomField;
         private List<(VisualElement, int, string)> tagsIndex = new List<(VisualElement, int, string)>();
-  
+
         public Box CharaProperties(bool isDefault = false, VCharacterV vchara = null)
         {
             var boxy = new Box();
@@ -522,21 +522,24 @@ namespace VIEditor
             is2dt.Add(is2dtoggle);
             boxy.Add(is2dt);
 
-            is2dtoggle.menu.AppendAction("Character is 2D", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                threeDhee.SetEnabled(false);
-                is2delement.SetEnabled(false);
-                vchara.is2D = true;
-                is2dtoggle.text = "Character is 2D";
-            });
+                is2dtoggle.menu.AppendAction("Character is 2D", (x) =>
+                {
+                    threeDhee.SetEnabled(false);
+                    is2delement.SetEnabled(false);
+                    vchara.is2D = true;
+                    is2dtoggle.text = "Character is 2D";
+                });
 
-            is2dtoggle.menu.AppendAction("Character is 3D", (x) =>
-            {
-                threeDhee.SetEnabled(true);
-                is2delement.SetEnabled(true);
-                vchara.is2D = false;
-                is2dtoggle.text = "Character is 3D";
-            });
+                is2dtoggle.menu.AppendAction("Character is 3D", (x) =>
+                {
+                    threeDhee.SetEnabled(true);
+                    is2delement.SetEnabled(true);
+                    vchara.is2D = false;
+                    is2dtoggle.text = "Character is 3D";
+                });
+            }
 
             var profile = new Box(); //Description profile
             profile.style.flexDirection = FlexDirection.Row;
@@ -625,7 +628,6 @@ namespace VIEditor
             Func<ObjectField> makeSprite = () =>
             {
                 var t = new ObjectField();
-                //t.RegisterValueChangedCallback(RegisterSprite);
                 t.objectType = typeof(Sprite);
                 t.style.width = 220;
                 return t;
@@ -643,13 +645,73 @@ namespace VIEditor
 
                 easobj.RegisterValueChangedCallback(x =>
                 {
-                    vchara.charaPortrait[i].portraitSprite = x.newValue as Sprite;
-                    spList.SetSelection(i);
+                    if (!PortsUtils.PlayMode)
+                    {
+                        vchara.charaPortrait[i].portraitSprite = x.newValue as Sprite;
+                        spList.SetSelection(i);
 
-                    if (!PortsUtils.PlayMode && vchara.charaPortrait[i] != null)
-                        PreviewCharaImage(vchara.charaPortrait[i].portraitSprite);
-                    else
-                        PreviewCharaImage(null);
+                        if (vchara.charaPortrait[i] != null)
+                        {
+                            if (x.previousValue != null && x.previousValue != x.newValue && vchara.charaPortrait[i] != null)
+                            {
+                                var getVcores = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+
+                                List<SayWord> sayWords = new List<SayWord>();
+                                List<SetPortrait> setPortraits = new List<SetPortrait>();
+
+                                if (getVcores != null && getVcores.Length > 0)
+                                {
+                                    for (int j = 0; j < getVcores.Length; j++)
+                                    {
+                                        sayWords = new List<SayWord>(getVcores[j].gameObject.GetComponents<SayWord>());
+                                        setPortraits = new List<SetPortrait>(getVcores[j].gameObject.GetComponents<SetPortrait>());
+                                    }
+                                    if (sayWords != null && sayWords.Count > 0)
+                                    {
+                                        for (int o = 0; o < sayWords.Count; o++)
+                                        {
+                                            if (sayWords[o] == null || sayWords[o].Thumbnail == null)
+                                                continue;
+
+                                            if (sayWords[o].Thumbnail.portraitSprite == x.previousValue as Sprite)
+                                                sayWords[o].Thumbnail.portraitSprite = x.newValue as Sprite;
+
+                                            if (sayWords[o].Portrait.portraitSprite == x.previousValue as Sprite)
+                                            {
+                                                sayWords[o].Portrait.portraitSprite = x.newValue as Sprite;
+                                            }
+                                        }
+                                    }
+
+                                    if (setPortraits != null && setPortraits.Count > 0)
+                                    {
+                                        for (int o = 0; o < setPortraits.Count; o++)
+                                        {
+                                            if (setPortraits[o] == null || setPortraits[o].ActivePortrait == null)
+                                                continue;
+
+                                            if (setPortraits[o].ActivePortrait.portraitSprite == x.previousValue as Sprite)
+                                            {
+                                                setPortraits[o].ActivePortrait.portraitSprite = x.newValue as Sprite;
+                                            }
+                                        }
+                                    }
+
+                                    if(EditorWindow.HasOpenInstances<VGraphs>())
+                                    {
+                                        //PortsUtils.VGraph?.Refresh(true);
+                                        PortsUtils.VGraph?.ShowSelectedVblockSerializedFields(true);
+                                    }
+                                }
+                            }
+
+                            PreviewCharaImage(vchara.charaPortrait[i].portraitSprite);
+                        }
+                        else
+                        {
+                            PreviewCharaImage(null);
+                        }
+                    }
                 });
 
                 easobj.RegisterCallback<MouseDownEvent>(x =>
@@ -725,19 +787,22 @@ namespace VIEditor
 
             var remBtn = new Button(() =>
             {
-                if (!PortsUtils.PlayMode && spriteList.selectedItem != null)
+                if (!PortsUtils.PlayMode)
                 {
-                    vchara.charaPortrait.RemoveAt(spriteList.selectedIndex);
-                    spriteList.Rebuild();
-                    EditorUtility.SetDirty(vchara.root);
-                }
-                else if(!PortsUtils.PlayMode && spriteList.selectedItem == null)
-                {
-                    if(vchara.charaPortrait.Count > 0)
+                    if (spriteList.selectedItem != null)
                     {
-                        vchara.charaPortrait.RemoveAt(vchara.charaPortrait.Count - 1);
+                        vchara.charaPortrait.RemoveAt(spriteList.selectedIndex);
                         spriteList.Rebuild();
                         EditorUtility.SetDirty(vchara.root);
+                    }
+                    else if (spriteList.selectedItem == null)
+                    {
+                        if (vchara.charaPortrait.Count > 0)
+                        {
+                            vchara.charaPortrait.RemoveAt(vchara.charaPortrait.Count - 1);
+                            spriteList.Rebuild();
+                            EditorUtility.SetDirty(vchara.root);
+                        }
                     }
                 }
             });
@@ -779,7 +844,8 @@ namespace VIEditor
 
                 easobj.RegisterValueChangedCallback(x =>
                 {
-                    vchara.charaObject3D[i] = easobj.value as GameObject;
+                    if (!PortsUtils.PlayMode)
+                        vchara.charaObject3D[i] = easobj.value as GameObject;
                 });
             };
             //////
@@ -833,19 +899,22 @@ namespace VIEditor
 
             var remBtnGo = new Button(() =>
             {
-                if (!PortsUtils.PlayMode && threedList.selectedItem != null)
+                if (!PortsUtils.PlayMode)
                 {
-                    vchara.charaObject3D.RemoveAt(threedList.selectedIndex);
-                    threedList.Rebuild();
-                    EditorUtility.SetDirty(vchara.root);
-                }
-                else if(!PortsUtils.PlayMode && spriteList.selectedItem == null)
-                {
-                    if(vchara.charaObject3D.Count > 0)
+                    if (threedList.selectedItem != null)
                     {
-                        vchara.charaObject3D.RemoveAt(vchara.charaObject3D.Count - 1);
+                        vchara.charaObject3D.RemoveAt(threedList.selectedIndex);
                         threedList.Rebuild();
                         EditorUtility.SetDirty(vchara.root);
+                    }
+                    else if (spriteList.selectedItem == null)
+                    {
+                        if (vchara.charaObject3D.Count > 0)
+                        {
+                            vchara.charaObject3D.RemoveAt(vchara.charaObject3D.Count - 1);
+                            threedList.Rebuild();
+                            EditorUtility.SetDirty(vchara.root);
+                        }
                     }
                 }
             });
@@ -937,9 +1006,9 @@ namespace VIEditor
                     auList.Rebuild();
                     EditorUtility.SetDirty(vchara.root);
                 }
-                else if(!PortsUtils.PlayMode && auList.selectedItem == null)
+                else if (!PortsUtils.PlayMode && auList.selectedItem == null)
                 {
-                    if(vchara.charaSound.Count > 0)
+                    if (vchara.charaSound.Count > 0)
                     {
                         vchara.charaSound.RemoveAt(vchara.charaSound.Count - 1);
                         auList.Rebuild();

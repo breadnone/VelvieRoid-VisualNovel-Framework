@@ -1092,8 +1092,8 @@ GameObject:
   - component: {fileID: 8694331751153890746}
   - component: {fileID: 8694331751153890747}
   - component: {fileID: 8694331751153890744}
-  - component: {fileID: 8694331751153890740}
   - component: {fileID: 8694331751153890743}
+  - component: {fileID: 4486796586631964227}
   m_Layer: 5
   m_Name: VMenu
   m_TagString: Untagged
@@ -1183,33 +1183,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8694331751153890740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8694331751153890745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e82c60188ef38d4290ec35861cc9e67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animType: 7
-  txtComponent: {fileID: 8694331750787120471}
-  parentPanel: {fileID: 8694331750354832088}
-  duration: 0.5
-  ease: 4
-  buttons:
-  - {fileID: 8694331750588163107}
-  - {fileID: 8694331750181772136}
-  - {fileID: 8694331751389840053}
-  - {fileID: 8694331750667442950}
-  - {fileID: 8694331750772836429}
-  - {fileID: 8694331751469037306}
-  vmenuName: VMenu
-  vmenuId: 524c52b3-eca7-4a70-8c74-c79a7d76355d1871495876
-  menuRect: {fileID: 8694331751153890741}
 --- !u!225 &8694331751153890743
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1222,6 +1195,33 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4486796586631964227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8694331751153890745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c437b2be7045b8a4fa0fbe4ba6de2933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animType: 6
+  txtComponent: {fileID: 8694331750787120471}
+  parentPanel: {fileID: 8694331750354832088}
+  duration: 0.5
+  ease: 4
+  buttons:
+  - {fileID: 8694331750588163107}
+  - {fileID: 8694331750181772136}
+  - {fileID: 8694331751389840053}
+  - {fileID: 8694331750667442950}
+  - {fileID: 8694331750772836429}
+  - {fileID: 8694331751469037306}
+  vmenuName: VMenu
+  vmenuId: d3224326-0421-48e4-88ec-66d4e52266151309344334
+  menuRect: {fileID: 8694331751153890741}
 --- !u!1 &8694331751389840059
 GameObject:
   m_ObjectHideFlags: 0

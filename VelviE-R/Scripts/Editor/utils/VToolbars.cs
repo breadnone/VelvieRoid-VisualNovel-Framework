@@ -22,7 +22,7 @@ namespace VIEditor
         {
             if (buttons != null && buttons.Count > 0)
             {
-                for (int i = buttons.Count; i --> 0; )
+                for (int i = buttons.Count; i-- > 0;)
                 {
                     buttons[i].RemoveFromHierarchy();
                     buttons[i].RemoveManipulator(contexts[i]);
@@ -74,8 +74,10 @@ namespace VIEditor
 
             //Clicked state
             btn.userData = vgContainer.graphState as GraphStates;
-            btn.RegisterCallback<MouseDownEvent>((evt)=> ButtonSubs(vgContainer));
-
+            if (!PortsUtils.PlayMode)
+            {
+                btn.RegisterCallback<MouseDownEvent>((evt) => ButtonSubs(vgContainer));
+            }
             var cntx = new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
             {
                 if (!PortsUtils.PlayMode)
@@ -299,43 +301,50 @@ namespace VIEditor
 
             var menuTwo = new ToolbarMenu { text = "Create VDialogue" };
             menuTwo.style.backgroundColor = Color.green;
+            menuTwo.style.color = Color.black;
             menuTwo.menu.AppendAction("Add VDialogue", a =>
             {
-                PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel"));
+                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel")) as GameObject;
+                //PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
             });
 
             toolbarTwo.Add(menuTwo);
 
             var popupTwo = new ToolbarMenu { text = "Create VStage", variant = ToolbarMenu.Variant.Default };
             popupTwo.style.backgroundColor = Color.green;
+            popupTwo.style.color = Color.black;
             popupTwo.menu.AppendAction("Add VStage", a =>
             {
-                PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VStage"));
+                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VStage")) as GameObject;
             }, a => DropdownMenuAction.Status.Normal);
 
             toolbarTwo.Add(popupTwo);
 
             var popupMenu = new ToolbarMenu { text = "Create VMenu", variant = ToolbarMenu.Variant.Default };
             popupMenu.style.backgroundColor = Color.green;
+            popupMenu.style.color = Color.black;
             popupMenu.menu.AppendAction("Add VMenu", a =>
             {
-                PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VMenu"));
+                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VMenu")) as GameObject;
             }, a => DropdownMenuAction.Status.Normal);
             toolbarTwo.Add(popupMenu);
 
             var clickableMenu = new ToolbarMenu { text = "Create Clickables", variant = ToolbarMenu.Variant.Default };
             clickableMenu.style.backgroundColor = Color.green;
+            clickableMenu.style.color = Color.black;
             clickableMenu.menu.AppendAction("Add Clickables", a => { }, a => DropdownMenuAction.Status.Normal);
             toolbarTwo.Add(clickableMenu);
 
             var inventoryMenu = new ToolbarMenu { text = "Create VInventorySystem", variant = ToolbarMenu.Variant.Default };
             inventoryMenu.style.backgroundColor = Color.green;
+            inventoryMenu.style.color = Color.black;
             inventoryMenu.menu.AppendAction("Add VInventory", a => { }, a => DropdownMenuAction.Status.Normal);
             inventoryMenu.menu.AppendAction("VInventory List/SomeInventory", a => { }, a => DropdownMenuAction.Status.Normal);
             toolbarTwo.Add(inventoryMenu);
 
             var questMenu = new ToolbarMenu { text = "Create VQuestSystem", variant = ToolbarMenu.Variant.Default };
             questMenu.style.backgroundColor = Color.green;
+            questMenu.style.color = Color.black;
             questMenu.menu.AppendAction("Add VQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
             questMenu.menu.AppendAction("VQuestSystem List/SomeQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
             toolbarTwo.Add(questMenu);
@@ -375,15 +384,18 @@ namespace VIEditor
 
             var toolbarSearchField = new ToolbarSearchField();
             toolbarSearchField.style.cursor = default(UnityEngine.UIElements.Cursor);
-            toolbarSearchField.RegisterCallback<KeyDownEvent>((x) =>
-            {
-                if (x.keyCode == KeyCode.Return)
-                {
-                    if (!String.IsNullOrEmpty(toolbarSearchField.value))
-                        SearchVNodes(toolbarSearchField.value);
-                }
-            });
 
+            if (!PortsUtils.PlayMode)
+            {
+                toolbarSearchField.RegisterCallback<KeyDownEvent>((x) =>
+                {
+                    if (x.keyCode == KeyCode.Return)
+                    {
+                        if (!String.IsNullOrEmpty(toolbarSearchField.value))
+                            SearchVNodes(toolbarSearchField.value);
+                    }
+                });
+            }
             toolbarThree.Add(toolbarSearchField);
             var variableBtn = new Button();
 

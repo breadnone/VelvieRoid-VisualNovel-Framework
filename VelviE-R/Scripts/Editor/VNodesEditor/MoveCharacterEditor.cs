@@ -15,11 +15,12 @@ namespace VIEditor
     {
         private VisualElement slotOne;
         private VisualElement slotTwo;
+        private VStageClass from;
+        private VStageClass to;
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement myInspector = new Box();
             var t = target as MoveCharacter;
-            Undo.RecordObject(t, "MoveCharacter undo object");
 
             myInspector.Add(DrawCharacter(t));
             myInspector.Add(DrawSelect(t));
@@ -54,7 +55,7 @@ namespace VIEditor
 
             myInspector.style.flexDirection = FlexDirection.Column;
             //Always add this at the end!
-            VUITemplate.DrawSummary(myInspector, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(myInspector, t, () => t.OnVSummary());
             return myInspector;
         }
         private VisualElement DrawWaitUntilFinished(MoveCharacter t)
@@ -72,12 +73,14 @@ namespace VIEditor
             tbMenu.style.width = 190;
             tbMenu.value = t.WaitUntilFinished;
 
-            tbMenu.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.WaitUntilFinished = tbMenu.value;
-                PortsUtils.SetActiveAssetDirty();
-            });
-
+                tbMenu.RegisterValueChangedCallback((x) =>
+                {
+                    t.WaitUntilFinished = tbMenu.value;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
             box.Add(lbl);
             box.Add(tbMenu);
             return box;
@@ -92,16 +95,32 @@ namespace VIEditor
             }
             else
             {
-                if(!String.IsNullOrEmpty(t.Character.name))
-                root.child.value = t.Character.name;
-                else
-                root.child.value = "<None>";
-            }
+                var chars = Resources.FindObjectsOfTypeAll<VCharacter>();
 
-            root.child.RegisterCallback<ChangeEvent<string>>((x) =>
-            {
-                if (!PortsUtils.PlayMode)
+                if (!String.IsNullOrEmpty(t.Character.name))
                 {
+                    root.child.value = t.Character.name;
+
+                    if (from != null)
+                    {
+                        t.FromStage = from;
+                    }
+                    if (to != null)
+                    {
+                        t.ToStage = to;
+                    }
+                }
+                else
+                {
+                    root.child.value = "<None>";
+                    t.Character = null;
+                }
+            }
+            if (!PortsUtils.PlayMode)
+            {
+                root.child.RegisterCallback<ChangeEvent<string>>((x) =>
+                {
+
                     if (x.newValue == "<None>")
                     {
                         t.Character = null;
@@ -115,8 +134,9 @@ namespace VIEditor
                         ShufflingMenu(t);
                         PortsUtils.SetActiveAssetDirty();
                     }
-                }
-            });
+
+                });
+            }
             return root.root;
         }
         private VisualElement swapChar;
@@ -131,10 +151,10 @@ namespace VIEditor
             }
             else
             {
-                if(!String.IsNullOrEmpty(t.CharacterToSwap.name))
-                root.child.value = t.CharacterToSwap.name;
+                if (!String.IsNullOrEmpty(t.CharacterToSwap.name))
+                    root.child.value = t.CharacterToSwap.name;
                 else
-                root.child.value = "<None>";
+                    root.child.value = "<None>";
             }
 
             root.child.RegisterCallback<ChangeEvent<string>>((x) =>
@@ -188,7 +208,7 @@ namespace VIEditor
                             {
                                 swapChar.SetEnabled(false);
 
-                                if(t.MainStage != null)
+                                if (t.MainStage != null)
                                 {
                                     toEl.SetEnabled(true);
                                     fromEl.SetEnabled(true);
@@ -225,10 +245,10 @@ namespace VIEditor
 
                 if (t.FromStage != null)
                 {
-                    if(!String.IsNullOrEmpty(t.FromStage.name))
-                    tbMenu.text = t.FromStage.name;
+                    if (!String.IsNullOrEmpty(t.FromStage.name))
+                        tbMenu.text = t.FromStage.name;
                     else
-                    tbMenu.text = "<Previous>";
+                        tbMenu.text = "<Previous>";
                 }
                 else
                 {
@@ -245,21 +265,36 @@ namespace VIEditor
                     PortsUtils.SetActiveAssetDirty();
                 });
 
-                if (t.Character.is2D)
+                if (t.Character != null)
                 {
-                    foreach (var vstage in vstages)
+                    if (t.Character.is2D)
                     {
-                        tbMenu.menu.AppendAction(vstage.name, (x) =>
+                        foreach (var vstage in vstages)
                         {
-                            tbMenu.text = vstage.name;
-                            t.FromStage = vstage;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
+                            tbMenu.menu.AppendAction(vstage.name, (x) =>
+                            {
+                                tbMenu.text = vstage.name;
+                                t.FromStage = vstage;
+                                PortsUtils.SetActiveAssetDirty();
+                            });
+                        }
+                    }
+                    else
+                    {
+                        foreach (var vstage in vstages3)
+                        {
+                            tbMenu.menu.AppendAction(vstage.name, (x) =>
+                            {
+                                tbMenu.text = vstage.name;
+                                t.FromStage = vstage;
+                                PortsUtils.SetActiveAssetDirty();
+                            });
+                        }
                     }
                 }
                 else
                 {
-                    foreach (var vstage in vstages3)
+                    foreach (var vstage in vstages)
                     {
                         tbMenu.menu.AppendAction(vstage.name, (x) =>
                         {
@@ -338,10 +373,10 @@ namespace VIEditor
             }
             else
             {
-                if(!String.IsNullOrEmpty(t.ToStage.name))
-                tbMenu.text = t.ToStage.name;
+                if (!String.IsNullOrEmpty(t.ToStage.name))
+                    tbMenu.text = t.ToStage.name;
                 else
-                tbMenu.text = "<None>";
+                    tbMenu.text = "<None>";
             }
 
             if (t.MainStage != null)
@@ -404,19 +439,22 @@ namespace VIEditor
             var tbMenu = new FloatField();
             tbMenu.style.width = 50;
             tbMenu.value = t.Duration;
-            tbMenu.RegisterValueChangedCallback((x) =>
-            {
-                t.Duration = tbMenu.value;
-                PortsUtils.SetActiveAssetDirty();
-            });
 
+            if (!PortsUtils.PlayMode)
+            {
+                tbMenu.RegisterValueChangedCallback((x) =>
+                {
+                    t.Duration = tbMenu.value;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
             box.Add(lbl);
             box.Add(tbMenu);
             return box;
         }
         private void ShufflingMenu(MoveCharacter t)
         {
-            if(t.MainStage != null && t.Character != null)
+            if (t.MainStage != null && t.Character != null)
             {
                 var stages = Resources.FindObjectsOfTypeAll<VStageUtil>();
                 var vstages = stages[0].TwoDStage;
@@ -430,10 +468,10 @@ namespace VIEditor
                 }
                 else
                 {
-                    if(!String.IsNullOrEmpty(t.FromStage.name))
-                    tbm.text = t.FromStage.name;
+                    if (!String.IsNullOrEmpty(t.FromStage.name))
+                        tbm.text = t.FromStage.name;
                     else
-                    tbm.text = "<Previous>";
+                        tbm.text = "<Previous>";
                 }
 
                 if (t.Character.is2D)
@@ -469,10 +507,10 @@ namespace VIEditor
                 }
                 else
                 {
-                    if(!String.IsNullOrEmpty(t.ToStage.name))
-                    tbmTo.text = t.ToStage.name;
+                    if (!String.IsNullOrEmpty(t.ToStage.name))
+                        tbmTo.text = t.ToStage.name;
                     else
-                    tbmTo.text = "<None>";
+                        tbmTo.text = "<None>";
                 }
 
                 if (t.Character.is2D)

@@ -28,51 +28,35 @@ namespace VIEditor
         }
         public void ActivateWindow() { CreateVGraphsWindow(); }
         public void SetActiveVgraph() { PortsUtils.VGraph = this; }
-        /*
-        void OnFocus()
+
+        public void Refresh(bool repaintActiveInspector = false)
         {
-            if (!PortsUtils.PlayMode)
+            if (!repaintActiveInspector)
             {
-                Refresh();
+                this.Repaint();
 
-                if (inspectorIsActive)
+                if (activeVToolbar != null)
                 {
-                    HideInspector();
+                    activeVToolbar.Toolbars.ForEach(x => x.MarkDirtyRepaint());
+                }
 
-                    if (PortsUtils.activeVNode != null)
+                if (graphView != null)
+                {
+                    foreach (var nodes in graphView.nodes)
                     {
-                        graphView.ClearSelection();
-                        PortsUtils.activeVNode.OnSelected();
+                        nodes.MarkDirtyRepaint();
                     }
-                }
-                else
-                {
-                    graphView?.ClearSelection();
-                    PortsUtils.activeVNode = null;
-                }
-            }
-        }
-        */
-        public void Refresh()
-        {
-            this.Repaint();
 
-            if (activeVToolbar != null)
+                    graphView.MarkDirtyRepaint();
+                }
+
+                rootVisualElement.MarkDirtyRepaint();
+            }
+            else
             {
-                activeVToolbar.Toolbars.ForEach(x => x.MarkDirtyRepaint());
+                if (PortsUtils.activeVGraphAssets != null)
+                    PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
             }
-
-            if (graphView != null)
-            {
-                foreach (var nodes in graphView.nodes)
-                {
-                    nodes.MarkDirtyRepaint();
-                }
-
-                graphView.MarkDirtyRepaint();
-            }
-
-            rootVisualElement.MarkDirtyRepaint();
         }
 
         void OnEnable()
@@ -155,7 +139,7 @@ namespace VIEditor
             PortsUtils.VGraph = null;
         }
         public void SetGraphsWindow(VViews graphViewInstance)
-        {          
+        {
             if (graphView != null)
             {
                 graphView.graphViewChanged -= OnGraphChange;
@@ -183,9 +167,9 @@ namespace VIEditor
             {
                 activeVToolbar.ResetButtonList();
 
-                for (int i = activeVToolbar.Toolbars.Count; i --> 0; )
+                for (int i = activeVToolbar.Toolbars.Count; i-- > 0;)
                 {
-                    if(activeVToolbar.Toolbars[i] != null)
+                    if (activeVToolbar.Toolbars[i] != null)
                     {
                         activeVToolbar.Toolbars[i].RemoveFromHierarchy();
                         activeVToolbar.Toolbars.RemoveAt(i);
@@ -302,7 +286,7 @@ namespace VIEditor
                 }
             }
         }
-        private PopupWindow VBlockPopupWindow = null;
+        private VisualElement VBlockPopupWindow = null;
         //Create VBlock inspector window
         public void VBlockWindow()
         {
@@ -310,6 +294,7 @@ namespace VIEditor
                 parentInspectorBox.Remove(VBlockPopupWindow);
 
             VBlockPopupWindow = new VBlockWindow(this);
+            VBlockPopupWindow.Add(new ResizableElement());
             parentInspectorBox.Add(VBlockPopupWindow);
             parentInspectorBox.MarkDirtyRepaint();
             PortsUtils.SetActiveAssetDirty();
@@ -331,11 +316,11 @@ namespace VIEditor
 
             if (graphEntity_ScrollView_Box != null)
             {
-                if(graphEntity_ScrollView_Box.childCount > 0)
+                if (graphEntity_ScrollView_Box.childCount > 0)
                 {
-                    foreach(var child in graphEntity_ScrollView_Box.Children().ToList())
+                    foreach (var child in graphEntity_ScrollView_Box.Children().ToList())
                     {
-                        if(child == null)
+                        if (child == null)
                             continue;
 
                         child.RemoveFromHierarchy();
@@ -402,7 +387,7 @@ namespace VIEditor
             PortsUtils.SetActiveAssetDirty();
         }
         private Box activeBoxPopup;
-        public PopupWindow inspectorWindow;
+        public VisualElement inspectorWindow;
         public bool inspectorIsActive { get; set; }
         public Box parentInspectorBox { get; set; }
         private Box dummyTargetBox;
@@ -413,11 +398,12 @@ namespace VIEditor
             if (parentInspectorBox == null)
             {
                 parentInspectorBox = new Box();
-                parentInspectorBox.style.width = 392;
+                //parentInspectorBox.style.width = 392;
                 parentInspectorBox.style.position = Position.Relative;
                 parentInspectorBox.style.alignSelf = Align.FlexStart;
                 parentInspectorBox.style.flexGrow = new StyleFloat(1);
                 parentInspectorBox.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+                parentInspectorBox.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 parentInspectorBox.name = "parentInspectorBox";
                 rootVisualElement.Add(parentInspectorBox);
             }
@@ -719,19 +705,37 @@ namespace VIEditor
             listV.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
             listV.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         }
-        public void ShowSelectedVblockSerializedFields()
+        public void ShowSelectedVblockSerializedFields(bool refresh = false)
         {
             if (listV != null && PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null && listV.selectedItem != null)
             {
                 if (inspectorWindow == null)
                     return;
 
-                var e = listV.selectedItem as VelvieBlockComponent;
+                if (!refresh)
+                {
+                    var e = listV.selectedItem as VelvieBlockComponent;
+                    var comp = e.attachedComponent.component;
+                    PortsUtils.ActiveInspector = comp;
+                    dummyTargetBox = DrawVInspectorWindow(comp);
+                    PortsUtils.ActiveInspectorContainer = dummyTargetBox;
+                    inspectorWindow.Add(dummyTargetBox);
+                }
+                else
+                {
+                    if(PortsUtils.ActiveInspector != null)
+                    {
+                        PortsUtils.ActiveInspectorContainer?.RemoveFromHierarchy();
+                        dummyTargetBox = DrawVInspectorWindow(PortsUtils.ActiveInspector);
+                        PortsUtils.ActiveInspectorContainer = dummyTargetBox;
+                        inspectorWindow.Add(dummyTargetBox);
+                    }
+                }
 
-                var comp = e.attachedComponent.component;
-                dummyTargetBox = DrawVInspectorWindow(comp);
-                inspectorWindow.Add(dummyTargetBox);
+                inspectorWindow.Add(new ResizableElement());
             }
+
+
         }
         public void RemoveActiveNodeFromView()
         {
@@ -794,8 +798,11 @@ namespace VIEditor
             inspectorScrolllView = scrollV;
             scrollV.verticalScrollerVisibility = ScrollerVisibility.Auto;
             scrollV.horizontalScrollerVisibility = ScrollerVisibility.Auto;
+            box.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            box.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+            
 
-            box.style.width = 380;
+            //box.style.width = 380;
             box.Add(scrollV);
 
             scrollV.Add(GenerateInspectorsBox(component));

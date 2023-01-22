@@ -10,20 +10,46 @@ using System.Linq;
 
 namespace VIEditor
 {
-    public class VBlockWindow : PopupWindow
+    public class VBlockWindow : VisualElement
     {
         private bool findIsActive = false;
         private VisualElement root;
         public VBlockWindow(VGraphs vgraph)
         {
-            this.style.width = 390;
+            /*
+            var inspectorWindow = new UnityEngine.UIElements.VisualElement();
+            inspectorWindow.style.flexDirection = FlexDirection.Column;
+            var lbl = new Label{text = "Property Tab"};
+            lbl.style.backgroundColor = Color.magenta;
+            lbl.style.unityTextAlign = TextAnchor.MiddleCenter;
+            lbl.style.height = new StyleLength(new Length(10, LengthUnit.Percent));
+            lbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            inspectorWindow.Add(lbl);
+            //inspectorWindow.style.width = 390;
+            inspectorWindow.style.position = Position.Relative;
+            inspectorWindow.style.alignSelf = Align.FlexStart; //This basically just saying: Attach to Left - dynmamic size
+            inspectorWindow.style.flexGrow = new StyleFloat(1);
+            inspectorWindow.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+            inspectorWindow.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            //inspectorWindow.text = "Property Tab";
+            return inspectorWindow;
+
+            */
+            //this.style.width = 390;
             this.style.position = Position.Relative;
+            this.style.flexDirection = FlexDirection.Column;
             this.style.alignSelf = Align.FlexStart; //This basically just saying: Attach to Left - dynmamic size
             this.style.flexGrow = new StyleFloat(1);
             this.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-            this.text = "VBlock";
+            this.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             this.style.backgroundColor = new StyleColor(Color.gray);
 
+            var lbl = new Label{text = "VBlock"};
+            lbl.style.backgroundColor = Color.blue;
+            lbl.style.unityTextAlign = TextAnchor.MiddleCenter;
+            lbl.style.height = new StyleLength(new Length(10, LengthUnit.Percent));
+            lbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            this.Add(lbl);
             //Add Toolbar
             var tb = new Toolbar();
             tb.style.backgroundColor = Color.grey;
@@ -251,10 +277,14 @@ namespace VIEditor
             listV.style.flexGrow = 1.0f;
 
             pop.Add(listV);
+            
             var btnClose = new Button(()=>
             {
-                pop.RemoveFromHierarchy();
-                findIsActive = false;
+                if(!PortsUtils.PlayMode)
+                {
+                    pop.RemoveFromHierarchy();
+                    findIsActive = false;
+                }
             });
 
             btnClose.text = "<b>Close</b>";

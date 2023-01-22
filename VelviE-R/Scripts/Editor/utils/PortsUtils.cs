@@ -34,6 +34,8 @@ namespace VIEditor
         public static VGraphsContainer LastPlayedVContainer { get; set; }
         public static bool waitLoading { get; set; }
         public static bool PlayMode { get; set; }
+        public static Component ActiveInspector {get;set;}
+        public static Box ActiveInspectorContainer {get;set;}
         public static VCharacterV[] GetCharacters()
         {
             var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
@@ -253,6 +255,9 @@ namespace VIEditor
                 var inNode = edge.input.node as VNodes;
                 var outNode = edge.output.node as VNodes;
 
+                if(inNode == null || outNode == null)
+                    continue;
+                    
                 bool isInParent = parent.Contains(inNode);
                 bool isOutParent = parent.Contains(outNode);
 
@@ -361,7 +366,7 @@ namespace VIEditor
                 SetActiveVgraph(vgraph);
 
                 VViews nuView = new VViews();
-                VGraph.SetGraphsWindow(nuView);
+                VGraph?.SetGraphsWindow(nuView);
 
                 if (!firstInit)
                 {
@@ -523,7 +528,7 @@ namespace VIEditor
 
                 VGraph.SetToolbar();
                 SetActiveAssetDirty();
-                VGraph.rootVisualElement.schedule.Execute(() => waitLoading = false).ExecuteLater(1);
+                VGraph.rootVisualElement.schedule.Execute(() => {waitLoading = false;}).ExecuteLater(1);
             }
         }
         public static void SetActiveAssetDirty()

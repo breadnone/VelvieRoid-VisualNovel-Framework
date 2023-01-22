@@ -71,15 +71,23 @@ namespace VIEditor
             return editor;
         }
         //Set properties of popup window
-        public UnityEngine.UIElements.PopupWindow SetPopUpContainerWindow()
+        public UnityEngine.UIElements.VisualElement SetPopUpContainerWindow()
         {
-            var inspectorWindow = new UnityEngine.UIElements.PopupWindow();
-            inspectorWindow.style.width = 390;
+            var inspectorWindow = new UnityEngine.UIElements.VisualElement();
+            inspectorWindow.style.flexDirection = FlexDirection.Column;
+            var lbl = new Label{text = "Property Tab"};
+            lbl.style.backgroundColor = Color.magenta;
+            lbl.style.unityTextAlign = TextAnchor.MiddleCenter;
+            lbl.style.height = new StyleLength(new Length(10, LengthUnit.Percent));
+            lbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            inspectorWindow.Add(lbl);
+            //inspectorWindow.style.width = 390;
             inspectorWindow.style.position = Position.Relative;
             inspectorWindow.style.alignSelf = Align.FlexStart; //This basically just saying: Attach to Left - dynmamic size
             inspectorWindow.style.flexGrow = new StyleFloat(1);
             inspectorWindow.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-            inspectorWindow.text = "Property Tab";
+            inspectorWindow.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            //inspectorWindow.text = "Property Tab";
             return inspectorWindow;
         }
     }

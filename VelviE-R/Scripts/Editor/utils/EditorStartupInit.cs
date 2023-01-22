@@ -21,7 +21,7 @@ static class EditorStartupInit
         EditorApplication.playModeStateChanged -= LogPlayModeState;
         EditorApplication.playModeStateChanged += LogPlayModeState;
         PortsUtils.waitLoading = false;
-        
+
     }
     static void LogPlayModeState(PlayModeStateChange state)
     {
@@ -35,28 +35,42 @@ static class EditorStartupInit
             VTokenManager.CancelAllVTokens();
             EditorApplication.playModeStateChanged -= LogPlayModeState;
             PortsUtils.PlayMode = false;
-            PortsUtils.LoadAssets(PortsUtils.LastPlayedVContainer, false);
 
-            if (PortsUtils.VGraph != null)
+            if (EditorWindow.HasOpenInstances<VGraphs>())
             {
-                PortsUtils.VGraph.Refresh();
+                VBlockManager.VgraphsOpenInstance = true;
+            }
+            else
+            {
+                VBlockManager.VgraphsOpenInstance = false;
+            }
 
-                if (PortsUtils.VGraph.inspectorIsActive)
+            EditorApplication.delayCall += () =>
+            {
+                if(VBlockManager.VgraphsOpenInstance)
                 {
-                    PortsUtils.VGraph.HideInspector();
+                    PortsUtils.LoadAssets(PortsUtils.LastPlayedVContainer, false);
 
-                    if (PortsUtils.activeVNode != null)
+                    if (PortsUtils.VGraph != null)
                     {
-                        PortsUtils.VGraph.graphView.ClearSelection();
-                        PortsUtils.activeVNode.OnSelected();
+                        if (PortsUtils.VGraph.inspectorIsActive)
+                        {
+                            PortsUtils.VGraph.HideInspector();
+
+                            if (PortsUtils.activeVNode != null)
+                            {
+                                PortsUtils.VGraph.graphView.ClearSelection();
+                                PortsUtils.activeVNode.OnSelected();
+                            }
+                        }
+                        else
+                        {
+                            PortsUtils.VGraph.graphView?.ClearSelection();
+                            PortsUtils.activeVNode = null;
+                        }
                     }
                 }
-                else
-                {
-                    PortsUtils.VGraph.graphView?.ClearSelection();
-                    PortsUtils.activeVNode = null;
-                }
-            }
+            };
         }
 
         if (EditorWindow.HasOpenInstances<VGraphs>())
@@ -164,20 +178,20 @@ static class HierarchyMonitor
         var all = Resources.FindObjectsOfTypeAll<VCoreUtil>();
         var vgraphs = PortsUtils.GetVGprahsScriptableObjects();
 
-        if(all.Length > 0)
+        if (all.Length > 0)
         {
             bool nulls = PortsUtils.Vcores.Exists(x => x == null);
 
-            if(nulls || PortsUtils.Vcores.Count == 0)
+            if (nulls || PortsUtils.Vcores.Count == 0)
             {
                 PortsUtils.Vcores.Clear();
                 PortsUtils.Vcores = all.ToList();
             }
             else
             {
-                for(int i = 0; i < all.Length; i++)
+                for (int i = 0; i < all.Length; i++)
                 {
-                    if(!PortsUtils.Vcores.Contains(all[i]))
+                    if (!PortsUtils.Vcores.Contains(all[i]))
                     {
                         PortsUtils.Vcores.Add(all[i]);
                     }
@@ -204,17 +218,17 @@ static class HierarchyMonitor
         {
             for (int i = 0; i < dialogue.Length; i++)
             {
-                if(dialogue[i] == null)
+                if (dialogue[i] == null)
                     continue;
 
                 dialogue[i].ReValidate();
-                
-                for(int j = 0; j < all.Length; j++)
+
+                for (int j = 0; j < all.Length; j++)
                 {
-                    if(all[j] == null)
+                    if (all[j] == null)
                         continue;
 
-                    if(!all[j].vdialogues.Contains(dialogue[i]))
+                    if (!all[j].vdialogues.Contains(dialogue[i]))
                         all[j].vdialogues.Add(dialogue[i]);
                 }
             }
@@ -285,11 +299,10 @@ static class HierarchyMonitor
                     if (!thisGraph)
                     {
                         wasRemoved = true;
-                        
 
-                        if(AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString() == vgraphs[i].sceneGuid)
+                        if (AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString() == vgraphs[i].sceneGuid)
                         {
-                            Debug.Log("ASSET DELETED!");
+                            Debug.LogWarning("ASSET DELETED!");
                             AssetDatabase.DeleteAsset(vgraphs[i].path);
                         }
                     }
@@ -307,19 +320,19 @@ static class HierarchyMonitor
                 EditorUtility.SetDirty(renamedGameobject);
                 EditorUtility.SetDirty(vgraphs.Find(x => x.vgraphGOname == renamedGameobject.name));
             }
-
         }
 
+        PortsUtils.VGraph?.ShowSelectedVblockSerializedFields(true);
+        
         //refresh binds
-        for(int i = 0; i < PortsUtils.RefreshBinds.Count; i++)
+        for (int i = 0; i < PortsUtils.RefreshBinds.Count; i++)
         {
-            if(PortsUtils.RefreshBinds[i] != null && PortsUtils.RefreshBinds[i].editor != null)
+            if (PortsUtils.RefreshBinds[i] != null && PortsUtils.RefreshBinds[i].editor != null)
                 PortsUtils.RefreshBinds[i].act?.Invoke();
         }
 
         //TODO guard clause this please!
-        if(!PortsUtils.PlayMode)
-        VUITemplate.RePolAll();
+        if (!PortsUtils.PlayMode)
+            VUITemplate.RePolAll();
     }
 }
-

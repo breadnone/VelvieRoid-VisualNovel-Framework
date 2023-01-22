@@ -220,11 +220,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4004669722847669213}
-  - component: {fileID: 4004669722847669218}
   - component: {fileID: 4004669722847669212}
   - component: {fileID: 4004669722847669215}
   - component: {fileID: 4004669722847669214}
   - component: {fileID: 4004669722847669219}
+  - component: {fileID: 1083011233341602931}
   m_Layer: 5
   m_Name: VDialogPanel
   m_TagString: Untagged
@@ -253,85 +253,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &4004669722847669218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4004669722847669208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e11d55ab94649348b8c6959e3ef6bef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  auSource:
-    audioSource: {fileID: 0}
-    name: 
-    enable: 1
-    volume: 0
-    assetClipPath: 
-    assetClipName: 
-    loop: 0
-    pitchLevel: 0
-    stereoPanLevel: 0
-  auSourceCommon:
-    audioSource: {fileID: 0}
-    name: 
-    enable: 1
-    volume: 0
-    assetClipPath: 
-    assetClipName: 
-    loop: 0
-    pitchLevel: 0
-    stereoPanLevel: 0
-  enderAudioClip: {fileID: 8300000, guid: 50a593f2bc299a1479d5ef669edf9282, type: 3}
-  tmpComponent: {fileID: 4004669723447114226}
-  textSpeed: 0.06
-  textEffectType: 0
-  writingIndicatorText: writing...
-  pauseBetweenWords: 0.05
-  typingSound: {fileID: 8300000, guid: a9837af4e2051544ba13b57636d0641b, type: 3}
-  continueIndicator: 0
-  iconSprite: {fileID: 0}
-  showEffect: 3
-  showEasing: 4
-  showEffectDuration: 0.2
-  clickTarget: 1
-  continueTmpComponent: {fileID: 0}
-  enableWritingIndicator: 1
-  enableTypingSound: 1
-  enableEndAudio: 1
-  thumbnail: {fileID: 0}
-  spritesDuration: 0.2
-  thumbnailDuration: 0.2
-  characterName: {fileID: 0}
-  canvyG: {fileID: 0}
-  parentpanel: {fileID: 0}
-  continueThreeDots: {fileID: 0}
-  vdialogDefaultPosition: {x: 0, y: 0, z: 0}
-  velvieDialogueName: VDialogPanel
-  velvieDialogueId: 6f6df1f8-4372-4784-a6e2-63442126ff4b1133117699
-  audioSource:
-    audioSource: {fileID: 0}
-    name: 
-    enable: 1
-    volume: 0
-    assetClipPath: 
-    assetClipName: 
-    loop: 0
-    pitchLevel: 0
-    stereoPanLevel: 0
-  audioSourceCommon:
-    audioSource: {fileID: 0}
-    name: 
-    enable: 1
-    volume: 0
-    assetClipPath: 
-    assetClipName: 
-    loop: 0
-    pitchLevel: 0
-    stereoPanLevel: 0
 --- !u!223 &4004669722847669212
 Canvas:
   m_ObjectHideFlags: 0
@@ -405,6 +326,85 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1083011233341602931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004669722847669208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9c0189f7741994bb4abf053a3df8ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  auSource:
+    audioSource: {fileID: 0}
+    name: 
+    enable: 1
+    volume: 0
+    assetClipPath: 
+    assetClipName: 
+    loop: 0
+    pitchLevel: 0
+    stereoPanLevel: 0
+  auSourceCommon:
+    audioSource: {fileID: 0}
+    name: 
+    enable: 1
+    volume: 0
+    assetClipPath: 
+    assetClipName: 
+    loop: 0
+    pitchLevel: 0
+    stereoPanLevel: 0
+  enderAudioClip: {fileID: 8300000, guid: 66c399d6e0705e842801e7474bae266a, type: 3}
+  tmpComponent: {fileID: 4004669723447114226}
+  textSpeed: 0.02
+  textEffectType: 0
+  writingIndicatorText: writing...
+  pauseBetweenWords: 0.1
+  typingSound: {fileID: 8300000, guid: b5563f809bbf30e418b54f5231a65590, type: 3}
+  continueIndicator: 0
+  iconSprite: {fileID: 0}
+  showEffect: 0
+  showEasing: 4
+  showEffectDuration: 0.3
+  clickTarget: 1
+  continueTmpComponent: {fileID: 0}
+  enableWritingIndicator: 1
+  enableTypingSound: 1
+  enableEndAudio: 1
+  thumbnail: {fileID: 0}
+  spritesDuration: 0.2
+  thumbnailDuration: 0.2
+  characterName: {fileID: 0}
+  canvyG: {fileID: 0}
+  parentpanel: {fileID: 0}
+  continueThreeDots: {fileID: 0}
+  vdialogDefaultPosition: {x: 0, y: 0, z: 0}
+  velvieDialogueName: VDialogPanel
+  velvieDialogueId: e81365f6-c7ed-4443-83e2-b2d85d35e25a191487271
+  audioSource:
+    audioSource: {fileID: 0}
+    name: 
+    enable: 1
+    volume: 0
+    assetClipPath: 
+    assetClipName: 
+    loop: 0
+    pitchLevel: 0
+    stereoPanLevel: 0
+  audioSourceCommon:
+    audioSource: {fileID: 0}
+    name: 
+    enable: 1
+    volume: 0
+    assetClipPath: 
+    assetClipName: 
+    loop: 0
+    pitchLevel: 0
+    stereoPanLevel: 0
 --- !u!1 &4004669723279976103
 GameObject:
   m_ObjectHideFlags: 0

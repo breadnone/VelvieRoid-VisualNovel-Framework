@@ -139,19 +139,19 @@ namespace VelvieR
     [System.Serializable]
     public enum VTextSpeed
     {
-        Twenty = 20,
-        Forty = 40,
-        Sixty = 60,
-        Eighty = 80,
-        Hundred = 100,
-        HundredTwenty = 120,
-        HundredForty = 140,
-        HundredSixty = 160,
-        HundredEighty = 180,
-        TwoHundred = 200,
-        TwoHundredTwenty = 220,
-        TwoHundredForty = 240,
-        TwoHundredSixty = 260
+        Twenty,
+        Forty,
+        Sixty,
+        Eighty,
+        Hundred,
+        HundredTwenty,
+        HundredForty,
+        HundredSixty,
+        HundredEighty,
+        TwoHundred,
+        TwoHundredTwenty,
+        TwoHundredForty,
+        TwoHundredSixty
     }
     [System.Serializable]
     public enum WaitForClick

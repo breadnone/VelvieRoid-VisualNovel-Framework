@@ -25,10 +25,11 @@ namespace VIEditor
             container.Add(DrawDialogType(t));
             container.Add(DrawShowEffect(t));
             container.Add(DrawEnableWritingIndicator(t));
+            container.Add(DrawSpeed(t));
             container.Add(DrawString(t));
             container.Add(DrawSetAsDefault(t));
-            
-            if(t.vdialog == null)
+
+            if (t.vdialog == null)
             {
                 container.SetEnabled(false);
             }
@@ -39,7 +40,7 @@ namespace VIEditor
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
-            return root; 
+            return root;
         }
         private VisualElement DrawObject(VDialogProperty t)
         {
@@ -52,21 +53,22 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.vdialog;
-
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.vdialog = objField.value as VelvieDialogue;
-                
-                if(t.vdialog != null)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    container.SetEnabled(true);
-                }
-                else
-                {
-                    container.SetEnabled(false);
-                }
-            });
+                    t.vdialog = objField.value as VelvieDialogue;
 
+                    if (t.vdialog != null)
+                    {
+                        container.SetEnabled(true);
+                    }
+                    else
+                    {
+                        container.SetEnabled(false);
+                    }
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawString(VDialogProperty t)
@@ -78,15 +80,60 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.vdialog != null)
-            objField.value = t.writeIndicatorString;
-
-            objField.RegisterValueChangedCallback((x)=>
+            if (t.vdialog != null)
+                objField.value = t.writeIndicatorString;
+            if (!PortsUtils.PlayMode)
             {
-                t.writeIndicatorString = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.writeIndicatorString = objField.value;
+                });
+            }
             return rootBox;
+        }
+        private VisualElement DrawSpeed(VDialogProperty t)
+        {
+            //Enum slot writing speed
+            var boxSpeed = new Box();
+            boxSpeed.style.marginTop = 5;
+            boxSpeed.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            boxSpeed.style.flexDirection = FlexDirection.Row;
+
+            var dropDSpeed = new DropdownField();
+
+            if (!PortsUtils.PlayMode)
+            {
+                dropDSpeed.choices = Enum.GetNames(typeof(VTextSpeed)).ToList();
+            }
+
+            dropDSpeed.value = t.textSpeed.ToString();
+            dropDSpeed.style.width = new StyleLength(new Length(60, LengthUnit.Percent));
+            if (!PortsUtils.PlayMode)
+            {
+                dropDSpeed.RegisterValueChangedCallback(x =>
+                {
+                    var enumss = Enum.GetValues(typeof(VTextSpeed));
+
+                    foreach (var numsVals in enumss)
+                    {
+                        if (numsVals.ToString() == x.newValue)
+                        {
+                            t.textSpeed = (VTextSpeed)numsVals;
+                            EditorUtility.SetDirty(t);
+                            break;
+                        }
+                    }
+                });
+            }
+            //Just a visual representation of the dropdown above
+
+            var lblSpeed = new Label();
+            lblSpeed.tooltip = "Choose writing speed";
+            lblSpeed.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
+            lblSpeed.text = "Writing Speed";
+            boxSpeed.Add(lblSpeed);
+            boxSpeed.Add(dropDSpeed);
+            return boxSpeed;
         }
         private VisualElement DrawShowEffect(VDialogProperty t)
         {
@@ -98,24 +145,25 @@ namespace VIEditor
             field.Add(objField);
 
             objField.choices = Enum.GetNames(typeof(ShowHideEffect)).ToList();
-            
-            if(t.vdialog != null)
-            objField.value = t.showEffect.ToString();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (t.vdialog != null)
+                objField.value = t.showEffect.ToString();
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode && t.vdialog != null)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var vals in Enum.GetValues(typeof(ShowHideEffect)))
+                    if (t.vdialog != null)
                     {
-                        var astype = (ShowHideEffect)vals;
+                        foreach (var vals in Enum.GetValues(typeof(ShowHideEffect)))
+                        {
+                            var astype = (ShowHideEffect)vals;
 
-                        if(astype.ToString() == x.newValue)
-                            t.showEffect = astype;
+                            if (astype.ToString() == x.newValue)
+                                t.showEffect = astype;
+                        }
                     }
-                }
-            });
-
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawDialogType(VDialogProperty t)
@@ -128,24 +176,25 @@ namespace VIEditor
             field.Add(objField);
 
             objField.choices = Enum.GetNames(typeof(DialogType)).ToList();
-            
-            if(t.vdialog != null)
-            objField.value = t.dialogType.ToString();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (t.vdialog != null)
+                objField.value = t.dialogType.ToString();
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode && t.vdialog != null)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var vals in Enum.GetValues(typeof(DialogType)))
+                    if (t.vdialog != null)
                     {
-                        var astype = (DialogType)vals;
+                        foreach (var vals in Enum.GetValues(typeof(DialogType)))
+                        {
+                            var astype = (DialogType)vals;
 
-                        if(astype.ToString() == x.newValue)
-                            t.dialogType = astype;
+                            if (astype.ToString() == x.newValue)
+                                t.dialogType = astype;
+                        }
                     }
-                }
-            });
-
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawEnableWritingIndicator(VDialogProperty t)
@@ -156,18 +205,19 @@ namespace VIEditor
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-            
-            if(t.vdialog != null)
-            objField.value = t.enableWritingIndicator;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (t.vdialog != null)
+                objField.value = t.enableWritingIndicator;
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode && t.vdialog != null)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    t.enableWritingIndicator = objField.value;
-                }
-            });
-
+                    if (t.vdialog != null)
+                    {
+                        t.enableWritingIndicator = objField.value;
+                    }
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawSetAsDefault(VDialogProperty t)
@@ -178,18 +228,19 @@ namespace VIEditor
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-            
-            if(t.vdialog != null)
-            objField.value = t.setThisAsdefaultDialog;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (t.vdialog != null)
+                objField.value = t.setThisAsdefaultDialog;
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode && t.vdialog != null)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    t.setThisAsdefaultDialog = objField.value;
-                }
-            });
-
+                    if (t.vdialog != null)
+                    {
+                        t.setThisAsdefaultDialog = objField.value;
+                    }
+                });
+            }
             return rootBox;
         }
     }

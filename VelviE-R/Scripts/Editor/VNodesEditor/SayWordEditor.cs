@@ -13,11 +13,8 @@ using System.Linq;
 public class SayWordEditor : Editor
 {
     public DropdownField waitForClick { get; set; }
-    public DropdownField typings { get; set; }
     public DropdownField vdialogues { get; set; }
     private VisualElement toggleCharaAudio;
-    private VisualElement charaVolumeElement;
-    private VisualElement thisInspector;
     private VisualElement delay;
     private SayWord SayWord;
     private VisualElement dummySlotProps;
@@ -28,10 +25,7 @@ public class SayWordEditor : Editor
         myInspector.style.flexDirection = FlexDirection.Column;
         var t = target as SayWord;
 
-        Undo.RecordObject(t, "SayWord undo object");
-
         SayWord = t;
-        thisInspector = myInspector;
 
         //Animatableprops here
         dummySlotProps = new VisualElement();
@@ -58,7 +52,7 @@ public class SayWordEditor : Editor
         myInspector.Add(DrawAudioClip(t));
 
         //Always add this at the end!
-        VUITemplate.DrawSummary(myInspector, t, ()=> t.OnVSummary());
+        VUITemplate.DrawSummary(myInspector, t, () => t.OnVSummary());
         return myInspector;
     }
     public Box DrawWordsField(SayWord t)
@@ -88,14 +82,14 @@ public class SayWordEditor : Editor
         strContent.style.height = 100;
         strContent.multiline = true;
 
-        strContent.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            strContent.RegisterValueChangedCallback((x) =>
+            {
                 t.Words = strContent.value;
-
-            EditorUtility.SetDirty(t.gameObject);
-        });
-
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
         boxStr.Add(strContent);
         return boxStr;
     }
@@ -133,22 +127,25 @@ public class SayWordEditor : Editor
                 t.Thumbnail = null;
                 EditorUtility.SetDirty(t.gameObject);
             }
-            tbMenu.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                tbMenu.RegisterValueChangedCallback((evt) =>
                 {
-                    tbMenu.value = "<None>";
-                    t.Thumbnail = null;
-                    EnablePortraitBoxes(false, t);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-                else
-                {
-                    t.Thumbnail = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
-                    EnablePortraitBoxes(true, t);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-            });
+                    if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                    {
+                        tbMenu.value = "<None>";
+                        t.Thumbnail = null;
+                        EnablePortraitBoxes(false, t);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                    else
+                    {
+                        t.Thumbnail = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
+                        EnablePortraitBoxes(true, t);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                });
+            }
             var varlist = new List<string>();
 
             if (t.Character.charaPortrait.Count > 0)
@@ -208,24 +205,25 @@ public class SayWordEditor : Editor
                 t.Portrait = null;
                 EditorUtility.SetDirty(t.gameObject);
             }
-
-            tbMenu.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                tbMenu.RegisterValueChangedCallback((evt) =>
                 {
-                    tbMenu.value = "<None>";
-                    t.Portrait = null;
-                    EnablePortraitBoxes(false, t);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-                else
-                {
-                    t.Portrait = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
-                    EnablePortraitBoxes(true, t);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-            });
-
+                    if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                    {
+                        tbMenu.value = "<None>";
+                        t.Portrait = null;
+                        EnablePortraitBoxes(false, t);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                    else
+                    {
+                        t.Portrait = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
+                        EnablePortraitBoxes(true, t);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                });
+            }
             var varlist = new List<string>();
 
             if (t.Character.charaPortrait.Count > 0)
@@ -268,25 +266,26 @@ public class SayWordEditor : Editor
         var wait = new DropdownField();
         waitForClick = wait;
 
-        List<string> menus = new List<string>{"Enable", "Disable"};
+        List<string> menus = new List<string> { "Enable", "Disable" };
         wait.choices = menus;
-
-        wait.RegisterCallback<ChangeEvent<string>>((x)=>
+        if (!PortsUtils.PlayMode)
         {
-            if(x.newValue == "Enable")
+            wait.RegisterValueChangedCallback((x) =>
             {
-                t.WaitForClick = WaitForClick.Enable;
-                delay.SetEnabled(false);
-                EditorUtility.SetDirty(t.gameObject);
-            }
-            else
-            {
-                t.WaitForClick = WaitForClick.Disable;
-                delay.SetEnabled(true);
-                EditorUtility.SetDirty(t.gameObject);
-            }
-        });
-
+                if (x.newValue == "Enable")
+                {
+                    t.WaitForClick = WaitForClick.Enable;
+                    delay.SetEnabled(false);
+                    EditorUtility.SetDirty(t.gameObject);
+                }
+                else
+                {
+                    t.WaitForClick = WaitForClick.Disable;
+                    delay.SetEnabled(true);
+                    EditorUtility.SetDirty(t.gameObject);
+                }
+            });
+        }
         wait.style.width = 220;
         boxEnumWait.Add(wait);
 
@@ -306,63 +305,7 @@ public class SayWordEditor : Editor
         }
         return boxEnumWait;
     }
-    /*
-    public Box DrawTypingEffect(SayWord t)
-    {
-        //Typing effect
-        var boxTypeEffect = new Box();
-        boxTypeEffect.style.marginTop = 5;
-        boxTypeEffect.style.flexDirection = FlexDirection.Row;
 
-        Label typingLbl = new Label();
-        typingLbl.style.width = 120;
-        typingLbl.text = "Typing effect : ";
-        boxTypeEffect.Add(typingLbl);
-
-        var typing = new DropdownField();
-        typings = typing;
-
-        List<string> menus = new List<string>{"Typewriter", "Gradient fade", "Auto Complete"};
-        typing.choices = menus;
-
-        typing.RegisterCallback<ChangeEvent<string>>((x)=>
-        {
-            if(x.newValue == "Typewriter")
-            {
-                t.TextRevealType = DialogType.TypeWriter;
-                EditorUtility.SetDirty(t.gameObject);
-            }
-            else if(x.newValue == "Gradient fade")
-            {
-                t.TextRevealType = DialogType.GradientFade;
-                EditorUtility.SetDirty(t.gameObject);
-            }
-            else
-            {
-                t.TextRevealType = DialogType.None;
-                EditorUtility.SetDirty(t.gameObject);
-            }
-        });
-
-        typing.style.width = 220;
-        boxTypeEffect.Add(typing);
-
-        if (t.TextRevealType == DialogType.TypeWriter)
-        {
-            typing.value = "Typewriter";
-        }
-        else if (t.TextRevealType == DialogType.GradientFade)
-        {
-            typing.value = "Gradient fade";
-        }
-        else
-        {
-            typing.value = "Auto Complete";
-        }
-
-        return boxTypeEffect;
-    }
-*/
     public Box[] DrawCharacterSound(SayWord t)
     {
         Box[] bxx = new Box[3];
@@ -384,10 +327,9 @@ public class SayWordEditor : Editor
 
         if (t.CharacterSound != null)
             auCharaClip.value = t.CharacterSound;
-
-        auCharaClip.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            auCharaClip.RegisterValueChangedCallback((x) =>
             {
                 if (auCharaClip.value != null)
                 {
@@ -400,8 +342,8 @@ public class SayWordEditor : Editor
                     toggleCharaAudio.SetEnabled(false);
                 }
                 EditorUtility.SetDirty(t.gameObject);
-            }
-        });
+            });
+        }
         bxx[0] = boxCharaSound;
 
         //LOOP Character sound clip
@@ -420,16 +362,14 @@ public class SayWordEditor : Editor
         auLoopCharaClip.style.width = 200;
         boxLoopCharaSound.Add(auLoopCharaClip);
         auLoopCharaClip.value = t.LoopCharacterAudio;
-
-        auLoopCharaClip.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            auLoopCharaClip.RegisterValueChangedCallback((x) =>
             {
                 t.LoopCharacterAudio = auLoopCharaClip.value;
                 EditorUtility.SetDirty(t.gameObject);
-            }
-        });
-
+            });
+        }
         bxx[1] = boxLoopCharaSound;
 
         if (auCharaClip.value == null)
@@ -451,7 +391,6 @@ public class SayWordEditor : Editor
         strSlider.style.marginLeft = 5;
         strSlider.text = "Chara audio vol : ";
         boxSlider.Add(strSlider);
-        charaVolumeElement = strSlider;
 
         var slider = new Slider();
         slider.style.width = 200;
@@ -470,15 +409,14 @@ public class SayWordEditor : Editor
         {
             boxSlider.SetEnabled(true);
         }
-
-        slider.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            slider.RegisterValueChangedCallback((x) =>
+            {
                 t.CharacterSoundVolume = slider.value;
-
-            EditorUtility.SetDirty(t.gameObject);
-        });
-
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
         return bxx;
     }
     private void WarningCheck(SayWord t)
@@ -514,9 +452,9 @@ public class SayWordEditor : Editor
         if (t.PlayAudioClip != null)
             auClip.value = t.PlayAudioClip;
 
-        auClip.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            auClip.RegisterValueChangedCallback((x) =>
             {
                 if (auClip.value != null)
                     t.PlayAudioClip = auClip.value as AudioClip;
@@ -524,9 +462,8 @@ public class SayWordEditor : Editor
                     t.PlayAudioClip = null;
 
                 EditorUtility.SetDirty(t.gameObject);
-            }
-        });
-
+            });
+        }
         var boxSubTwo = new Box();
         boxSubTwo.style.marginTop = 5;
         boxSubTwo.style.flexDirection = FlexDirection.Row;
@@ -541,11 +478,13 @@ public class SayWordEditor : Editor
         var sym = new TextField();
         sym.style.width = 210;
         sym.value = t.CustomSymbols;
-        sym.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            t.CustomSymbols = sym.value;
-        });
-
+            sym.RegisterValueChangedCallback((x) =>
+            {
+                t.CustomSymbols = sym.value;
+            });
+        }
         boxSubTwo.Add(sym);
         return boxAu;
     }
@@ -588,7 +527,7 @@ public class SayWordEditor : Editor
             {
                 t.VDialogue = Array.Find(RePoolVDialogues(), x => x.velvieDialogueName == evt.newValue);
 
-                if(t.VDialogue == null)
+                if (t.VDialogue == null)
                 {
                     vdialog.child.value = "<None>";
                 }
@@ -678,37 +617,39 @@ public class SayWordEditor : Editor
             Array.ForEach(vcharas, x => asList.Add(x.character.name));
             asList.Add("<None>");
             vis.child.choices = asList;
-
-            vis.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                vis.child.RegisterValueChangedCallback((evt) =>
                 {
-                    vis.child.value = "<None>";
-                    Resets(t);
-                    RePoolPortrait(t, spriteList);
-                    RePoolThumbnail(t, thmList);
-                    thumbnailElement.SetEnabled(false);
-                    portraitElements.SetEnabled(false);
-                    EnablePortraitBoxes(false, t);
-                    thmAnim?.SetEnabled(false);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-                else
-                {
-                    //Reset first
-                    Resets(t);
-                    /////
+                    if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+                    {
+                        vis.child.value = "<None>";
+                        Resets(t);
+                        RePoolPortrait(t, spriteList);
+                        RePoolThumbnail(t, thmList);
+                        thumbnailElement.SetEnabled(false);
+                        portraitElements.SetEnabled(false);
+                        EnablePortraitBoxes(false, t);
+                        thmAnim?.SetEnabled(false);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                    else
+                    {
+                        //Reset first
+                        Resets(t);
+                        /////
 
-                    t.Character = Array.Find(Resources.FindObjectsOfTypeAll<VCharacterUtil>(), x => x.character.name == evt.newValue).character;
-                    RePoolPortrait(t, spriteList);
-                    RePoolThumbnail(t, thmList);
-                    thumbnailElement.SetEnabled(true);
-                    portraitElements.SetEnabled(true);
-                    EnablePortraitBoxes(true, t);
-                    thmAnim?.SetEnabled(true);
-                    EditorUtility.SetDirty(t.gameObject);
-                }
-            });
+                        t.Character = Array.Find(Resources.FindObjectsOfTypeAll<VCharacterUtil>(), x => x.character.name == evt.newValue).character;
+                        RePoolPortrait(t, spriteList);
+                        RePoolThumbnail(t, thmList);
+                        thumbnailElement.SetEnabled(true);
+                        portraitElements.SetEnabled(true);
+                        EnablePortraitBoxes(true, t);
+                        thmAnim?.SetEnabled(true);
+                        EditorUtility.SetDirty(t.gameObject);
+                    }
+                });
+            }
         }
 
 
@@ -790,57 +731,58 @@ public class SayWordEditor : Editor
 
 
         objElement.choices = str;
-
-        objElement.RegisterCallback<ChangeEvent<string>>((evt) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "None")
+            objElement.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
-                objElement.value = "<None>";
-                t.EffectThm = ThumbnailEffects.None;
-                EnablePortraitBoxes(false, t);
-                AddRemoveAnimatableProps(t, false);
-            }
-            else
-            {
-                if (ThumbnailEffects.PlayAnimatableProps.ToString() == evt.newValue)
+                if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "None")
                 {
-                    if (t.Character != null)
-                    {
-                        t.EffectThm = ThumbnailEffects.PlayAnimatableProps;
-                        EnablePortraitBoxes(true, t);
-                        AddRemoveAnimatableProps(t, true);
-                        EditorUtility.SetDirty(t.gameObject);
-                    }
-                    else
-                    {
-                        objElement.value = "<None>";
-                        t.EffectThm = ThumbnailEffects.None;
-                        EnablePortraitBoxes(false, t);
-                        AddRemoveAnimatableProps(t, false);
-                        EditorUtility.SetDirty(t.gameObject);
-                    }
+                    objElement.value = "<None>";
+                    t.EffectThm = ThumbnailEffects.None;
+                    EnablePortraitBoxes(false, t);
+                    AddRemoveAnimatableProps(t, false);
                 }
                 else
                 {
-                    foreach (var nume in Enum.GetValues(typeof(ThumbnailEffects)))
+                    if (ThumbnailEffects.PlayAnimatableProps.ToString() == evt.newValue)
                     {
-                        var asnumetype = (ThumbnailEffects)nume;
-
-                        if (asnumetype.ToString() == evt.newValue)
+                        if (t.Character != null)
                         {
-                            t.EffectThm = asnumetype;
-                            t.AnimatableThumbnailProp = null;
+                            t.EffectThm = ThumbnailEffects.PlayAnimatableProps;
                             EnablePortraitBoxes(true, t);
+                            AddRemoveAnimatableProps(t, true);
+                            EditorUtility.SetDirty(t.gameObject);
+                        }
+                        else
+                        {
+                            objElement.value = "<None>";
+                            t.EffectThm = ThumbnailEffects.None;
+                            EnablePortraitBoxes(false, t);
                             AddRemoveAnimatableProps(t, false);
                             EditorUtility.SetDirty(t.gameObject);
-                            break;
                         }
                     }
+                    else
+                    {
+                        foreach (var nume in Enum.GetValues(typeof(ThumbnailEffects)))
+                        {
+                            var asnumetype = (ThumbnailEffects)nume;
 
+                            if (asnumetype.ToString() == evt.newValue)
+                            {
+                                t.EffectThm = asnumetype;
+                                t.AnimatableThumbnailProp = null;
+                                EnablePortraitBoxes(true, t);
+                                AddRemoveAnimatableProps(t, false);
+                                EditorUtility.SetDirty(t.gameObject);
+                                break;
+                            }
+                        }
+
+                    }
                 }
-            }
-        });
-
+            });
+        }
         vis.Add(lblName);
         vis.Add(objElement);
         return vis;
@@ -882,12 +824,14 @@ public class SayWordEditor : Editor
         objElement.style.marginLeft = 4;
         objElement.style.width = 50;
         objElement.value = t.Magnitude;
-        objElement.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            t.Magnitude = objElement.value;
-            EditorUtility.SetDirty(t.gameObject);
-        });
-
+            objElement.RegisterValueChangedCallback((x) =>
+            {
+                t.Magnitude = objElement.value;
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
         vis.Add(lblName);
         vis.Add(objElement);
         return vis;
@@ -953,11 +897,15 @@ public class SayWordEditor : Editor
         objElement.style.marginLeft = 4;
         objElement.style.width = 50;
         objElement.value = t.LoopCount;
-        objElement.RegisterValueChangedCallback((x) =>
+
+        if (!PortsUtils.PlayMode)
         {
-            t.LoopCount = objElement.value;
-            EditorUtility.SetDirty(t.gameObject);
-        });
+            objElement.RegisterValueChangedCallback((x) =>
+            {
+                t.LoopCount = objElement.value;
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
 
         vis.Add(lblName);
         vis.Add(objElement);
@@ -1042,11 +990,14 @@ public class SayWordEditor : Editor
         objElementTwo.style.width = 50;
         objElementTwo.value = t.FrameRate;
 
-        objElementTwo.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            t.FrameRate = objElementTwo.value;
-            EditorUtility.SetDirty(t.gameObject);
-        });
+            objElementTwo.RegisterValueChangedCallback((x) =>
+            {
+                t.FrameRate = objElementTwo.value;
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
 
         var visThree = new Box();
         visThree.style.flexDirection = FlexDirection.Row;

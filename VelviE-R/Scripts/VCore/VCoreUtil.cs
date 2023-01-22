@@ -58,6 +58,8 @@ namespace VelvieR
                 if (!VBlockManager.vcoreutils.Contains(this))
                     VBlockManager.vcoreutils.Add(this);
             }
+
+            //HideAllVCoreComponents(false);
         }
         public void HideAllVCoreComponents(bool state)
         {

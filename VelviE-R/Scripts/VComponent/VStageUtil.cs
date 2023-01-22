@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
-using VTasks;
 
 namespace VelvieR
 {
@@ -18,15 +15,6 @@ namespace VelvieR
         [SerializeField, HideInInspector] public GameObject threedobj;
         [SerializeField] private bool dim = false;
         public bool Dim{get{return dim;} set{dim = value;}}
-        public VStageClass getOneDummyStage
-        {
-            get
-            {
-                if(TwoDStage.Count > 0)
-                    return TwoDStage[0];
-                return null;
-            }
-        }
         
         void OnValidate()
         {

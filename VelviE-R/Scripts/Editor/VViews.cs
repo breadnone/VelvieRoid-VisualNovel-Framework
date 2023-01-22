@@ -246,9 +246,9 @@ namespace VIEditor
 
             if (vnode.IsGameStarted == EnableState.GameStarted)
                 dropEventType.text = "GameStart";
-            else if(vnode.IsGameStarted == EnableState.None)
+            else if (vnode.IsGameStarted == EnableState.None)
                 dropEventType.text = "EventType";
-            else if(vnode.IsGameStarted == EnableState.Scheduler)
+            else if (vnode.IsGameStarted == EnableState.Scheduler)
                 dropEventType.text = "Scheduler";
 
 
@@ -262,7 +262,7 @@ namespace VIEditor
             txtDescription.style.width = 145;
             txtDescription.style.height = 20;
             txtDescription.name = "nodeName";
-            txtDescription.value = GetNonDuplicateName(txtDescription.name, vnode:vnode);
+            txtDescription.value = GetNonDuplicateName(txtDescription.name, vnode: vnode);
 
             vnode.contentContainer.Add(txtDescription);
             activeVnode = vnode;
@@ -286,10 +286,9 @@ namespace VIEditor
 
             vnode.userData = vportinstance as VPortsInstance; //Node.userData is very handy to pass data around! 
             PortsUtils.InsertToVPorts(vportinstance);
-
-            txtDescription.RegisterCallback<FocusOutEvent>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                txtDescription.RegisterCallback<FocusOutEvent>((x) =>
                 {
                     var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vportinstance.vnodeProperty.nodeId);
 
@@ -301,10 +300,9 @@ namespace VIEditor
                         vportinstance.vnodeProperty.nodeName = getname;
                     }
 
-                    if (!PortsUtils.PlayMode)
-                        PortsUtils.VGraph.RefreshListV();
-                }
-            });
+                    PortsUtils.VGraph.RefreshListV();
+                });
+            }
 
             ports.ForEach(x =>
             {
@@ -332,10 +330,10 @@ namespace VIEditor
                 {
                     var asVn = nodeDesc as VNodes;
 
-                    if(vnode != null)
+                    if (vnode != null)
                     {
                         //var asvport = (VPortsInstance)asVn.userData;
-                        if(asVn == vnode)
+                        if (asVn == vnode)
                         {
                             continue;
                         }

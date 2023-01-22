@@ -154,7 +154,6 @@ namespace VIEditor
             }
         }
 
-        private Label No;
         private Label Indicator;
         public void RegisterCallB(MouseDownEvent e)
         {
@@ -237,38 +236,11 @@ namespace VIEditor
                 Indicator.text = customSymbol;
             }
         }
-        public void CustomIndicator(VColor col)
-        {
-            if(col != VColor.None)
-            {
-                VColorAttr.GetColor(Indicator, col);
-            }
-            else
-            {
-                Indicator.style.backgroundColor = Color.yellow;
-            }
-        }
         public void SetIndicators(bool state)
         {
             Indicator.SetEnabled(state);
             VBlockContent.SetEnabled(state);
             VBlockLineNumber.SetEnabled(state);
-        }
-        //Color state when selected. 
-        public void SetContentColor(Color col)
-        {
-            VBlockContent.style.backgroundColor = col;
-        }
-        public void SetVBlockColor(int defWidth, Color defColor)
-        {
-            this.style.borderTopWidth = defWidth;
-            this.style.borderBottomWidth = defWidth;
-            this.style.borderLeftWidth = defWidth;
-            this.style.borderRightWidth = defWidth;
-            this.style.borderTopColor = defColor;
-            this.style.borderBottomColor = defColor;
-            this.style.borderLeftColor = defColor;
-            this.style.borderRightColor = defColor;
         }
     }
 }

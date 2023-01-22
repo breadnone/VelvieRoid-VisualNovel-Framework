@@ -4,7 +4,6 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace VIEditor
@@ -17,22 +16,45 @@ namespace VIEditor
             var root = new VisualElement();
             var t = target as SetPortrait;
 
-            var port = VUITemplate.CharacterTemplate();
-            port.child.RegisterCallback<ChangeEvent<string>>((x)=>
-            {
-                if(String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
-                {
-                    t.ActivePortrait = null;
-                    port.child.value = "<None>";
-                    imgCon.sprite = null;
-                }
-                else
-                {
-                    t.ActivePortrait = t.Character.charaPortrait.Find(xx => xx.portraitSprite.name == x.newValue);
-                    imgCon.sprite = t.ActivePortrait.portraitSprite;
-                }
-            });
+            var port = VUITemplate.PortraitTemplate(t.Character);
 
+            if (t.ActivePortrait != null && t.ActivePortrait.portraitSprite != null)
+            {
+                port.child.value = t.ActivePortrait.portraitSprite.name;
+            }
+            else
+            {
+                port.child.value = "<None>";
+
+            }
+            if (!PortsUtils.PlayMode)
+            {
+                port.child.RegisterValueChangedCallback((x) =>
+                {
+                    if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
+                    {
+                        t.ActivePortrait = null;
+                        port.child.value = "<None>";
+                        imgCon.sprite = null;
+                    }
+                    else
+                    {
+                        t.ActivePortrait = t.Character.charaPortrait.Find(xx => xx.portraitSprite.name == x.newValue);
+
+                        if (t.ActivePortrait == null)
+                        {
+                            Debug.LogWarning("ActivePortrait does not exists!!");
+                            return;
+                        }
+
+                        port.child.value = x.newValue;
+
+                        if (t.ActivePortrait.portraitSprite != null)
+                            imgCon.sprite = t.ActivePortrait.portraitSprite;
+                    }
+
+                });
+            }
             portraitL = port.child;
 
             root.Add(DrawCharacter(t));
@@ -40,60 +62,58 @@ namespace VIEditor
             root.Add(DrawPortrait(t));
             root.Add(DrawDuration(t));
             root.Add(DrawWait(t));
-            
+
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
-
-        private DropdownField characterTool;
 
         private Box DrawCharacter(SetPortrait t)
         {
             var vchar = VUITemplate.CharacterTemplate();
 
-            characterTool = vchar.child;
-
             if (t.Character == null)
             {
                 vchar.child.value = "<None>";
-                PortsUtils.SetActiveAssetDirty();
-                EditorUtility.SetDirty(t);
             }
             else
             {
                 vchar.child.value = t.Character.name;
-                PortsUtils.SetActiveAssetDirty();
-                EditorUtility.SetDirty(t);
             }
 
-            vchar.child.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
+                vchar.child.RegisterValueChangedCallback((x) =>
                 {
-                    t.Character = null;
-                    PoolPortraits(t);
-                }
-                else
-                {
-                    t.Character = Array.Find(Chars(), xx => xx.character.name == x.newValue).character;
-
-                    if (t.Character == null)
+                    if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
                     {
-                        vchar.child.value = "<None>";
+                        t.Character = null;
                         PoolPortraits(t);
                     }
                     else
                     {
-                        PoolPortraits(t);
+                        t.Character = Array.Find(Chars(), xx => xx.character.name == x.newValue).character;
+
+                        if (t.Character == null)
+                        {
+                            vchar.child.value = "<None>";
+                            PoolPortraits(t);
+                        }
+                        else
+                        {
+                            PoolPortraits(t);
+                        }
                     }
-                }
-            });
+
+                    PortsUtils.SetActiveAssetDirty();
+                    EditorUtility.SetDirty(t);
+                });
+            }
 
             return vchar.root;
         }
 
-        
+
         private VCharacterUtil[] Chars()
         {
             return Resources.FindObjectsOfTypeAll<VCharacterUtil>();
@@ -101,37 +121,44 @@ namespace VIEditor
         private Box DrawStage(SetPortrait t)
         {
             var vstage = VUITemplate.VStageTemplate();
-            
+
             if (t.ActiveVStage != null)
             {
-                vstage.child.value = t.ActiveVStage.vstageName + " - " + t.ActiveVStage.vstageId[0..2];
+                vstage.child.value = t.ActiveVStage.vstageName;
             }
             else
             {
                 vstage.child.value = "<None>";
             }
 
-
-            vstage.child.RegisterCallback<ChangeEvent<string>>((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
+                vstage.child.RegisterValueChangedCallback((x) =>
                 {
-                    vstage.child.value = "<None>";
-                    t.ActiveVStage = null;
-                }
-                else
-                {
-                    var getStages = Resources.FindObjectsOfTypeAll<VStageUtil>();
-                    t.ActiveVStage = Array.Find(getStages, xx => xx.vstageName == x.newValue);
-                    vstage.child.value = t.ActiveVStage.vstageName + " - " + t.ActiveVStage.vstageId[0..2];
-
-                    if(t.ActiveVStage == null)
+                    if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
                     {
                         vstage.child.value = "<None>";
+                        t.ActiveVStage = null;
                     }
-                }
-            });
+                    else
+                    {
+                        var getStages = Resources.FindObjectsOfTypeAll<VStageUtil>();
+                        t.ActiveVStage = Array.Find(getStages, xx => xx.vstageName == x.newValue);
 
+                        if (t.ActiveVStage != null)
+                        {
+                            vstage.child.value = t.ActiveVStage.vstageName;
+                        }
+                        else
+                        {
+                            vstage.child.value = "<None>";
+                        }
+
+                        EditorUtility.SetDirty(t);
+                    }
+
+                });
+            }
             return vstage.root;
         }
         private Image imgCon;
@@ -165,10 +192,17 @@ namespace VIEditor
             img.style.borderLeftColor = Color.blue;
             img.style.borderRightColor = Color.blue;
 
-            if (t.Character != null && t.ActivePortrait != null && t.ActivePortrait.portraitSprite != null)
+            if (t.Character != null)
             {
-                portraitL.value = t.ActivePortrait.portraitSprite.name;
-                imgCon.sprite = t.ActivePortrait.portraitSprite;
+                if (t.ActivePortrait != null && t.ActivePortrait.portraitSprite != null)
+                {
+                    portraitL.value = t.ActivePortrait.portraitSprite.name;
+                    imgCon.sprite = t.ActivePortrait.portraitSprite;
+                }
+                else
+                {
+
+                }
             }
 
             imgContainer.Add(portraitL);
@@ -193,10 +227,10 @@ namespace VIEditor
             if (t.Character != null && t.Character.charaPortrait.Count > 0)
             {
                 var list = new List<string>();
-                t.Character.charaPortrait.ForEach(x => 
+                t.Character.charaPortrait.ForEach(x =>
                 {
-                    if(x != null && x.portraitSprite != null && !String.IsNullOrEmpty(x.portraitSprite.name))
-                    list.Add(x.portraitSprite.name);
+                    if (x != null && x.portraitSprite != null && !String.IsNullOrEmpty(x.portraitSprite.name))
+                        list.Add(x.portraitSprite.name);
                 });
                 portraitL.choices = list;
                 list.Add("<None>");
@@ -222,11 +256,15 @@ namespace VIEditor
 
             var toggle = new Toggle();
             toggle.value = t.WaitUntilFinished;
-            toggle.RegisterValueChangedCallback((x) =>
-            {
-                t.WaitUntilFinished = toggle.value;
-            });
 
+            if (!PortsUtils.PlayMode)
+            {
+                toggle.RegisterValueChangedCallback((x) =>
+                {
+                    t.WaitUntilFinished = toggle.value;
+                });
+            }
+            
             vis.Add(wait);
             vis.Add(toggle);
             return vis;
@@ -245,11 +283,13 @@ namespace VIEditor
             var floatField = new FloatField();
             floatField.style.width = 190;
             floatField.value = t.Duration;
-            floatField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.Duration = floatField.value;
-            });
-
+                floatField.RegisterValueChangedCallback((x) =>
+                {
+                    t.Duration = floatField.value;
+                });
+            }
             vis.Add(wait);
             vis.Add(floatField);
             return vis;

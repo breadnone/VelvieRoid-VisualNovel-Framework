@@ -762,7 +762,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4880911234155824601}
-  - component: {fileID: 4880911234155824602}
   m_Layer: 0
   m_Name: VCharacter
   m_TagString: Untagged
@@ -790,85 +789,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4880911234155824602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4880911234155824603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0b92a87f34ac4429e533cbd6c61cf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vstageid: cb4245bc-3387-4852-bde2-5666b0197c181300798693
-  vstageName: VCharacter
-  character:
-    name: VCharacter
-    fullName: 
-    description: 
-    profile: 
-    isClickable: 0
-    charaSound:
-    - {fileID: 0}
-    - {fileID: 0}
-    charaObject3D:
-    - {fileID: 0}
-    - {fileID: 0}
-    charaPortrait:
-    - portraitSprite: {fileID: 21300000, guid: 048b2b2c863bca4439ef5777bbd1b70d, type: 3}
-      portraitObj: {fileID: 0}
-      portraitRect: {fileID: 0}
-    - portraitSprite: {fileID: 21300000, guid: 5f7fa9a7940a64e79b5a42d9f661d42c, type: 3}
-      portraitObj: {fileID: 0}
-      portraitRect: {fileID: 0}
-    - portraitSprite: {fileID: 0}
-      portraitObj: {fileID: 0}
-      portraitRect: {fileID: 0}
-    activePortraitIndex: 0
-    activeAudioClipIndex: 0
-    activeObject3dIndex: 0
-    charaId: 809c7ced-0e93-4b03-a686-a2c3a40ef2362099644247
-    isVisible: 1
-    is2D: 1
-    lastStagePosition: 
-    root: {fileID: 4880911234155824603}
-    rootRect: {fileID: 4880911234155824601}
-    editorIndex: 2
-    customTag: 
-    lastStageDuration: 0.2
-    dimmed: 0
-    vcharacterUtil: {fileID: 0}
-  characterId: 809c7ced-0e93-4b03-a686-a2c3a40ef2362099644247
-  gameobjectname: VCharacter
-  animatableThumbnail:
-  - name: test
-    description: <Empty>
-    delay: 0.1
-    loopClamp: 0
-    sprites:
-    - {fileID: 21300000, guid: c4a6884eaf6a3fa47962e4b068491d94, type: 3}
-    - {fileID: 21300000, guid: c4a6884eaf6a3fa47962e4b068491d94, type: 3}
-    - {fileID: 21300000, guid: f80736d04b093f94083c842ff5b06106, type: 3}
-    - {fileID: 21300000, guid: 45dc1b0d0d7e8ad4f8f5b969140a6382, type: 3}
-    - {fileID: 21300000, guid: dc08c6f3d53cb3840b52e935e1a9f950, type: 3}
-    - {fileID: 21300000, guid: f43ad0e9b8bf79c40b1e433d740d5f63, type: 3}
-  - name: NoName2
-    description: <Empty>
-    delay: 0.1
-    loopClamp: 0
-    sprites: []
-  - name: NoName3
-    description: <Empty>
-    delay: 0.1
-    loopClamp: 0
-    sprites: []
-  - name: NoName1
-    description: <Empty>
-    delay: 0.1
-    loopClamp: 0
-    sprites: []
 --- !u!1 &4880911234616164451
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,55 +840,63 @@ MonoBehaviour:
   m_GameObject: {fileID: 4880911234616164451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c644061968b23479468be5be2b6be2, type: 3}
+  m_Script: {fileID: 11500000, guid: c65f56589d6f2934782ba2f5edca7693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TwoDStage:
   - name: LeftStage
     stageObject: {fileID: 4880911233344335643}
     stageTransform: {fileID: 4880911233344335642}
-    stageHashId: 775f5f97-a325-4cfb-8f82-b625b7931f3d
+    stageHashId: 9804c4c1-6ad3-4c5f-adf2-0baaf7358c8c
     stageDefaultPos: {x: 354.7, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
-    stageIs2d: 1
+    stageIs2d: 0
     rect: {fileID: 4880911233344335642}
   - name: OffscreenLeftStage
     stageObject: {fileID: 4880911233559021472}
     stageTransform: {fileID: 4880911233559021479}
-    stageHashId: 643a054d-f3ca-4bd6-98d5-6a39fe948f4e
+    stageHashId: 59a50995-68e9-40e0-b6ae-cb18b71da584
     stageDefaultPos: {x: -451, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
-    stageIs2d: 1
+    stageIs2d: 0
     rect: {fileID: 4880911233559021479}
   - name: RightStage
     stageObject: {fileID: 4880911233705600110}
     stageTransform: {fileID: 4880911233705600109}
-    stageHashId: 49ab84d3-b1b6-4109-bb87-a1dea40b38f0
+    stageHashId: c46864cd-3ba7-4f9e-bbe1-b8d8fc2a9981
     stageDefaultPos: {x: 1565.3, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
-    stageIs2d: 1
+    stageIs2d: 0
     rect: {fileID: 4880911233705600109}
   - name: OffscreenRightStage
     stageObject: {fileID: 4880911233144706911}
     stageTransform: {fileID: 4880911233144706910}
-    stageHashId: b12b6b6a-fc1a-4d8e-a411-004e6b2b1d22
+    stageHashId: ddaf20d9-a1cb-4ea9-bbdc-53509c8c54ec
     stageDefaultPos: {x: 2371, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
-    stageIs2d: 1
+    stageIs2d: 0
     rect: {fileID: 4880911233144706910}
   - name: middle
     stageObject: {fileID: 4880911235083212519}
     stageTransform: {fileID: 4880911235083212518}
-    stageHashId: 93d06922-b5e5-41db-8229-1add1b2a189e
+    stageHashId: e3e77ef5-a7c0-4255-8b7a-158da777c8d9
     stageDefaultPos: {x: 960, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
-    stageIs2d: 1
+    stageIs2d: 0
     rect: {fileID: 4880911235083212518}
+  - name: VCharacter
+    stageObject: {fileID: 4880911234155824603}
+    stageTransform: {fileID: 4880911234155824601}
+    stageHashId: d9781e19-89ee-48a0-92c9-70bd1e4dc5e0
+    stageDefaultPos: {x: 960, y: 540, z: 0}
+    stageDefaultScale: {x: 1, y: 1, z: 1}
+    stageIs2d: 0
+    rect: {fileID: 4880911234155824601}
   ThreeDStage:
   - name: LeftStage
     stageObject: {fileID: 4880911233692053124}
     stageTransform: {fileID: 4880911233692053131}
-    stageHashId: c255855e-bc92-414a-9a6f-d62445a28a8a
+    stageHashId: 353398e8-a9c8-4d9f-bd3d-e8ab712b836e
     stageDefaultPos: {x: -458, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -976,7 +904,7 @@ MonoBehaviour:
   - name: RightStage
     stageObject: {fileID: 4880911233346433830}
     stageTransform: {fileID: 4880911233346433829}
-    stageHashId: b8497454-a4dc-4adc-8791-716d163b1e95
+    stageHashId: 20b636e1-b2fa-460c-a028-c9671ac3644c
     stageDefaultPos: {x: 457.6, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -984,7 +912,7 @@ MonoBehaviour:
   - name: OffScreenRightStage
     stageObject: {fileID: 4880911233679710572}
     stageTransform: {fileID: 4880911233679710483}
-    stageHashId: 4adc5ce0-3503-4430-be43-db873a40b915
+    stageHashId: e51b9f8a-b1d6-48b0-91fb-52d46271cad9
     stageDefaultPos: {x: 1068, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -992,7 +920,7 @@ MonoBehaviour:
   - name: OffScreenLeftStage
     stageObject: {fileID: 4880911235134246711}
     stageTransform: {fileID: 4880911235134246710}
-    stageHashId: 6b47192f-cef5-430b-b7a9-eee707b944bc
+    stageHashId: 51849925-95bb-4956-9b34-e5f1d5a507a0
     stageDefaultPos: {x: -1057, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -1000,12 +928,12 @@ MonoBehaviour:
   - name: middle
     stageObject: {fileID: 4880911233847987940}
     stageTransform: {fileID: 4880911233847987947}
-    stageHashId: c5249a1d-19c2-41ab-a6d9-4f5997a55be9
+    stageHashId: 0868f3d8-a019-402a-a3f1-b45d496154f6
     stageDefaultPos: {x: 0, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
     rect: {fileID: 0}
-  vstageId: ccd7f317-b14f-4bfa-80c8-a832d314af09534319112
+  vstageId: 9032ad83-feb5-4883-bb15-1c3edb5c422165802933
   vstageName: VStage
   twodobj: {fileID: 4880911234720892111}
   threedobj: {fileID: 4880911233191930331}

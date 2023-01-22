@@ -27,12 +27,12 @@ namespace VIEditor
             var t = target as VInventory;
             root.Add(container);
             container.Add(DrawButton(t));
-            
+
 
             var resetBtn = new Button();
             resetBtn.style.height = 40;
             resetBtn.text = "Reset Inventory!";
-            resetBtn.clicked += ()=>
+            resetBtn.clicked += () =>
             {
                 dummy.Add(DrawResetConfirm(t));
             };
@@ -118,33 +118,34 @@ namespace VIEditor
                 asdata.Item3.value = t.category[i].sprite;
 
                 var idx = i;
-
-                asdata.Item1.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.category[idx].name = x.newValue;
-
-                    if(t.category[idx].tmp == null)
+                    asdata.Item1.RegisterValueChangedCallback((x) =>
                     {
-                        t.UpdateCategoryName(t.category[idx].categoryObject, x.newValue);
-                    }
-                    else
+                        t.category[idx].name = x.newValue;
+
+                        if (t.category[idx].tmp == null)
+                        {
+                            t.UpdateCategoryName(t.category[idx].categoryObject, x.newValue);
+                        }
+                        else
+                        {
+                            t.category[idx].tmp.SetText(x.newValue);
+                            t.category[idx].tmp.ForceMeshUpdate();
+                        }
+                    });
+
+                    asdata.Item2.RegisterValueChangedCallback((x) =>
                     {
-                        t.category[idx].tmp.SetText(x.newValue);
-                        t.category[idx].tmp.ForceMeshUpdate();
-                    }
-                });
+                        t.category[idx].description = x.newValue;
+                    });
 
-                asdata.Item2.RegisterValueChangedCallback((x) =>
-                {
-                    t.category[idx].description = x.newValue;
-                });
-
-                asdata.Item3.RegisterValueChangedCallback((x) =>
-                {
-                    t.category[idx].sprite = x.newValue as Sprite;
-                    t.UpdateCategorySprite(t.category[idx].categoryObject, x.newValue as Sprite);
-                });
-
+                    asdata.Item3.RegisterValueChangedCallback((x) =>
+                    {
+                        t.category[idx].sprite = x.newValue as Sprite;
+                        t.UpdateCategorySprite(t.category[idx].categoryObject, x.newValue as Sprite);
+                    });
+                }
             };
 
             const int itemHeight = 100;
@@ -223,7 +224,7 @@ namespace VIEditor
         }
         private ListView listV;
         private DateTime date;
-        
+
         public Box DrawCreateItem(VInventory t)
         {
             Box box = new Box();
@@ -351,111 +352,114 @@ namespace VIEditor
                 asdata.Item2.value = t.inventory[idx].description;
                 asdata.Item3.value = t.inventory[idx].sprite;
 
-                if(t.inventory[idx] != null && t.inventory[idx].category != null && !String.IsNullOrEmpty(t.inventory[idx].category.name))
+                if (t.inventory[idx] != null && t.inventory[idx].category != null && !String.IsNullOrEmpty(t.inventory[idx].category.name))
                     asdata.Item4.value = t.inventory[idx].category.name;
                 else
                     asdata.Item4.value = "<None!>";
-                
 
-                if(t.inventory[i].slots.Count > 0)
+
+                if (t.inventory[i].slots.Count > 0)
                 {
-                    foreach(var itts in t.inventory[i].slots)
+                    foreach (var itts in t.inventory[i].slots)
                     {
-                        if(itts != null)
+                        if (itts != null)
                         {
                             var slot = CreateSlots(t, asdata.Item7);
                             slot.txt.value = itts.name;
                             slot.val.value = itts.value;
-
-                            slot.txt.RegisterValueChangedCallback((x)=>
+                            if (!PortsUtils.PlayMode)
                             {
-                                itts.name = x.newValue;
-                            });
+                                slot.txt.RegisterValueChangedCallback((x) =>
+                                {
+                                    itts.name = x.newValue;
+                                });
 
-                            slot.val.RegisterValueChangedCallback((x)=>
-                            {
-                                itts.value = x.newValue;
-                            });
-                        }
-                    }
-                }
-
-                asdata.Item1.RegisterValueChangedCallback((x) =>
-                {
-                    t.inventory[idx].name = x.newValue;
-                    t.UpdateCategoryName(t.inventory[idx].inventoryObject, x.newValue);
-                });
-
-                asdata.Item2.RegisterValueChangedCallback((x) =>
-                {
-                    t.inventory[idx].description = x.newValue;
-                });
-
-                asdata.Item3.RegisterValueChangedCallback((x) =>
-                {
-                    t.inventory[idx].sprite = x.newValue as Sprite;
-                    t.UpdateCategorySprite(t.inventory[idx].inventoryObject, x.newValue as Sprite);
-                });
-
-                asdata.Item4.RegisterCallback<ChangeEvent<string>>((xx) =>
-                {
-                    if (t.inventory[idx] != null && t.inventory[idx].category != null)
-                    {
-                        t.inventory[idx].category = t.category.Find(x => x.name == xx.newValue);
-                    }
-                    else
-                    {
-                        t.inventory[idx].category = null;
-                        asdata.Item4.value = "<None!>";
-                    }
-
-                    RePoolCategory(t);
-                });
-
-                asdata.Item5.clicked += () =>
-                {
-                    if(!wasClicked)
-                    {
-                        wasClicked = true;
-                        
-                        asdata.Item5.schedule.Execute(()=>
-                        {
-                            Debug.Log("SDS");
-                            t.inventory[idx].slots.Add(new AVStat<int>.AVSlot());
-                            var slot = CreateSlots(t, asdata.Item7);
-                            slot.txt.value = t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].name;
-                            slot.val.value = t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].value;
-
-                            slot.txt.RegisterValueChangedCallback((x)=>
-                            {
-                                t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].name = x.newValue;
-                            });
-
-                            slot.val.RegisterValueChangedCallback((x)=>
-                            {
-                                t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].value = x.newValue;
-                            });
-                            
-                            wasClicked = false;
-                        }).ExecuteLater(1);
-                    }
-                };
-
-                asdata.Item6.clicked += () =>
-                {
-                    if (asdata.Item7.childCount > 0)
-                    {
-                        var parents = asdata.Item7.Children().ToList();
-                        if (parents[parents.Count - 1].name == "slotSlot")
-                        {
-                            if(t.inventory[idx].slots.Count > 0)
-                            {
-                                parents[parents.Count - 1].RemoveFromHierarchy();
-                                t.inventory[idx].slots.RemoveAt(t.inventory[idx].slots.Count - 1);
+                                slot.val.RegisterValueChangedCallback((x) =>
+                                {
+                                    itts.value = x.newValue;
+                                });
                             }
                         }
                     }
-                };
+                }
+                if (!PortsUtils.PlayMode)
+                {
+                    asdata.Item1.RegisterValueChangedCallback((x) =>
+                    {
+                        t.inventory[idx].name = x.newValue;
+                        t.UpdateCategoryName(t.inventory[idx].inventoryObject, x.newValue);
+                    });
+
+                    asdata.Item2.RegisterValueChangedCallback((x) =>
+                    {
+                        t.inventory[idx].description = x.newValue;
+                    });
+
+                    asdata.Item3.RegisterValueChangedCallback((x) =>
+                    {
+                        t.inventory[idx].sprite = x.newValue as Sprite;
+                        t.UpdateCategorySprite(t.inventory[idx].inventoryObject, x.newValue as Sprite);
+                    });
+
+                    asdata.Item4.RegisterCallback<ChangeEvent<string>>((xx) =>
+                    {
+                        if (t.inventory[idx] != null && t.inventory[idx].category != null)
+                        {
+                            t.inventory[idx].category = t.category.Find(x => x.name == xx.newValue);
+                        }
+                        else
+                        {
+                            t.inventory[idx].category = null;
+                            asdata.Item4.value = "<None!>";
+                        }
+
+                        RePoolCategory(t);
+                    });
+
+                    asdata.Item5.clicked += () =>
+                    {
+                        if (!wasClicked)
+                        {
+                            wasClicked = true;
+
+                            asdata.Item5.schedule.Execute(() =>
+                            {
+                                t.inventory[idx].slots.Add(new AVStat<int>.AVSlot());
+                                var slot = CreateSlots(t, asdata.Item7);
+                                slot.txt.value = t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].name;
+                                slot.val.value = t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].value;
+
+                                slot.txt.RegisterValueChangedCallback((x) =>
+                                {
+                                    t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].name = x.newValue;
+                                });
+
+                                slot.val.RegisterValueChangedCallback((x) =>
+                                {
+                                    t.inventory[idx].slots[t.inventory[idx].slots.Count - 1].value = x.newValue;
+                                });
+
+                                wasClicked = false;
+                            }).ExecuteLater(1);
+                        }
+                    };
+
+                    asdata.Item6.clicked += () =>
+                    {
+                        if (asdata.Item7.childCount > 0)
+                        {
+                            var parents = asdata.Item7.Children().ToList();
+                            if (parents[parents.Count - 1].name == "slotSlot")
+                            {
+                                if (t.inventory[idx].slots.Count > 0)
+                                {
+                                    parents[parents.Count - 1].RemoveFromHierarchy();
+                                    t.inventory[idx].slots.RemoveAt(t.inventory[idx].slots.Count - 1);
+                                }
+                            }
+                        }
+                    };
+                }
             };
 
             var addCat = new ListView(t.inventory, makeItem: makeItem, bindItem: bindItem);
@@ -517,7 +521,7 @@ namespace VIEditor
         private DropdownField categoryFieldListview;
         private DropdownField categoryFieldDefault;
         private VisualElement DrawDefault(VInventory t)
-        {            
+        {
             var vis = new VisualElement();
             vis.style.flexDirection = FlexDirection.Row;
 
@@ -530,9 +534,9 @@ namespace VIEditor
             categoryFieldDefault = dropd;
             dropd.style.width = 300;
 
-            if(t.setDefault == null)
+            if (t.setDefault == null)
             {
-                if(t.category.Count > 0)
+                if (t.category.Count > 0)
                 {
                     dropd.value = t.category[0].name;
                     t.setDefault = t.category[0];
@@ -544,7 +548,7 @@ namespace VIEditor
             }
             else
             {
-                if(t.category.Exists(x => x.name == t.setDefault.name))
+                if (t.category.Exists(x => x.name == t.setDefault.name))
                 {
                     dropd.value = t.setDefault.name;
                 }
@@ -555,13 +559,13 @@ namespace VIEditor
             }
 
             var lis = new List<string>();
-            if(t.category.Count > 0)
+            if (t.category.Count > 0)
             {
-                foreach(var cat in t.category)
+                foreach (var cat in t.category)
                 {
-                    if(cat == null || String.IsNullOrEmpty(cat.name))
+                    if (cat == null || String.IsNullOrEmpty(cat.name))
                         continue;
-                    
+
                     lis.Add(cat.name);
                 }
             }
@@ -569,11 +573,11 @@ namespace VIEditor
             dropd.choices = lis;
             dropd.choices.Add("<None>");
 
-            dropd.RegisterCallback<ChangeEvent<string>>((x)=>
+            dropd.RegisterCallback<ChangeEvent<string>>((x) =>
             {
-                if(x.newValue == "<None>")
+                if (x.newValue == "<None>")
                 {
-                    if(t.category.Count > 0)
+                    if (t.category.Count > 0)
                     {
                         dropd.value = t.category[0].name;
                         t.setDefault = t.category[0];
@@ -601,13 +605,13 @@ namespace VIEditor
 
             var lis = new List<string>();
 
-            if(t.category.Count > 0)
+            if (t.category.Count > 0)
             {
-                foreach(var cat in t.category)
+                foreach (var cat in t.category)
                 {
-                    if(cat == null || String.IsNullOrEmpty(cat.name))
+                    if (cat == null || String.IsNullOrEmpty(cat.name))
                         continue;
-                    
+
                     lis.Add(cat.name);
                 }
             }
@@ -630,13 +634,13 @@ namespace VIEditor
             dropd.style.width = 300;
             dropd.choices = Enum.GetNames(typeof(InventoryWhenZero)).ToList();
             dropd.value = t.itemWhenZero.ToString();
-            dropd.RegisterCallback<ChangeEvent<string>>((x)=>
+            dropd.RegisterCallback<ChangeEvent<string>>((x) =>
             {
-                foreach(var item in Enum.GetValues(typeof(InventoryWhenZero)))
+                foreach (var item in Enum.GetValues(typeof(InventoryWhenZero)))
                 {
                     var asenum = (InventoryWhenZero)item;
 
-                    if(asenum.ToString() == x.newValue)
+                    if (asenum.ToString() == x.newValue)
                     {
                         t.itemWhenZero = asenum;
                         break;
@@ -658,7 +662,7 @@ namespace VIEditor
             btn.style.height = 40;
             vis.Add(btn);
 
-            btn.clicked += ()=>
+            btn.clicked += () =>
             {
                 if (!EditorWindow.HasOpenInstances<VInventoryManagerWindow>())
                 {
@@ -676,11 +680,11 @@ namespace VIEditor
         }
         public void ResetInventory(VInventory t)
         {
-            if(t.inventory.Count > 0)
+            if (t.inventory.Count > 0)
             {
-                for (int i = t.inventory.Count; i --> 0; )
+                for (int i = t.inventory.Count; i-- > 0;)
                 {
-                    if(t.inventory[i].inventoryObject != null)
+                    if (t.inventory[i].inventoryObject != null)
                     {
                         DestroyImmediate(t.inventory[i].inventoryObject);
                     }
@@ -688,11 +692,11 @@ namespace VIEditor
 
                 t.inventory = new List<VInventoryClass>();
             }
-            if(t.category.Count > 0)
+            if (t.category.Count > 0)
             {
-                for (int i = t.category.Count; i --> 0; )
+                for (int i = t.category.Count; i-- > 0;)
                 {
-                    if(t.category[i].categoryObject != null)
+                    if (t.category[i].categoryObject != null)
                     {
                         DestroyImmediate(t.category[i].categoryObject);
                     }
@@ -708,7 +712,7 @@ namespace VIEditor
 
             Repaint();
 
-            if(EditorWindow.HasOpenInstances<VInventoryManagerWindow>())
+            if (EditorWindow.HasOpenInstances<VInventoryManagerWindow>())
             {
                 var getWindow = EditorWindow.GetWindow<VInventoryManagerWindow>();
                 getWindow.RefreshInventoryWindow();
@@ -717,15 +721,15 @@ namespace VIEditor
         }
         private VisualElement DrawResetConfirm(VInventory t)
         {
-            if(dummy.childCount > 0)
+            if (dummy.childCount > 0)
             {
-                foreach(var child in dummy.Children().ToList())
+                foreach (var child in dummy.Children().ToList())
                 {
-                    if(child != null)
-                    child.RemoveFromHierarchy();
+                    if (child != null)
+                        child.RemoveFromHierarchy();
                 }
             }
-            
+
             var vis = new VisualElement();
             vis.style.flexDirection = FlexDirection.Row;
 
@@ -741,28 +745,28 @@ namespace VIEditor
             vis.Add(yes);
             vis.Add(no);
 
-            yes.clicked += ()=>
+            yes.clicked += () =>
             {
                 ResetInventory(t);
 
-                if(dummy.childCount > 0)
+                if (dummy.childCount > 0)
                 {
-                    foreach(var child in dummy.Children().ToList())
+                    foreach (var child in dummy.Children().ToList())
                     {
-                        if(child != null)
-                        child.RemoveFromHierarchy();
+                        if (child != null)
+                            child.RemoveFromHierarchy();
                     }
                 }
             };
 
-            no.clicked += ()=>
+            no.clicked += () =>
             {
-                if(dummy.childCount > 0)
+                if (dummy.childCount > 0)
                 {
-                    foreach(var child in dummy.Children().ToList())
+                    foreach (var child in dummy.Children().ToList())
                     {
-                        if(child != null)
-                        child.RemoveFromHierarchy();
+                        if (child != null)
+                            child.RemoveFromHierarchy();
                     }
                 }
             };

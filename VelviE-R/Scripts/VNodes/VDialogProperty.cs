@@ -36,7 +36,7 @@ namespace VelvieR
                     vdialog.WritingIndicatorText = writeIndicatorString;
                 }
 
-                vdialog.SpeedText(textSpeed);
+                vdialog.SpeedText(vdialog.TxtSpeed);
             }
         }
         public override void OnVExit()

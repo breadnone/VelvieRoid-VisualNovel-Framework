@@ -123,7 +123,7 @@ namespace VelvieR
             //hide active portrait first
             var getPortrait = GetVPortrait(vchara.charaId, portraitProp.portraitSprite.name);
 
-            if (getPortrait.vchara.charaPortrait.Count == 0 || getPortrait.vchara == null || getPortrait.portraitProp == null)
+            if (getPortrait.vchara == null || getPortrait.portraitProp == null || getPortrait.vchara.charaPortrait.Count == 0)
                 return;
 
             if (vstage != null)
@@ -149,6 +149,27 @@ namespace VelvieR
             if (String.IsNullOrEmpty(getPortrait.vchara.lastStagePosition))
             {
                 var activeDialog = VBlockManager.DefaultDialog;
+
+                #if UNITY_EDITOR
+                if(activeDialog == null)
+                {
+                    var getDialogs = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+
+                    if(getDialogs == null || getDialogs.Length == 0)
+                    {
+                        var tmpDialog = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel"));
+                        activeDialog = tmpDialog.GetComponent<VelvieDialogue>();
+                    }
+                    else
+                    {
+                        activeDialog = getDialogs[0];
+                    }
+
+                    activeDialog = getDialogs[0];
+                    VBlockManager.DefaultDialog = activeDialog;
+                }
+                #endif
+
                 getPortrait.vchara.lastStageDuration = activeDialog.SpritesDuration;
                 duration = activeDialog.SpritesDuration;
                 getPortrait.vchara.lastStagePosition = "middle";

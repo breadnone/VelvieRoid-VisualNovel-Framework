@@ -32,22 +32,22 @@ namespace VIEditor
             //Remove orphans!
             var scenes = AssetDatabase.FindAssets("t:Scene");
 
-                for(int i = 0; i < PortsUtils.variable.ivar.Count; i++)
+            for (int i = 0; i < PortsUtils.variable.ivar.Count; i++)
+            {
+                if (PortsUtils.variable.ivar[i] == null)
+                    continue;
+
+                for (int j = 0; j < PortsUtils.variable.ivar.Count; j++)
                 {
-                    if(PortsUtils.variable.ivar[i] == null)
-                        continue;
+                    var iguid = PortsUtils.variable.ivar[j].SceneGuid;
 
-                    for(int j = 0; j < PortsUtils.variable.ivar.Count; j++)
+                    if (String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(iguid)))
                     {
-                        var iguid = PortsUtils.variable.ivar[j].SceneGuid;
-
-                        if(String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(iguid)))
-                        {
-                            PortsUtils.variable.ivar.RemoveAt(j);
-                        }
+                        PortsUtils.variable.ivar.RemoveAt(j);
                     }
                 }
-            
+            }
+
             ////////
 
             VVariableUtils.ActiveVariableWindow = this;
@@ -87,7 +87,7 @@ namespace VIEditor
                 VVariableUtils.CreateEmptyVariable(mainListv);
 
                 SortIvarList();
-                
+
                 if (mainListv != null && PortsUtils.variable != null && PortsUtils.variable.ivar.Count > 0)
                     mainListv.ScrollToId(PortsUtils.variable.ivar.Count - 1);
             });
@@ -98,11 +98,11 @@ namespace VIEditor
 
             var btnRem = new Button(() =>
             {
-                if(!PortsUtils.PlayMode)
-                {                
+                if (!PortsUtils.PlayMode)
+                {
                     if (PortsUtils.variable.ivar.Count > 0 && mainListv.selectedItem != null)
                     {
-                        if((mainListv.selectedItem as IVar).SceneGuid == AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                        if ((mainListv.selectedItem as IVar).SceneGuid == AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
                         {
                             PortsUtils.variable.ivar.Remove(mainListv.selectedItem as IVar);
                             mainListv.ClearSelection();
@@ -166,19 +166,18 @@ namespace VIEditor
             searchBar.style.width = 230;
             searchBar.style.height = 25;
             searchBar.focusable = true;
-
-            searchBar.RegisterCallback<KeyDownEvent>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                searchBar.RegisterCallback<KeyDownEvent>((x) =>
                 {
+
                     if (x.keyCode == KeyCode.Return)
                     {
                         if (!String.IsNullOrEmpty(searchBar.value))
                             SearchVariables(searchBar.value);
                     }
-                }
-            });
-
+                });
+            }
             toolbar.Add(btnAdd);
             toolbar.Add(btnRem);
             toolbar.Add(btnSort);
@@ -198,31 +197,31 @@ namespace VIEditor
         private List<IVar> sortList;
         private void SortIvarList()
         {
-                sortList = new List<IVar>();
-                
-                foreach(var ivar in PortsUtils.variable.ivar)
-                {
-                    if(ivar == null)
-                        continue;
+            sortList = new List<IVar>();
 
-                    if (ivar.IsPublic || ivar.SceneGuid == AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
-                    {
-                        sortList.Add(ivar);
-                    }
-                }
+            foreach (var ivar in PortsUtils.variable.ivar)
+            {
+                if (ivar == null)
+                    continue;
 
-                if(mainListv != null)
+                if (ivar.IsPublic || ivar.SceneGuid == AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
                 {
-                    mainListv.itemsSource = sortList;
-                    mainListv.Rebuild();
+                    sortList.Add(ivar);
                 }
+            }
+
+            if (mainListv != null)
+            {
+                mainListv.itemsSource = sortList;
+                mainListv.Rebuild();
+            }
         }
         public ListView VariableListV()
         {
             if (PortsUtils.activeVGraphAssets != null && VVariableUtils.ActiveVariableWindow != null)
             {
                 SortIvarList();
-                
+
                 const int defHeight = 30;
                 const int defWidth = 260;
                 const int itemHeight = 30;
@@ -243,14 +242,14 @@ namespace VIEditor
                         sortList[i].Vindex = i;
                         var objtype = sortList[i].GetVtype();
 
-                                if(sortList[i].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
-                                {
-                                    vb.SetEnabled(false);
-                                }
-                                else
-                                {
-                                    vb.SetEnabled(true);
-                                }
+                        if (sortList[i].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                        {
+                            vb.SetEnabled(false);
+                        }
+                        else
+                        {
+                            vb.SetEnabled(true);
+                        }
 
                         switch (objtype)
                         {
@@ -260,27 +259,29 @@ namespace VIEditor
                                 var vstrval = vb.StringLabel(false, vstr.value, vstr.name);
                                 vb.InsertUiField(vstrval, true);
                                 vb.publicToggle.value = vstr.IsPublic;
-
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Float:
                                 var vfloat = sortList[i] as VFloat;
@@ -288,26 +289,29 @@ namespace VIEditor
                                 var vfloatval = vb.FloatLabel(false, vfloat.value, vfloat.name);
                                 vb.InsertUiField(vfloatval, true);
                                 vb.publicToggle.value = vfloat.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Integer:
                                 var vint = sortList[i] as VInteger;
@@ -315,26 +319,30 @@ namespace VIEditor
                                 var vintval = vb.IntLabel(false, vint.value, vint.name);
                                 vb.InsertUiField(vintval, true);
                                 vb.publicToggle.value = vint.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Boolean:
                                 var vbool = sortList[i] as VBoolean;
@@ -343,7 +351,7 @@ namespace VIEditor
                                 vb.InsertUiField(vboolval, true);
                                 vb.publicToggle.value = vbool.IsPublic;
 
-                                if(sortList[i].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                if (sortList[i].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
                                 {
                                     vb.SetEnabled(false);
                                 }
@@ -351,26 +359,29 @@ namespace VIEditor
                                 {
                                     vb.SetEnabled(true);
                                 }
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Double:
                                 var vdob = sortList[i] as VDouble;
@@ -378,26 +389,29 @@ namespace VIEditor
                                 var vdobval = vb.DoubleLabel(false, vdob.value, vdob.name);
                                 vb.InsertUiField(vdobval, true);
                                 vb.publicToggle.value = vdob.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if(sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Vector2:
                                 var vvec2 = sortList[i] as VVector2;
@@ -405,27 +419,29 @@ namespace VIEditor
                                 var vvec2val = vb.VecTwoLabel(false, vvec2.value, vvec2.name);
                                 vb.InsertUiField(vvec2val, true);
                                 vb.publicToggle.value = vvec2.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
 
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Vector3:
                                 var vvec3 = sortList[i] as VVector3;
@@ -433,26 +449,30 @@ namespace VIEditor
                                 var vvec3val = vb.VecThreeLabel(false, vvec3.value, vvec3.name);
                                 vb.InsertUiField(vvec3val, true);
                                 vb.publicToggle.value = vvec3.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.Vector4:
                                 var vvec4 = sortList[i] as VVector4;
@@ -460,26 +480,30 @@ namespace VIEditor
                                 var vvec4val = vb.VecFourLabel(false, vvec4.value, vvec4.name);
                                 vb.InsertUiField(vvec4val, true);
                                 vb.publicToggle.value = vvec4.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.VList:
                                 var vlist = sortList[i] as VList;
@@ -487,53 +511,58 @@ namespace VIEditor
                                 var vlistval = vb.ListLabel(false, vlist.dataType, vlist.name);
                                 vb.InsertUiField(vlistval, true);
                                 vb.publicToggle.value = vlist.IsPublic;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if(sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
 
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                             case VTypes.None:
                                 var non = sortList[i];
                                 non.Vindex = i;
                                 vb.Indicator.text = "TYPE";
                                 vb.publicToggle.value = false;
-                                vb.publicToggle.RegisterValueChangedCallback(x =>
+                                if (!PortsUtils.PlayMode)
                                 {
-                                    var idx = i;
-
-                                    if (x.newValue)
+                                    vb.publicToggle.RegisterValueChangedCallback(x =>
                                     {
-                                        sortList[idx].IsPublic = true;
-                                        PortsUtils.SetActiveAssetDirty();
-                                    }
-                                    else
-                                    {
-                                        sortList[idx].IsPublic = false;
+                                        var idx = i;
 
-                                        if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                        if (x.newValue)
                                         {
+                                            sortList[idx].IsPublic = true;
                                             PortsUtils.SetActiveAssetDirty();
-                                            mainListv?.Rebuild();
                                         }
-                                    }
-                                });
+                                        else
+                                        {
+                                            sortList[idx].IsPublic = false;
+
+                                            if (sortList[idx].SceneGuid != AssetDatabase.GUIDFromAssetPath(EditorSceneManager.GetActiveScene().path).ToString())
+                                            {
+                                                PortsUtils.SetActiveAssetDirty();
+                                                mainListv?.Rebuild();
+                                            }
+                                        }
+                                    });
+                                }
                                 break;
                         }
                     }

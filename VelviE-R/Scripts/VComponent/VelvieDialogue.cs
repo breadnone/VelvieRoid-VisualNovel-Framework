@@ -28,6 +28,7 @@ namespace VelvieR
         [SerializeField] private Image thumbnail;
         [SerializeField] private float spritesDuration = 0.2f;
         [SerializeField] private float thumbnailDuration = 0.2f;
+        [SerializeField] private VTextSpeed vtextSpeed = VTextSpeed.Hundred;
         public ClickOnDialogue ClickTarget { get { return clickTarget; } set { clickTarget = value; } }
         public float SpritesDuration { get { return spritesDuration; } set { spritesDuration = value; } }
         public float ThumbnailDuration { get { return thumbnailDuration; } set { thumbnailDuration = value; } }
@@ -47,7 +48,7 @@ namespace VelvieR
         public GameObject IconSprite { get { return iconSprite; } set { iconSprite = value; } }
         public ShowHideEffect ShowEffect { get { return showEffect; } set { showEffect = value; } }
         public float ShowEffectDuration { get { return showEffectDuration; } set { showEffectDuration = value; } }
-        public VTextSpeed TxtSpeed { get; set; }
+        public VTextSpeed TxtSpeed { get{return vtextSpeed;} set{vtextSpeed = value;} }
         public bool isWaiting { get; set; }
         public bool isWriting { get; set; }
         public GameObject parentObject { get; set; }
@@ -86,6 +87,7 @@ namespace VelvieR
 
         void Awake()
         {
+            Debug.Log("ON AWAKE = : -> " + textSpeed);
             var AuComs = gameObject.GetComponents<AudioSource>();
 
             if (AuComs.Length == 0)
@@ -184,9 +186,12 @@ namespace VelvieR
 
             CancelVDialogTokens();
         }
-        public virtual void SpeedText(VTextSpeed speed)
+        public virtual void SpeedText(VTextSpeed txtSpeed)
         {
-            switch (speed)
+
+            TxtSpeed = txtSpeed;
+
+            switch (txtSpeed)
             {
                 case VTextSpeed.Twenty:
                     textSpeed = 0.9f;
@@ -228,8 +233,6 @@ namespace VelvieR
                     textSpeed = 0.02f;
                     break;
             }
-
-            TxtSpeed = speed;
         }
 
         void PoolingBeforeSceneLoaded()
