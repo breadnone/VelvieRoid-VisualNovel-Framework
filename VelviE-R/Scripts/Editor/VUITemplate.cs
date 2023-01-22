@@ -120,29 +120,6 @@ namespace VIEditor
             root.Add(field);
             return root;
         }
-        public static VisualElement GetRoot(string name = "superRoot", FlexDirection flex = FlexDirection.Column)
-        {
-            var box = new Box();
-            box.name = name;
-            box.style.flexDirection = flex;
-            return box;
-        }
-        public static Label GetLabel(Box root, string setText = "")
-        {
-            foreach (var lbl in root.Children())
-            {
-                if (lbl is Label asLabel && lbl.name == "lbl")
-                {
-                    if (!String.IsNullOrEmpty(setText))
-                    {
-                        asLabel.text = setText;
-                    }
-
-                    return asLabel;
-                }
-            }
-            return null;
-        }
         public static VisualElement GetField(Box root)
         {
             foreach (var fld in root.Children())
@@ -288,7 +265,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();
@@ -376,7 +353,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();

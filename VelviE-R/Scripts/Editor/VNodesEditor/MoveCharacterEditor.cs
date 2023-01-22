@@ -13,8 +13,6 @@ namespace VIEditor
     [CustomEditor(typeof(MoveCharacter))]
     public class MoveCharacterEditor : Editor
     {
-        private VisualElement slotOne;
-        private VisualElement slotTwo;
         private VStageClass from;
         private VStageClass to;
         public override VisualElement CreateInspectorGUI()
@@ -66,11 +64,11 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "Wait until finished :";
 
             var tbMenu = new Toggle();
-            tbMenu.style.width = 190;
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             tbMenu.value = t.WaitUntilFinished;
 
             if (!PortsUtils.PlayMode)
@@ -81,11 +79,12 @@ namespace VIEditor
                     PortsUtils.SetActiveAssetDirty();
                 });
             }
+
             box.Add(lbl);
             box.Add(tbMenu);
             return box;
         }
-        private VisualElement DrawCharacter(MoveCharacter t)
+        private Box DrawCharacter(MoveCharacter t)
         {
             var root = VUITemplate.CharacterTemplate();
 
@@ -116,11 +115,11 @@ namespace VIEditor
                     t.Character = null;
                 }
             }
+
             if (!PortsUtils.PlayMode)
             {
                 root.child.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-
                     if (x.newValue == "<None>")
                     {
                         t.Character = null;
@@ -134,13 +133,12 @@ namespace VIEditor
                         ShufflingMenu(t);
                         PortsUtils.SetActiveAssetDirty();
                     }
-
                 });
             }
             return root.root;
         }
         private VisualElement swapChar;
-        private VisualElement DrawCharacterSwap(MoveCharacter t)
+        private Box DrawCharacterSwap(MoveCharacter t)
         {
             var root = VUITemplate.CharacterTemplate("Swap to character : ");
             swapChar = root.root;
@@ -157,9 +155,9 @@ namespace VIEditor
                     root.child.value = "<None>";
             }
 
-            root.child.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                root.child.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
                     if (x.newValue == "<None>" || String.IsNullOrEmpty(x.newValue))
                     {
@@ -173,23 +171,24 @@ namespace VIEditor
                         PortsUtils.SetActiveAssetDirty();
                         ShufflingMenu(t);
                     }
-                }
-            });
+                });
+            }
             return root.root;
         }
-        private VisualElement DrawSelect(MoveCharacter t)
+        private Box DrawSelect(MoveCharacter t)
         {
             var root = VUITemplate.GetTemplate("Move type :");
             var field = root.userData as VisualElement;
             var tbMenu = new DropdownField();
-            tbMenu.style.width = field.style.width;
-            tbMenu.value = t.MoveType.ToString();
-            tbMenu.choices = Enum.GetNames(typeof(CharacterMoveType)).ToList();
             field.Add(tbMenu);
 
-            tbMenu.RegisterCallback<ChangeEvent<string>>((x) =>
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            tbMenu.value = t.MoveType.ToString();
+            tbMenu.choices = Enum.GetNames(typeof(CharacterMoveType)).ToList();
+
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                tbMenu.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
                     foreach (var move in Enum.GetValues(typeof(CharacterMoveType)))
                     {
@@ -215,11 +214,10 @@ namespace VIEditor
                                     fromEl.SetEnabled(true);
                                 }
                             }
-
                         }
                     }
-                }
-            });
+                });
+            }
 
             return root;
         }
@@ -234,7 +232,7 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "From :";
 
             var tbMenu = new ToolbarMenu();
@@ -307,8 +305,7 @@ namespace VIEditor
                 }
             }
 
-
-            tbMenu.style.width = 190;
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.MainStage != null)
             {
@@ -324,7 +321,6 @@ namespace VIEditor
             box.Add(tbMenu);
             return box;
         }
-        private VisualElement is2dvis;
         private VisualElement DrawIsTwoD(MoveCharacter t)
         {
             var box = new VisualElement();
@@ -334,12 +330,11 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "Stage type : ";
 
             var tbMenu = new ToolbarMenu();
-            is2dvis = tbMenu;
-            tbMenu.style.width = 190;
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.Is2D)
                 tbMenu.text = "2D stage";
@@ -361,12 +356,12 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "To :";
 
             var tbMenu = new ToolbarMenu();
             tbmTo = tbMenu;
-            tbMenu.style.width = 190;
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.ToStage == null)
             {
@@ -434,11 +429,11 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "Move duration : ";
 
             var tbMenu = new FloatField();
-            tbMenu.style.width = 50;
+            tbMenu.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             tbMenu.value = t.Duration;
 
             if (!PortsUtils.PlayMode)
@@ -555,11 +550,11 @@ namespace VIEditor
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
-            lbl.style.width = 125;
+            lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lbl.text = "Ease type :";
 
             var tbMenu = new ToolbarMenu();
-            tbMenu.style.width = 190;
+            tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             tbMenu.text = t.EaseType.ToString();
 
             foreach (var mvtype in Enum.GetValues(typeof(LeanTweenType)))
