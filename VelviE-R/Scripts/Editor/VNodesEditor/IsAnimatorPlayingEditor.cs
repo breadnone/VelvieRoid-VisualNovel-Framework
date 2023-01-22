@@ -24,29 +24,31 @@ namespace VIEditor
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
-        private VisualElement DrawAnimator(IsAnimatorPlaying t)
+        private Box DrawAnimator(IsAnimatorPlaying t)
         {
             var rootBox = VUITemplate.GetTemplate("Animator : ");
-            var field = VUITemplate.GetField(rootBox);
-
+            var field = rootBox.userData as VisualElement;
             var objField = new ObjectField();
+            
             objField.objectType = typeof(Animator);
             objField.allowSceneObjects = true;
-            objField.style.width = field.style.width;
+            objField.style.width =  new StyleLength(new Length(100, LengthUnit.Percent));
             field.Add(objField);
-
             objField.value = t.animator;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.animator = objField.value as Animator;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animator = objField.value as Animator;
+                });
+            }
 
             return rootBox;
         }
         private VisualElement DrawVars(IsAnimatorPlaying t)
         {
-            var varTemplate = VUITemplate.VariableTemplate(type:VTypes.Boolean);
+            var varTemplate = VUITemplate.VariableTemplate(type: VTypes.Boolean);
 
             if (t.variable == null)
             {
@@ -68,19 +70,18 @@ namespace VIEditor
             {
                 var varlist = new List<string>();
 
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(x.GetVtype() == VTypes.Boolean)
-                        varlist.Add(x.Name); 
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (x.GetVtype() == VTypes.Boolean)
+                        varlist.Add(x.Name);
                 });
 
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
-
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
                     if (evt.newValue == "<None>")
                     {
@@ -92,9 +93,8 @@ namespace VIEditor
                         t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
                         PortsUtils.SetActiveAssetDirty();
                     }
-                }
-            });
-
+                });
+            }
             return varTemplate.root;
         }
     }

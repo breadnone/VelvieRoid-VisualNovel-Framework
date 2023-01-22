@@ -22,20 +22,29 @@ namespace VIEditor
             box.style.flexDirection = FlexDirection.Row;
 
             var lblSeconds = new Label();
-            lblSeconds.style.width = 120;
+            lblSeconds.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
+            lblSeconds.style.marginLeft = 10;
             lblSeconds.text = "Frames : ";
 
+            var visCon = new VisualElement();
+            visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
             var objSeconds = new IntegerField();
-            objSeconds.style.width = 220;
+            visCon.Add(objSeconds);
+
+            objSeconds.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             objSeconds.value = t.Frames;
 
-            objSeconds.RegisterValueChangedCallback((x)=>
+            if(!PortsUtils.PlayMode)
             {
-                t.Frames = objSeconds.value;
-            });
+                objSeconds.RegisterValueChangedCallback((x)=>
+                {
+                    t.Frames = objSeconds.value;
+                });
+            }
 
             box.Add(lblSeconds);
-            box.Add(objSeconds);
+            box.Add(visCon);
             root.Add(box);
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());

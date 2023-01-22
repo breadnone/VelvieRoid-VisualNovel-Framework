@@ -44,42 +44,49 @@ public class CallEditor : Editor
     private Box DrawVGraph(Call t)
     {
         //Character's Sprites
-        var boxGraph = new Box();
-        boxGraph.style.marginTop = 5;
-        boxGraph.style.flexDirection = FlexDirection.Row;
-
-        Label strLbl = new Label();
-        strLbl.style.width = 120;
-        strLbl.style.marginLeft = 5;
-        strLbl.text = "VGraph : ";
-        boxGraph.Add(strLbl);
-
-        var objField = new ToolbarMenu();
-        objfld = objField;
-        objField.style.marginLeft = 4;
-        objField.style.width = 220;
-        boxGraph.Add(objField);
-
-        RepoPulateGraphMenus(t);
+        var boxGraph = VUITemplate.VGraphTemplate();
 
         if (t.VGraph != null)
         {
-            objField.text = t.VGraph.vcorename;
+            boxGraph.child.value = t.VGraph.vcorename;
         }
         else
         {
-            objField.text = "<None>";
+            boxGraph.child.value = "<None>";
+        }
+        
+        if(!PortsUtils.PlayMode)
+        {
+            boxGraph.child.RegisterValueChangedCallback((x) =>
+            {
+                var vgraphs = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+
+                if(vgraphs == null || vgraphs.Length == 0)
+                    return;
+
+                bool found = false;
+                
+                foreach(var g in vgraphs)
+                {
+                    if(g == null)
+                        continue;
+
+                    if(g.vcorename == x.newValue)
+                    {
+                        t.VGraph = g;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(!found)
+                {
+                    boxGraph.child.value = "<None>";
+                }
+            });
         }
 
-        RePoolNodeComboBox(t);
-
-        objField.RegisterCallback<MouseEnterEvent>((x) =>
-        {
-            if(!PortsUtils.PlayMode)
-            RepoPulateGraphMenus(t);
-        });
-
-        return boxGraph;
+        return boxGraph.root;
     }
     private void RepoPulateGraphMenus(Call t)
     {
@@ -100,7 +107,7 @@ public class CallEditor : Editor
     //ContinueVBlockState
     private Box DrawVNodeName(Call t)
     {
-        //Character's Sprites
+        //Nodes      
         var boxVnodeName = new Box();
         boxVnodeName.style.marginTop = 5;
         boxVnodeName.style.flexDirection = FlexDirection.Row;
@@ -115,7 +122,6 @@ public class CallEditor : Editor
         txtfld = objField;
         objField.style.marginLeft = 4;
         objField.style.width = 220;
-
 
         txtfld.RegisterCallback<MouseEnterEvent>((x) =>
         {

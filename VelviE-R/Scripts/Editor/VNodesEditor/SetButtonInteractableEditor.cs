@@ -20,40 +20,46 @@ namespace VIEditor
             VUITemplate.DrawSummary(root, t, t.OnVSummary);
             return root;
         }
-        private VisualElement DrawSlider(SetButtonInteractable t)
+        private Box DrawSlider(SetButtonInteractable t)
         {
             var rootBox = VUITemplate.GetTemplate("Button : ");
-            var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(UnityEngine.UI.Button);
             objField.allowSceneObjects = true;
-            objField.style.width = field.style.width;
-            field.Add(objField);
+
+            var fld = rootBox.userData as VisualElement;
+            objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            fld.Add(objField);
 
             objField.value = t.button;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if(!PortsUtils.PlayMode)
             {
-                t.button = objField.value as UnityEngine.UI.Button;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.button = objField.value as UnityEngine.UI.Button;
+                });
+            }
 
             return rootBox;
         }
-        private VisualElement DrawInteractable(SetButtonInteractable t)
+        private Box DrawInteractable(SetButtonInteractable t)
         {
             var rootBox = VUITemplate.GetTemplate("Interactable : ");
-            var field = VUITemplate.GetField(rootBox);
+            var field = rootBox.userData as VisualElement;
 
             var objField = new Toggle();
-            objField.style.width = field.style.width;
+            objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             field.Add(objField);
             objField.value = t.interactable;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if(!PortsUtils.PlayMode)
             {
-                t.interactable = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.interactable = objField.value;
+                });
+            }
 
             return rootBox;
         }

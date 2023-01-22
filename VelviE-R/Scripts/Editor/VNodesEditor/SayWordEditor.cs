@@ -67,7 +67,14 @@ public class SayWordEditor : Editor
         strLbl.text = "Words : ";
         boxStr.Add(strLbl);
 
+
+        var visCon = new VisualElement();
+        visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         TextField strContent = new TextField();
+        strContent.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
+        visCon.Add(strContent);
 
         if (!String.IsNullOrEmpty(t.Words))
         {
@@ -78,7 +85,6 @@ public class SayWordEditor : Editor
         strContent.style.overflow = Overflow.Visible;
         strContent.style.whiteSpace = WhiteSpace.Normal;
         strContent.style.unityOverflowClipBox = OverflowClipBox.ContentBox;
-        strContent.style.width = 218;
         strContent.style.height = 100;
         strContent.multiline = true;
 
@@ -90,7 +96,7 @@ public class SayWordEditor : Editor
                 EditorUtility.SetDirty(t.gameObject);
             });
         }
-        boxStr.Add(strContent);
+        boxStr.Add(visCon);
         return boxStr;
     }
     private DropdownField spriteList;
@@ -257,14 +263,21 @@ public class SayWordEditor : Editor
         var boxEnumWait = new Box();
         boxEnumWait.style.marginTop = 5;
         boxEnumWait.style.flexDirection = FlexDirection.Row;
+        boxEnumWait.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         Label waitLbl = new Label();
         waitLbl.style.width = 120;
         waitLbl.text = "Wait for click : ";
         boxEnumWait.Add(waitLbl);
 
+        var visCon = new VisualElement();
+        visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var wait = new DropdownField();
+        wait.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         waitForClick = wait;
+
+        visCon.Add(wait);
 
         List<string> menus = new List<string> { "Enable", "Disable" };
         wait.choices = menus;
@@ -286,8 +299,7 @@ public class SayWordEditor : Editor
                 }
             });
         }
-        wait.style.width = 220;
-        boxEnumWait.Add(wait);
+        boxEnumWait.Add(visCon);
 
         if (t.WaitForClick == WaitForClick.Enable)
         {
@@ -311,6 +323,7 @@ public class SayWordEditor : Editor
         Box[] bxx = new Box[3];
         //Character sound clip
         var boxCharaSound = new Box();
+        boxCharaSound.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         boxCharaSound.style.marginTop = 5;
         boxCharaSound.style.flexDirection = FlexDirection.Row;
 
@@ -320,10 +333,14 @@ public class SayWordEditor : Editor
         strCharaClip.text = "Play character audio : ";
         boxCharaSound.Add(strCharaClip);
 
+        var visCon = new VisualElement();
+        visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var auCharaClip = new ObjectField();
-        auCharaClip.style.width = 210;
+        auCharaClip.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         auCharaClip.objectType = typeof(AudioClip);
-        boxCharaSound.Add(auCharaClip);
+        visCon.Add(auCharaClip);
+        boxCharaSound.Add(visCon);
 
         if (t.CharacterSound != null)
             auCharaClip.value = t.CharacterSound;
@@ -392,11 +409,17 @@ public class SayWordEditor : Editor
         strSlider.text = "Chara audio vol : ";
         boxSlider.Add(strSlider);
 
+        var visConSlider = new VisualElement();
+        visConSlider.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var slider = new Slider();
-        slider.style.width = 200;
+        slider.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         slider.lowValue = 0f;
         slider.highValue = 1f;
-        boxSlider.Add(slider);
+
+        visConSlider.Add(slider);
+
+        boxSlider.Add(visConSlider);
         bxx[2] = boxSlider;
 
         slider.value = t.CharacterSoundVolume;
@@ -434,6 +457,7 @@ public class SayWordEditor : Editor
         boxAu.style.flexDirection = FlexDirection.Column;
 
         var boxSub = new Box();
+        boxSub.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         boxSub.style.marginTop = 5;
         boxSub.style.flexDirection = FlexDirection.Row;
         boxAu.Add(boxSub);
@@ -444,10 +468,14 @@ public class SayWordEditor : Editor
         strAu.text = "Play oneshot audio : ";
         boxSub.Add(strAu);
 
+        var visConOneShot = new VisualElement();
+        visConOneShot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var auClip = new ObjectField();
-        auClip.style.width = 210;
+        auClip.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         auClip.objectType = typeof(AudioClip);
-        boxSub.Add(auClip);
+        visConOneShot.Add(auClip);
+        boxSub.Add(visConOneShot);
 
         if (t.PlayAudioClip != null)
             auClip.value = t.PlayAudioClip;
@@ -475,9 +503,13 @@ public class SayWordEditor : Editor
         lbl.text = "Custom symbol : ";
         boxSubTwo.Add(lbl);
 
+        var visConSymbol = new VisualElement();
+        visConSymbol.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var sym = new TextField();
-        sym.style.width = 210;
+        sym.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         sym.value = t.CustomSymbols;
+        visConSymbol.Add(sym);
         if (!PortsUtils.PlayMode)
         {
             sym.RegisterValueChangedCallback((x) =>
@@ -485,7 +517,7 @@ public class SayWordEditor : Editor
                 t.CustomSymbols = sym.value;
             });
         }
-        boxSubTwo.Add(sym);
+        boxSubTwo.Add(visConSymbol);
         return boxAu;
     }
     public Box DrawVDialogue(SayWord t)
@@ -552,20 +584,25 @@ public class SayWordEditor : Editor
         strEnder.text = "Ender delay : ";
         boxEnder.Add(strEnder);
 
+        var visConEnder = new VisualElement();
+        visConEnder.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var ender = new FloatField();
         ender.style.marginLeft = 4;
-        ender.style.width = 50;
+        ender.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         ender.value = t.EnderDelay;
-        boxEnder.Add(ender);
+        visConEnder.Add(ender);
+        boxEnder.Add(visConEnder);
         boxEnder.SetEnabled(false);
 
-        ender.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (!PortsUtils.PlayMode)
+            ender.RegisterValueChangedCallback((x) =>
+            {
                 t.EnderDelay = ender.value;
-
-            EditorUtility.SetDirty(t.gameObject);
-        });
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
 
         return boxEnder;
     }
@@ -665,6 +702,7 @@ public class SayWordEditor : Editor
     private Box DrawThumbnailEffects(SayWord t)
     {
         var vis = new Box();
+        vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         thmAnim = vis;
 
         if (t.Character == null)
@@ -679,9 +717,14 @@ public class SayWordEditor : Editor
         lblName.text = "Thm animation : ";
         lblName.style.width = 120;
 
+        var visCon = new VisualElement();
+        visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var objElement = new DropdownField();
-        objElement.style.width = 220;
+        objElement.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         thmAnimTb = objElement;
+
+        visCon.Add(objElement);
 
         if (t.EffectThm == ThumbnailEffects.Punch)
         {
@@ -784,7 +827,7 @@ public class SayWordEditor : Editor
             });
         }
         vis.Add(lblName);
-        vis.Add(objElement);
+        vis.Add(visCon);
         return vis;
     }
 
@@ -820,10 +863,15 @@ public class SayWordEditor : Editor
         lblName.text = "Thm anim power : ";
         lblName.style.width = 120;
 
+        var visConPower = new VisualElement();
+        visConPower.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var objElement = new FloatField();
         objElement.style.marginLeft = 4;
-        objElement.style.width = 50;
+        objElement.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         objElement.value = t.Magnitude;
+
+        visConPower.Add(objElement);
         if (!PortsUtils.PlayMode)
         {
             objElement.RegisterValueChangedCallback((x) =>
@@ -833,7 +881,7 @@ public class SayWordEditor : Editor
             });
         }
         vis.Add(lblName);
-        vis.Add(objElement);
+        vis.Add(visConPower);
         return vis;
     }
     private Box loopCountBox;
@@ -893,10 +941,15 @@ public class SayWordEditor : Editor
         lblName.text = "Loop count : ";
         lblName.style.width = 120;
 
+        var visConCount = new VisualElement();
+        visConCount.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var objElement = new IntegerField();
         objElement.style.marginLeft = 4;
-        objElement.style.width = 50;
+        objElement.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         objElement.value = t.LoopCount;
+
+        visConCount.Add(objElement);
 
         if (!PortsUtils.PlayMode)
         {
@@ -908,7 +961,7 @@ public class SayWordEditor : Editor
         }
 
         vis.Add(lblName);
-        vis.Add(objElement);
+        vis.Add(visConCount);
         return vis;
     }
     private ToolbarMenu animatableTb;
