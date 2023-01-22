@@ -74,6 +74,7 @@ namespace VIEditor
         public UnityEngine.UIElements.VisualElement SetPopUpContainerWindow()
         {
             var inspectorWindow = new UnityEngine.UIElements.VisualElement();
+            inspectorWindow.style.backgroundColor = Color.grey;
             inspectorWindow.style.flexDirection = FlexDirection.Column;
             var lbl = new Label{text = "Property Tab"};
             lbl.style.backgroundColor = Color.magenta;
