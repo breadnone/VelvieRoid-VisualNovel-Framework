@@ -58,15 +58,18 @@ namespace VIEditor
             //Right click contextual menu
             if (SetManipulator == true)
             {
-                this.AddManipulator(new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
+                if(!PortsUtils.PlayMode)
                 {
-                    //TODO: Multiple items selections!
-                    if (PortsUtils.VGraph.listV.selectedItem != null && !PortsUtils.PlayMode)
+                    this.AddManipulator(new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
                     {
-                        evt.menu.AppendAction("Delete", (x) => VBlockUtils.Delete());
-                        evt.menu.AppendAction(EnableString(), (x) => EnableVBlock());
-                    }                    
-                }));               
+                        //TODO: Multiple items selections!
+                        if (PortsUtils.VGraph.listV.selectedItem != null)
+                        {
+                            evt.menu.AppendAction("Delete", (x) => VBlockUtils.Delete());
+                            evt.menu.AppendAction(EnableString(), (x) => EnableVBlock());
+                        }                    
+                    }));   
+                }            
             }
 
             var no = new Label();
