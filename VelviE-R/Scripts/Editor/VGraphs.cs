@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using UnityEngine.UIElements;
-using PopupWindow = UnityEngine.UIElements.PopupWindow;
 using System;
 using System.Linq;
 using VelvieR;
 using UnityEditor.UIElements;
-using System.Reflection;
 using UnityEditor.SceneManagement;
 
 namespace VIEditor
