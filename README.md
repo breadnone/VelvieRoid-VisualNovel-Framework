@@ -27,5 +27,6 @@ This project fully inspired by the legendary Fungus framework.
   
 # Issues 
 1. Broken 3D examples
-2. Missing guid due to guid mismatch
-3. Freezing graph layouts after getting out of Play mode while Graphs aren't present.
+2. ~Missing guid due to guid mismatch~
+3. ~Freezing graph layouts after getting out of Play mode while Graphs aren't present.~
+4. ResizableElement will break the layout of inspector window when vertically resized.
