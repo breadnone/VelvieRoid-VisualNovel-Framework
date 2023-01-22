@@ -22,31 +22,41 @@ namespace VIEditor
             box.style.flexDirection = FlexDirection.Row;
 
             var lblSeconds = new Label();
-            lblSeconds.style.width = 120;
+            lblSeconds.style.marginLeft = 10;
+            lblSeconds.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lblSeconds.text = "Seconds : ";
 
+            var visCon = new VisualElement();
+            visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
             var objSeconds = new FloatField();
-            objSeconds.style.width = 220;
+            visCon.Add(objSeconds);
+
+            objSeconds.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             objSeconds.value = t.Seconds;
 
-            objSeconds.RegisterValueChangedCallback((x)=>
+            if(!PortsUtils.PlayMode)
             {
-                t.Seconds = objSeconds.value;
-            });
+                objSeconds.RegisterValueChangedCallback((x)=>
+                {
+                    t.Seconds = objSeconds.value;
+                });
+            }
 
             box.Add(lblSeconds);
-            box.Add(objSeconds);
+            box.Add(visCon);
             root.Add(box);
 
             var boxTwo = new Box();
             boxTwo.style.flexDirection = FlexDirection.Row;
 
             var lblScale = new Label();
-            lblScale.style.width = 120;
+            lblScale.style.marginLeft = 10;
+            lblScale.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             lblScale.text = "Unscaled time : ";
 
             var objScale = new Toggle();
-            objScale.style.width = 220;
+            objScale.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             objScale.value = t.UnscaledTime;
 
             objScale.RegisterValueChangedCallback((x)=>

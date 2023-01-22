@@ -167,6 +167,7 @@ namespace VIEditor
         {
             var vis = new Box();
             vis.style.flexDirection = FlexDirection.Row;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             vis.style.marginBottom = 10;
 
             var lblPortraitName = new Label();
@@ -175,6 +176,7 @@ namespace VIEditor
             vis.Add(lblPortraitName);
 
             var imgContainer = new VisualElement();
+            imgContainer.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             imgContainer.style.flexDirection = FlexDirection.Column;
             vis.Add(imgContainer);
 

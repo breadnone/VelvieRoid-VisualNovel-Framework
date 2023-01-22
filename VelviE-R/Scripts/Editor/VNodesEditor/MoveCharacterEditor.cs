@@ -182,7 +182,7 @@ namespace VIEditor
             var root = VUITemplate.GetTemplate("Move type :");
             var field = root.userData as VisualElement;
             var tbMenu = new DropdownField();
-            tbMenu.style.width = 220;
+            tbMenu.style.width = field.style.width;
             tbMenu.value = t.MoveType.ToString();
             tbMenu.choices = Enum.GetNames(typeof(CharacterMoveType)).ToList();
             field.Add(tbMenu);
@@ -580,7 +580,6 @@ namespace VIEditor
         private VisualElement GetStages(MoveCharacter t)
         {
             var root = VUITemplate.VStageTemplate("Stage : ");
-            root.child.style.width = 220;
 
             if (t.MainStage != null)
             {

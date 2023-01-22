@@ -25,31 +25,35 @@ public class JumpLabelEditor : Editor
         boxSStrJump.style.flexDirection = FlexDirection.Row;
 
         Label strStrJump = new Label();
-        strStrJump.style.width = 120;
+        strStrJump.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strStrJump.style.marginLeft = 5;
         strStrJump.text = "Label : ";
         boxSStrJump.Add(strStrJump);
 
+        var visCon = new VisualElement();
+        visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+
         var auStrJump = new TextField();
-        auStrJump.style.width = 210;
-        boxSStrJump.Add(auStrJump);
+        visCon.Add(auStrJump);
+
+        auStrJump.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+        boxSStrJump.Add(visCon);
 
         if (!String.IsNullOrEmpty(t.Label))
             auStrJump.value = t.Label;
 
-        auStrJump.RegisterCallback<FocusOutEvent>((x)=>
-        {
             if(!PortsUtils.PlayMode)
             {
+        auStrJump.RegisterCallback<FocusOutEvent>((x)=>
+        {
                 if (auStrJump.value != null)
                     t.Label = auStrJump.value;
                 else
                     t.Label = null;
                 
                 WarningCheck(t);
-            }
         });
-
+            }
         myInspector.Add(boxSStrJump);
 
         //Always add this at the end!

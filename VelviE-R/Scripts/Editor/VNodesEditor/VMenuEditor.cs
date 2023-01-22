@@ -28,65 +28,42 @@ namespace VIEditor
         }
         private Box DrawMenu(VMenu t)
         {
-            var box = new Box();
-            box.style.marginTop = 5;
-            box.style.marginBottom = 5;
-            box.style.flexDirection = FlexDirection.Row;
-
-            var lbl = new Label();
-            lbl.text = "Menu : ";
-            lbl.style.width = 120;
-            box.Add(lbl);
-
-            var obj = new DropdownField();
-            obj.style.width = 220;
-            box.Add(obj);
-
             var menus = Resources.FindObjectsOfTypeAll<VMenuOption>();
             var asList = new List<string>();
-
             Array.ForEach(menus, x => asList.Add(x.VmenuName));
-            asList.Add("<None>");
-            obj.choices = asList;
+            var root = VUITemplate.VDropDownFieldTemplate(asList, "Menu : ", true);
 
             if (t.Vmenu == null)
             {
-                obj.value = asList.Find(x => x == "<None>");
+                root.child.value = asList.Find(x => x == "<None>");
             }
             else
             {
                 if (!Array.Exists(menus, x => x.VmenuId == t.Vmenu.VmenuId))
                 {
-                    obj.value = asList.Find(x => x == "<None>");
+                    root.child.value = asList.Find(x => x == "<None>");
                     t.Vmenu = null;
                 }
                 else
                 {
-                    obj.value = asList.Find(x => x == t.Vmenu.VmenuName);
+                    root.child.value = asList.Find(x => x == t.Vmenu.VmenuName);
                 }
             }
 
-            obj.RegisterCallback<ChangeEvent<string>>((evt) =>
+            root.child.RegisterValueChangedCallback((xx) =>
             {
-                t.Vmenu = Array.Find(menus, x => x.VmenuName == (string)evt.newValue);
-                Debug.Log(t.Vmenu);
+                t.Vmenu = Array.Find(menus, x => x.VmenuName == xx.newValue);
             });
 
-            return box;
+            return root.root;
         }
         private Box DrawMainText(VMenu t)
         {
-            var box = new Box();
-            box.style.marginTop = 5;
-            box.style.marginBottom = 5;
-            box.style.flexDirection = FlexDirection.Row;
-
-            var lbl = new Label();
-            lbl.text = "Text : ";
-            lbl.style.width = 120;
-            box.Add(lbl);
-
+            var root = VUITemplate.GetTemplate("Text : ");
+            var tmp = root.userData as VisualElement;
             var obj = new TextField();
+            tmp.Add(obj);
+
             obj.style.flexDirection = FlexDirection.Column;
             obj.style.overflow = Overflow.Visible;
             obj.style.whiteSpace = WhiteSpace.Normal;
@@ -95,8 +72,7 @@ namespace VIEditor
             obj.value = t.MainText;
 
             obj.multiline = true;
-            obj.style.width = 220;
-            box.Add(obj);
+            obj.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             obj.RegisterCallback<FocusOutEvent>((x) =>
             {
@@ -106,7 +82,7 @@ namespace VIEditor
                 }
             });
 
-            return box;
+            return root;
         }
         private Box DrawRandomBool(VMenu t)
         {
@@ -170,18 +146,20 @@ namespace VIEditor
             box.style.marginTop = 5;
             box.style.marginBottom = 5;
             box.style.flexDirection = FlexDirection.Column;
+            box.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             var lbl = new Label();
             lbl.style.marginLeft = 5;
             lbl.style.marginTop = 5;
             lbl.style.marginBottom = 5;
             lbl.text = "<b>ADD MENU : </b>";
-            lbl.style.width = 320;
+            lbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             box.Add(lbl);
 
             Func<VisualElement> makeItem = () =>
             {
                 var lbl = new VisualElement();
+                lbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lbl.style.flexDirection = FlexDirection.Column;
 
                 //////////////////////////
@@ -192,11 +170,11 @@ namespace VIEditor
                 boxMenutext.style.flexDirection = FlexDirection.Row;
 
                 var lblName = new Label();
-                lblName.style.width = 110;
+                lblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 lblName.text = "Menu text : ";
 
                 var lblObj = new TextField();
-                lblObj.style.width = 210;
+                lblObj.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lblObj.name = "menuObj";
                 boxMenutext.Add(lblName);
                 boxMenutext.Add(lblObj);
@@ -208,11 +186,11 @@ namespace VIEditor
                 boxMenuGraph.style.flexDirection = FlexDirection.Row;
 
                 var lbllblGr = new Label();
-                lbllblGr.style.width = 110;
+                lbllblGr.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 lbllblGr.text = "VGraph : ";
 
                 var lbllblggr = new DropdownField();
-                lbllblggr.style.width = 210;
+                lbllblggr.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lbllblggr.name = "menuGraph";
                 boxMenuGraph.Add(lbllblGr);
                 boxMenuGraph.Add(lbllblggr);
@@ -224,11 +202,11 @@ namespace VIEditor
                 boxMenuNode.style.flexDirection = FlexDirection.Row;
 
                 var lblVnodeName = new Label();
-                lblVnodeName.style.width = 110;
+                lblVnodeName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 lblVnodeName.text = "VNode : ";
 
                 var lblVnode = new DropdownField();
-                lblVnode.style.width = 210;
+                lblVnode.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lblVnode.name = "menuNode";
                 boxMenuNode.Add(lblVnodeName);
                 boxMenuNode.Add(lblVnode);
@@ -240,11 +218,11 @@ namespace VIEditor
                 boxMenuLbl.style.flexDirection = FlexDirection.Row;
 
                 var lbllblName = new Label();
-                lbllblName.style.width = 110;
+                lbllblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 lbllblName.text = "Jump to label : ";
 
                 var lbllbl = new TextField();
-                lbllbl.style.width = 210;
+                lbllbl.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lbllbl.name = "menuJump";
                 lbllbl.userData = boxMenuLbl as Box;
                 boxMenuLbl.Add(lbllblName);
@@ -257,11 +235,11 @@ namespace VIEditor
                 boxMeneEx.style.flexDirection = FlexDirection.Row;
 
                 var lbllblEx = new Label();
-                lbllblEx.style.width = 110;
+                lbllblEx.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 lbllblEx.text = "Exclude after : ";
 
                 var lbllblExx = new DropdownField();
-                lbllblExx.style.width = 210;
+                lbllblExx.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 lbllblExx.name = "menuExclude";
                 boxMeneEx.Add(lbllblEx);
                 boxMeneEx.Add(lbllblExx);
@@ -281,34 +259,39 @@ namespace VIEditor
                 RePoolJumpsAndNodes(e, i, t);
             };
 
-            const int itemHeight = 100;
+            const int itemHeight = 120;
             var obj = new ListView(t.VmenuPools, itemHeight, makeItem, bindItem);
             obj.showAlternatingRowBackgrounds = AlternatingRowBackground.All;
-            obj.style.width = 340;
+            obj.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             box.Add(obj);
 
             var btnContainer = new Box();
-            btnContainer.style.alignSelf = Align.FlexEnd;
-            btnContainer.style.flexDirection = FlexDirection.Row;
+            btnContainer.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            btnContainer.style.flexDirection = FlexDirection.Column;
 
-            var btnAdd = new Button { text = "+" };
-            btnAdd.style.width = 40;
+            var btnAdd = new Button { text = "ADD" };
+            btnAdd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             btnAdd.style.height = 20;
+
+            if(!PortsUtils.PlayMode)
+            {
             btnAdd.clicked += () =>
             {
                 t.VmenuPools.Add(new VMenuPools());
                 obj.Rebuild();
             };
-
-            var btnRem = new Button { text = "-" };
-            btnRem.style.width = 40;
+            }
+            var btnRem = new Button { text = "REMOVE" };
+            btnRem.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             btnRem.style.height = 20;
+            if(!PortsUtils.PlayMode)
+            {
             btnRem.clicked += () =>
             {
                 t.VmenuPools.RemoveAt(obj.selectedIndex);
                 obj.Rebuild();
             };
-
+            }
             btnContainer.Add(btnAdd);
             btnContainer.Add(btnRem);
             box.Add(btnContainer);

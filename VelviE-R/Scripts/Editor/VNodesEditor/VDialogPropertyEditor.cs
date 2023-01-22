@@ -93,29 +93,22 @@ namespace VIEditor
         }
         private VisualElement DrawSpeed(VDialogProperty t)
         {
+            var root = VUITemplate.VDropDownFieldTemplate(Enum.GetNames(typeof(VTextSpeed)).ToList(), "Writing Speed", false);
             //Enum slot writing speed
-            var boxSpeed = new Box();
-            boxSpeed.style.marginTop = 5;
-            boxSpeed.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-            boxSpeed.style.flexDirection = FlexDirection.Row;
 
-            var dropDSpeed = new DropdownField();
-
+            root.child.value = t.textSpeed.ToString();
+            
             if (!PortsUtils.PlayMode)
             {
-                dropDSpeed.choices = Enum.GetNames(typeof(VTextSpeed)).ToList();
-            }
-
-            dropDSpeed.value = t.textSpeed.ToString();
-            dropDSpeed.style.width = new StyleLength(new Length(60, LengthUnit.Percent));
-            if (!PortsUtils.PlayMode)
-            {
-                dropDSpeed.RegisterValueChangedCallback(x =>
+                root.child.RegisterValueChangedCallback(x =>
                 {
                     var enumss = Enum.GetValues(typeof(VTextSpeed));
 
                     foreach (var numsVals in enumss)
                     {
+                        if(numsVals == null)
+                            continue;
+
                         if (numsVals.ToString() == x.newValue)
                         {
                             t.textSpeed = (VTextSpeed)numsVals;
@@ -125,15 +118,7 @@ namespace VIEditor
                     }
                 });
             }
-            //Just a visual representation of the dropdown above
-
-            var lblSpeed = new Label();
-            lblSpeed.tooltip = "Choose writing speed";
-            lblSpeed.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
-            lblSpeed.text = "Writing Speed";
-            boxSpeed.Add(lblSpeed);
-            boxSpeed.Add(dropDSpeed);
-            return boxSpeed;
+            return root.root;
         }
         private VisualElement DrawShowEffect(VDialogProperty t)
         {

@@ -24,7 +24,7 @@ namespace VIEditor
             root.Add(DrawInterpolate(t));
             root.Add(DrawDuration(t));
             root.Add(DrawResetSpeed(t));
-            
+
             root.Add(DrawFixedTime(t));
 
             //Always add this at the end!
@@ -44,11 +44,13 @@ namespace VIEditor
 
             objField.value = t.animator;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.animator = objField.value as Animator;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animator = objField.value as Animator;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawLayer(AnimatorPlayStates t)
@@ -61,13 +63,14 @@ namespace VIEditor
             field.Add(objField);
 
             objField.value = t.layerName;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.layerName = objField.value;
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.layerName = objField.value;
 
-            });
-
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawState(AnimatorPlayStates t)
@@ -80,13 +83,14 @@ namespace VIEditor
             field.Add(objField);
 
             objField.value = t.stateName;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.stateName = objField.value;
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.stateName = objField.value;
 
-            });
-
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawFixedTime(AnimatorPlayStates t)
@@ -98,11 +102,13 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.playInFixedTime;
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.playInFixedTime = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.playInFixedTime = objField.value;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawResetSpeed(AnimatorPlayStates t)
@@ -114,11 +120,13 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.resetDefaultSpeed;
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.resetDefaultSpeed = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.resetDefaultSpeed = objField.value;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawStop(AnimatorPlayStates t)
@@ -127,23 +135,24 @@ namespace VIEditor
             var field = VUITemplate.GetField(rootBox);
 
             var objField = new DropdownField();
-            objField.choices = new List<string>{"Stop", "Play"};
+            objField.choices = new List<string> { "Stop", "Play" };
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.stop)
-            objField.value = "Stop";
+            if (t.stop)
+                objField.value = "Stop";
             else
-            objField.value = "Play";
-
-            objField.RegisterValueChangedCallback((x) =>
+                objField.value = "Play";
+            if (!PortsUtils.PlayMode)
             {
-                if(x.newValue == "Stop")
-                t.stop = true;
-                else
-                t.stop = false;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    if (x.newValue == "Stop")
+                        t.stop = true;
+                    else
+                        t.stop = false;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawWeight(AnimatorPlayStates t)
@@ -164,13 +173,14 @@ namespace VIEditor
             objIndic.value = t.weight;
 
             rootBox.Add(objIndic);
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.weight = x.newValue;
-                objIndic.value = x.newValue;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.weight = x.newValue;
+                    objIndic.value = x.newValue;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawInterpolate(AnimatorPlayStates t)
@@ -179,23 +189,24 @@ namespace VIEditor
             var field = VUITemplate.GetField(rootBox);
 
             var objField = new DropdownField();
-            objField.choices = new List<string>{"Interpolate", "Disable"};
+            objField.choices = new List<string> { "Interpolate", "Disable" };
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.interpolate)
-            objField.value = "Interpolate";
+            if (t.interpolate)
+                objField.value = "Interpolate";
             else
-            objField.value = "Disable";
-
-            objField.RegisterValueChangedCallback((x) =>
+                objField.value = "Disable";
+            if (!PortsUtils.PlayMode)
             {
-                if(x.newValue == "Interpolate")
-                t.interpolate = true;
-                else
-                t.interpolate = false;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    if (x.newValue == "Interpolate")
+                        t.interpolate = true;
+                    else
+                        t.interpolate = false;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawDuration(AnimatorPlayStates t)
@@ -207,11 +218,13 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.interpolateDuration;
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.interpolateDuration = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.interpolateDuration = objField.value;
+                });
+            }
             return rootBox;
         }
     }

@@ -46,7 +46,7 @@ namespace VIEditor
                 t.LocalorValue = "Value";
             }
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
 
@@ -621,14 +621,15 @@ namespace VIEditor
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                         (t.LocalVariable as VFloat).value = tmp.value;
                     }
-                    tmp.RegisterValueChangedCallback((x) =>
+
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VFloat).value = tmp.value;
-                        }
-                    });
+                        });
+                    }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Double)
                 {
@@ -646,15 +647,15 @@ namespace VIEditor
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                         (t.LocalVariable as VDouble).value = tmp.value;
                     }
-
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VDouble).value = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Integer)
                 {
@@ -672,14 +673,15 @@ namespace VIEditor
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                         (t.LocalVariable as VInteger).value = tmp.value;
                     }
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VInteger).value = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
             }
             else if (t.Variable != null && t.Variable.GetVtype() == VTypes.Boolean)
@@ -698,14 +700,14 @@ namespace VIEditor
                     t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                     (t.LocalVariable as VBoolean).value = tmp.value;
                 }
-                tmp.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if (!PortsUtils.PlayMode)
+                    tmp.RegisterValueChangedCallback((x) =>
                     {
                         if (t.LocalVariable != null)
                             (t.LocalVariable as VBoolean).value = tmp.value;
-                    }
-                });
+                    });
+                }
             }
             else if (t.Variable != null && (t.Variable.GetVtype() == VTypes.Vector2 || t.Variable != null && t.Variable.GetVtype() == VTypes.Vector3 || t.Variable != null && t.Variable.GetVtype() == VTypes.Vector4))
             {
@@ -725,14 +727,16 @@ namespace VIEditor
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                         (t.LocalVariable as VVector2).value = tmp.value;
                     }
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
+
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VVector2).value = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Vector3)
                 {
@@ -748,16 +752,18 @@ namespace VIEditor
                         t.LocalVariable = new VVector3();
                         t.LocalVariable.Name = "localVector3";
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
-                        (t.LocalVariable as VVector3).value  = tmp.value;
+                        (t.LocalVariable as VVector3).value = tmp.value;
                     }
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
+
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VVector3).value = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Vector4)
                 {
@@ -775,14 +781,16 @@ namespace VIEditor
                         t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                         (t.LocalVariable as VVector4).value = tmp.value;
                     }
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
+
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VVector4).value = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
             }
             else if (t.Variable != null && t.Variable.GetVtype() == VTypes.Transform)
@@ -802,14 +810,14 @@ namespace VIEditor
                     t.LocalVariable.VarId = PortsUtils.variable.GlobalCounter++;
                     (t.LocalVariable as VTransform).value = tmp.value as Transform;
                 }
-                tmp.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    if (!PortsUtils.PlayMode)
+                    tmp.RegisterValueChangedCallback((x) =>
                     {
                         if (t.LocalVariable != null)
                             (t.LocalVariable as VTransform).value = tmp.value as Transform;
-                    }
-                });
+                    });
+                }
             }
             else if (t.Variable != null && t.Variable.GetVtype() == VTypes.VList)
             {
