@@ -78,74 +78,82 @@ namespace VIEditor
             {
                 btn.RegisterCallback<MouseDownEvent>((evt) => ButtonSubs(vgContainer));
             }
-            var cntx = new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
+
+            ContextualMenuManipulator cntx = null;
+
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                cntx = new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
                 {
+
                     evt.menu.AppendAction("Set Color/Red", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.red;
-                        vgContainer.graphState.entityBackgroundColor = Color.red;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.red;
+                            vgContainer.graphState.entityBackgroundColor = Color.red;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Blue", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.blue;
-                        vgContainer.graphState.entityBackgroundColor = Color.blue;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.blue;
+                            vgContainer.graphState.entityBackgroundColor = Color.blue;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Magenta", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.magenta;
-                        vgContainer.graphState.entityBackgroundColor = Color.magenta;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.magenta;
+                            vgContainer.graphState.entityBackgroundColor = Color.magenta;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Grey", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.grey;
-                        vgContainer.graphState.entityBackgroundColor = Color.grey;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.grey;
+                            vgContainer.graphState.entityBackgroundColor = Color.grey;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Black", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.black;
-                        vgContainer.graphState.entityBackgroundColor = Color.black;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.black;
+                            vgContainer.graphState.entityBackgroundColor = Color.black;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Yellow", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.yellow;
-                        vgContainer.graphState.entityBackgroundColor = Color.yellow;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.yellow;
+                            vgContainer.graphState.entityBackgroundColor = Color.yellow;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/Green", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.green;
-                        vgContainer.graphState.entityBackgroundColor = Color.green;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.green;
+                            vgContainer.graphState.entityBackgroundColor = Color.green;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
                     evt.menu.AppendAction("Set Color/White", (x) =>
-                    {
-                        btn.style.backgroundColor = Color.white;
-                        vgContainer.graphState.entityBackgroundColor = Color.white;
-                        PortsUtils.SetActiveAssetDirty();
-                    });
+                {
+                            btn.style.backgroundColor = Color.white;
+                            vgContainer.graphState.entityBackgroundColor = Color.white;
+                            PortsUtils.SetActiveAssetDirty();
+                        });
 
                     evt.menu.AppendAction("Delete", (x) =>
-                    {
-                        GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
+                {
+                            GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
 
-                        if (obj != null)
-                            GameObject.DestroyImmediate(obj);
+                            if (obj != null)
+                                GameObject.DestroyImmediate(obj);
 
-                        box.Remove(btn);
-                        PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
-                    });
-                }
-            });
+                            box.Remove(btn);
+                            PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
+                        });
 
-            contexts.Add(cntx);
-            btn.AddManipulator(cntx);
+                });
+            }
+
+            if (cntx != null)
+            {
+                contexts.Add(cntx);
+                btn.AddManipulator(cntx);
+            }
 
             buttons.Add(btn);
             box.Add(btn);
@@ -401,18 +409,21 @@ namespace VIEditor
             toolbarThree.Add(toolbarSearchField);
             var variableBtn = new Button();
 
-            variableBtn.clicked += () =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!EditorWindow.HasOpenInstances<VariableDrawerWindow>())
+                variableBtn.clicked += () =>
                 {
-                    VariableDrawerWindow vg = EditorWindow.GetWindow<VariableDrawerWindow>();
-                    vg.Repaint();
-                }
-                else
-                {
-                    EditorWindow.GetWindow<VariableDrawerWindow>().Close();
-                }
-            };
+                    if (!EditorWindow.HasOpenInstances<VariableDrawerWindow>())
+                    {
+                        VariableDrawerWindow vg = EditorWindow.GetWindow<VariableDrawerWindow>();
+                        vg.Repaint();
+                    }
+                    else
+                    {
+                        EditorWindow.GetWindow<VariableDrawerWindow>().Close();
+                    }
+                };
+            }
 
             variableBtn.text = "Variable Drawer";
             variableBtn.style.backgroundColor = Color.grey;
