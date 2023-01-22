@@ -16,7 +16,6 @@ namespace VIEditor
         public Toolbar entityToolbar;
         public List<Label> buttons = new List<Label>();
         public Toolbar mainToolbar { get; set; }
-        private int defaultWidth = 1;
         private StyleColor defaultBorderColor;
         public void ResetButtonList()
         {
@@ -24,6 +23,9 @@ namespace VIEditor
             {
                 for (int i = buttons.Count; i-- > 0;)
                 {
+                    if (buttons[i] == null)
+                        continue;
+
                     buttons[i].RemoveFromHierarchy();
                     buttons[i].RemoveManipulator(contexts[i]);
                 }
@@ -32,7 +34,6 @@ namespace VIEditor
             buttons = new List<Label>();
         }
         private List<ContextualMenuManipulator> contexts = new List<ContextualMenuManipulator>();
-        private List<Action> actions = new List<Action>();
 
         private void ButtonSubs(VGraphsContainer vgContainer)
         {
@@ -86,65 +87,65 @@ namespace VIEditor
                 cntx = new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
                 {
 
-                    evt.menu.AppendAction("Set Color/Red", (x) =>
+                evt.menu.AppendAction("Set Color/Red", (x) =>
                 {
-                            btn.style.backgroundColor = Color.red;
-                            vgContainer.graphState.entityBackgroundColor = Color.red;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Blue", (x) =>
+                    btn.style.backgroundColor = Color.red;
+                    vgContainer.graphState.entityBackgroundColor = Color.red;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Blue", (x) =>
                 {
-                            btn.style.backgroundColor = Color.blue;
-                            vgContainer.graphState.entityBackgroundColor = Color.blue;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Magenta", (x) =>
+                    btn.style.backgroundColor = Color.blue;
+                    vgContainer.graphState.entityBackgroundColor = Color.blue;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Magenta", (x) =>
                 {
-                            btn.style.backgroundColor = Color.magenta;
-                            vgContainer.graphState.entityBackgroundColor = Color.magenta;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Grey", (x) =>
+                    btn.style.backgroundColor = Color.magenta;
+                    vgContainer.graphState.entityBackgroundColor = Color.magenta;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Grey", (x) =>
                 {
-                            btn.style.backgroundColor = Color.grey;
-                            vgContainer.graphState.entityBackgroundColor = Color.grey;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Black", (x) =>
+                    btn.style.backgroundColor = Color.grey;
+                    vgContainer.graphState.entityBackgroundColor = Color.grey;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Black", (x) =>
                 {
-                            btn.style.backgroundColor = Color.black;
-                            vgContainer.graphState.entityBackgroundColor = Color.black;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Yellow", (x) =>
+                    btn.style.backgroundColor = Color.black;
+                    vgContainer.graphState.entityBackgroundColor = Color.black;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Yellow", (x) =>
                 {
-                            btn.style.backgroundColor = Color.yellow;
-                            vgContainer.graphState.entityBackgroundColor = Color.yellow;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/Green", (x) =>
+                    btn.style.backgroundColor = Color.yellow;
+                    vgContainer.graphState.entityBackgroundColor = Color.yellow;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/Green", (x) =>
                 {
-                            btn.style.backgroundColor = Color.green;
-                            vgContainer.graphState.entityBackgroundColor = Color.green;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
-                    evt.menu.AppendAction("Set Color/White", (x) =>
+                    btn.style.backgroundColor = Color.green;
+                    vgContainer.graphState.entityBackgroundColor = Color.green;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                evt.menu.AppendAction("Set Color/White", (x) =>
                 {
-                            btn.style.backgroundColor = Color.white;
-                            vgContainer.graphState.entityBackgroundColor = Color.white;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
+                    btn.style.backgroundColor = Color.white;
+                    vgContainer.graphState.entityBackgroundColor = Color.white;
+                    PortsUtils.SetActiveAssetDirty();
+                });
 
-                    evt.menu.AppendAction("Delete", (x) =>
+                evt.menu.AppendAction("Delete", (x) =>
                 {
-                            GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
+                    GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
 
-                            if (obj != null)
-                                GameObject.DestroyImmediate(obj);
+                    if (obj != null)
+                        GameObject.DestroyImmediate(obj);
 
-                            box.Remove(btn);
-                            PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
-                        });
+                    box.Remove(btn);
+                    PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
+                });
 
                 });
             }
@@ -174,7 +175,6 @@ namespace VIEditor
                 else
                 {
                     cols = Color.black;
-                    widths = defaultWidth;
                 }
 
                 btn.style.borderBottomColor = cols;
@@ -247,19 +247,24 @@ namespace VIEditor
             //Collection
             var toolbarGenerics = new ToolbarMenu { text = "Collection", variant = ToolbarMenu.Variant.Default };
             toolbarGenerics.name = "Collection";
-            toolbarGenerics.menu.AppendAction("CreateList", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("AddToList", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("RemoveFromList", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("ClearList", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("CreateArray", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("AddToArray", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("ClearArray", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("CreateQueue", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("Queue", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("DeQueue", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("ClearQueue", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("ArrayToList", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarGenerics.menu.AppendAction("ListToArray", a => { }, a => DropdownMenuAction.Status.Normal);
+
+            if (!PortsUtils.PlayMode)
+            {
+                toolbarGenerics.menu.AppendAction("CreateList", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("AddToList", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("RemoveFromList", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("ClearList", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("CreateArray", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("AddToArray", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("ClearArray", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("CreateQueue", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("Queue", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("DeQueue", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("ClearQueue", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("ArrayToList", a => { }, a => DropdownMenuAction.Status.Normal);
+                toolbarGenerics.menu.AppendAction("ListToArray", a => { }, a => DropdownMenuAction.Status.Normal);
+            }
+
             toolbar.Add(toolbarGenerics);
 
             //Math
@@ -310,55 +315,76 @@ namespace VIEditor
             var menuTwo = new ToolbarMenu { text = "Create VDialogue" };
             menuTwo.style.backgroundColor = Color.green;
             menuTwo.style.color = Color.black;
-            menuTwo.menu.AppendAction("Add VDialogue", a =>
+
+            if (!PortsUtils.PlayMode)
             {
-                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel")) as GameObject;
-                PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            });
+                menuTwo.menu.AppendAction("Add VDialogue", a =>
+                {
+                    GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel")) as GameObject;
+                    PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                });
+            }
 
             toolbarTwo.Add(menuTwo);
-
             var popupTwo = new ToolbarMenu { text = "Create VStage", variant = ToolbarMenu.Variant.Default };
             popupTwo.style.backgroundColor = Color.green;
             popupTwo.style.color = Color.black;
-            popupTwo.menu.AppendAction("Add VStage", a =>
+
+            if (!PortsUtils.PlayMode)
             {
-                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VStage")) as GameObject;
-                PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            }, a => DropdownMenuAction.Status.Normal);
+                popupTwo.menu.AppendAction("Add VStage", a =>
+                {
+                    GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VStage")) as GameObject;
+                    PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                }, a => DropdownMenuAction.Status.Normal);
+            }
 
             toolbarTwo.Add(popupTwo);
-
             var popupMenu = new ToolbarMenu { text = "Create VMenu", variant = ToolbarMenu.Variant.Default };
             popupMenu.style.backgroundColor = Color.green;
             popupMenu.style.color = Color.black;
-            popupMenu.menu.AppendAction("Add VMenu", a =>
-            {
-                GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VMenu")) as GameObject;
-                PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            }, a => DropdownMenuAction.Status.Normal);
-            toolbarTwo.Add(popupMenu);
 
+            if (!PortsUtils.PlayMode)
+            {
+                popupMenu.menu.AppendAction("Add VMenu", a =>
+                {
+                    GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VMenu")) as GameObject;
+                    PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                }, a => DropdownMenuAction.Status.Normal);
+            }
+
+            toolbarTwo.Add(popupMenu);
             var clickableMenu = new ToolbarMenu { text = "Create Clickables", variant = ToolbarMenu.Variant.Default };
             clickableMenu.style.backgroundColor = Color.green;
             clickableMenu.style.color = Color.black;
-            clickableMenu.menu.AppendAction("Add Clickables", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarTwo.Add(clickableMenu);
 
+            if (!PortsUtils.PlayMode)
+            {
+                clickableMenu.menu.AppendAction("Add Clickables", a => { }, a => DropdownMenuAction.Status.Normal);
+            }
+
+            toolbarTwo.Add(clickableMenu);
             var inventoryMenu = new ToolbarMenu { text = "Create VInventorySystem", variant = ToolbarMenu.Variant.Default };
             inventoryMenu.style.backgroundColor = Color.green;
             inventoryMenu.style.color = Color.black;
-            inventoryMenu.menu.AppendAction("Add VInventory", a => { }, a => DropdownMenuAction.Status.Normal);
-            inventoryMenu.menu.AppendAction("VInventory List/SomeInventory", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarTwo.Add(inventoryMenu);
+            if (!PortsUtils.PlayMode)
+            {
+                inventoryMenu.menu.AppendAction("Add VInventory", a => { }, a => DropdownMenuAction.Status.Normal);
+                inventoryMenu.menu.AppendAction("VInventory List/SomeInventory", a => { }, a => DropdownMenuAction.Status.Normal);
+            }
 
+            toolbarTwo.Add(inventoryMenu);
             var questMenu = new ToolbarMenu { text = "Create VQuestSystem", variant = ToolbarMenu.Variant.Default };
             questMenu.style.backgroundColor = Color.green;
             questMenu.style.color = Color.black;
-            questMenu.menu.AppendAction("Add VQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
-            questMenu.menu.AppendAction("VQuestSystem List/SomeQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
-            toolbarTwo.Add(questMenu);
 
+            if (!PortsUtils.PlayMode)
+            {
+                questMenu.menu.AppendAction("Add VQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
+                questMenu.menu.AppendAction("VQuestSystem List/SomeQuestSystem", a => { }, a => DropdownMenuAction.Status.Normal);
+            }
+
+            toolbarTwo.Add(questMenu);
             Toolbars.Add(toolbarTwo);
 
             //3rd toolbar
@@ -389,7 +415,10 @@ namespace VIEditor
             toolbarThree.Add(delvnodeTool);
 
             var tools = new ToolbarMenu { text = "Tools", variant = ToolbarMenu.Variant.Default };
-            tools.menu.AppendAction("Group", a => { vgraph.AddGroup(); }, a => DropdownMenuAction.Status.Normal);
+            if (!PortsUtils.PlayMode)
+            {
+                tools.menu.AppendAction("Group", a => { vgraph.AddGroup(); }, a => DropdownMenuAction.Status.Normal);
+            }
             toolbarThree.Add(tools);
 
             var toolbarSearchField = new ToolbarSearchField();
@@ -406,6 +435,7 @@ namespace VIEditor
                     }
                 });
             }
+
             toolbarThree.Add(toolbarSearchField);
             var variableBtn = new Button();
 
@@ -431,18 +461,21 @@ namespace VIEditor
 
             var bwBtn = new Button();
 
-            bwBtn.clicked += () =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!EditorWindow.HasOpenInstances<BackgroundWorkerWindow>())
+                bwBtn.clicked += () =>
                 {
-                    BackgroundWorkerWindow vg = EditorWindow.GetWindow<BackgroundWorkerWindow>();
-                    vg.Repaint();
-                }
-                else
-                {
-                    EditorWindow.GetWindow<BackgroundWorkerWindow>().Close();
-                }
-            };
+                    if (!EditorWindow.HasOpenInstances<BackgroundWorkerWindow>())
+                    {
+                        BackgroundWorkerWindow vg = EditorWindow.GetWindow<BackgroundWorkerWindow>();
+                        vg.Repaint();
+                    }
+                    else
+                    {
+                        EditorWindow.GetWindow<BackgroundWorkerWindow>().Close();
+                    }
+                };
+            }
 
             bwBtn.text = "Background Scheduler";
             bwBtn.style.backgroundColor = Color.grey;
@@ -492,7 +525,6 @@ namespace VIEditor
             if (!String.IsNullOrEmpty(headerString) && !String.IsNullOrEmpty(componentName))
             {
                 var split = headerString.Split('/');
-
                 var splitOne = string.Empty;
                 var splitTwo = string.Empty;
 
