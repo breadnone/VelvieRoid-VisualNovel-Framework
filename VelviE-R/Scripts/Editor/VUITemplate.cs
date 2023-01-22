@@ -113,6 +113,7 @@ namespace VIEditor
             var field = new VisualElement();
             field.name = "field";
             field.style.width = 220;
+            root.userData = field as VisualElement;
 
             root.Add(lbl);
             root.Add(field);
@@ -190,82 +191,83 @@ namespace VIEditor
             vis.name = "variable";
             vis.style.width = 220;
 
-            var addActiveVar = new ActiveVariableClass{vfield = vis, vtype = type};
+            var addActiveVar = new ActiveVariableClass { vfield = vis, vtype = type };
             ActiveVariable.Add(addActiveVar);
 
             if (PortsUtils.variable.ivar.Count > 0)
             {
                 var varlist = new List<string>();
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(type == VTypes.None)
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (type == VTypes.None)
                     {
                         varlist.Add(x.Name);
                     }
                     else
                     {
-                        if(type == VTypes.String)
+                        if (type == VTypes.String)
                         {
-                            if(x.GetVtype() == VTypes.String)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.String)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Boolean)
+                        else if (type == VTypes.Boolean)
                         {
-                            if(x.GetVtype() == VTypes.Boolean)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Boolean)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Double)
+                        else if (type == VTypes.Double)
                         {
-                            if(x.GetVtype() == VTypes.Double)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Double)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Float)
+                        else if (type == VTypes.Float)
                         {
-                            if(x.GetVtype() == VTypes.Float)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Float)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Integer)
+                        else if (type == VTypes.Integer)
                         {
-                            if(x.GetVtype() == VTypes.Integer)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Integer)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.GameObject)
+                        else if (type == VTypes.GameObject)
                         {
-                            if(x.GetVtype() == VTypes.GameObject)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.GameObject)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Transform)
+                        else if (type == VTypes.Transform)
                         {
-                            if(x.GetVtype() == VTypes.Transform)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Transform)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Vector2)
+                        else if (type == VTypes.Vector2)
                         {
-                            if(x.GetVtype() == VTypes.Vector2)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Vector2)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Vector3)
+                        else if (type == VTypes.Vector3)
                         {
-                            if(x.GetVtype() == VTypes.Vector3)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Vector3)
+                                varlist.Add(x.Name);
                         }
-                        else if(type == VTypes.Vector4)
+                        else if (type == VTypes.Vector4)
                         {
-                            if(x.GetVtype() == VTypes.Vector4)
-                            varlist.Add(x.Name);
+                            if (x.GetVtype() == VTypes.Vector4)
+                                varlist.Add(x.Name);
                         }
                     }
                 });
                 varlist.Add("<None>");
                 vis.choices = varlist;
             }
-
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
-                    ActiveVariable.Remove(addActiveVar);
-            });
-
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                        ActiveVariable.Remove(addActiveVar);
+                });
+            }
             subroot.Add(txtLabel);
             subroot.Add(vis);
             return (subroot, vis, type);
@@ -302,12 +304,13 @@ namespace VIEditor
                 vis.choices = varlist;
             }
 
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
                     ActiveCharacter.Remove(vis);
-            });
-
+                });
+            }
             subroot.Add(txtLabel);
             subroot.Add(vis);
             return (subroot, vis);
@@ -336,13 +339,14 @@ namespace VIEditor
                 varlist.Add("<None>");
                 vis.choices = varlist;
             }
-
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
-                    ActiveDialog.Remove(vis);
-            });
-
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                        ActiveDialog.Remove(vis);
+                });
+            }
             subroot.Add(txtLabel);
             subroot.Add(vis);
             return (subroot, vis);
@@ -371,13 +375,14 @@ namespace VIEditor
                 varlist.Add("<None>");
                 vis.choices = varlist;
             }
-
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
-                    ActiveStage.Remove(vis);
-            });
-
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                        ActiveStage.Remove(vis);
+                });
+            }
             subroot.Add(txtLabel);
             subroot.Add(vis);
             return (subroot, vis);
@@ -406,13 +411,14 @@ namespace VIEditor
                 varlist.Add("<None>");
                 vis.choices = varlist;
             }
-
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
-                    ActiveMenuDialog.Remove(vis);
-            });
-
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                        ActiveMenuDialog.Remove(vis);
+                });
+            }
             subroot.Add(txtLabel);
             subroot.Add(vis);
             return (subroot, vis);
@@ -452,13 +458,14 @@ namespace VIEditor
                     }
                 }
             }
-
-            vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
-                    ActivePortrait.Remove(porVar);
-            });
-
+                vis.RegisterCallback<DetachFromPanelEvent>((evt) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                        ActivePortrait.Remove(porVar);
+                });
+            }
             varlist.Add("<None>");
             vis.choices = varlist;
             subroot.Add(txtLabel);
@@ -619,13 +626,13 @@ namespace VIEditor
 
                     if (!init)
                     {
-                        PortsUtils.variable.ivar.ForEach((x) => 
-                        { 
-                            if(activeVar.vtype == VTypes.None)
+                        PortsUtils.variable.ivar.ForEach((x) =>
+                        {
+                            if (activeVar.vtype == VTypes.None)
                                 varlist.Add(x.Name);
                             else
                             {
-                                if(activeVar.vtype == x.GetVtype())
+                                if (activeVar.vtype == x.GetVtype())
                                     varlist.Add(x.Name);
                             }
                         });

@@ -180,11 +180,12 @@ namespace VIEditor
         private VisualElement DrawSelect(MoveCharacter t)
         {
             var root = VUITemplate.GetTemplate("Move type :");
+            var field = root.userData as VisualElement;
             var tbMenu = new DropdownField();
             tbMenu.style.width = 220;
             tbMenu.value = t.MoveType.ToString();
             tbMenu.choices = Enum.GetNames(typeof(CharacterMoveType)).ToList();
-            root.Add(tbMenu);
+            field.Add(tbMenu);
 
             tbMenu.RegisterCallback<ChangeEvent<string>>((x) =>
             {
