@@ -214,7 +214,7 @@ static class HierarchyMonitor
         //check VelvieDialogue
         var dialogue = VEditorFunc.EditorGetVDialogues();
 
-        if (dialogue.Length > 0)
+        if (dialogue != null && dialogue.Length > 0)
         {
             for (int i = 0; i < dialogue.Length; i++)
             {
