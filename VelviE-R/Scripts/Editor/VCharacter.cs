@@ -654,7 +654,7 @@ namespace VIEditor
                         {
                             if (x.previousValue != null && x.previousValue != x.newValue && vchara.charaPortrait[i] != null)
                             {
-                                var getVcores = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+                                var getVcores = VEditorFunc.EditorGetVCoreUtils();
 
                                 List<SayWord> sayWords = new List<SayWord>();
                                 List<SetPortrait> setPortraits = new List<SetPortrait>();
