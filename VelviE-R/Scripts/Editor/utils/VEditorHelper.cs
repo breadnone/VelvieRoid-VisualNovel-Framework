@@ -126,7 +126,27 @@ namespace VIEditor
             
             return dials.ToArray();
         }
-    
+        public static VInputBuffer[] EditorGetVInput()
+        {
+            var t = EditorGetVCoreUtils();
+
+            if(t == null || t.Length == 0)
+                return null;
+
+            List<VInputBuffer> dials = new List<VInputBuffer>();
+
+            for(int i = 0; i < t.Length; i++)
+            {
+                var com = t[i].gameObject.GetComponent<VInputBuffer>();
+
+                if(com != null)
+                {
+                    dials.Add(com);
+                }
+            }
+            
+            return dials.ToArray();
+        }
         public static void AssignAndAddTag(GameObject obj, string tag = "VelvieRoid")
         {
             if(obj == null)
