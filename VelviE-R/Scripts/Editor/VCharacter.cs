@@ -1074,6 +1074,7 @@ namespace VIEditor
                     charaObj.name = tmpStrName;
                     charaObj.AddComponent<VCharacterUtil>();
                     var vcharComponent = charaObj.GetComponent<VCharacterUtil>();
+                    VEditorFunc.AssignAndAddTag(charaObj);
 
                     var vcom = charaObj.GetComponent<VCharacterUtil>();
                     var chars = new VCharacterV();
