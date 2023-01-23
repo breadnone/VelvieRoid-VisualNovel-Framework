@@ -968,7 +968,7 @@ namespace VIEditor
         public void GetAllVInputs()
         {
             if (inputs.Count == 0)
-            {
+            {                
                 var all = Resources.FindObjectsOfTypeAll<VInputBuffer>();
                 inputs = all.ToList();
             }
