@@ -181,10 +181,10 @@ static class HierarchyMonitor
             VEditorFunc.CreateTag();
         }
         
-        var all = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+        var all = VEditorFunc.EditorGetVCoreUtils();
         var vgraphs = PortsUtils.GetVGprahsScriptableObjects();
 
-        if (all.Length > 0)
+        if (all != null && all.Length > 0)
         {
             bool nulls = PortsUtils.Vcores.Exists(x => x == null);
 
