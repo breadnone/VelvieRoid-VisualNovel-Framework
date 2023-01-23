@@ -175,6 +175,12 @@ static class HierarchyMonitor
 
     static void OnHierarchyChanged()
     {
+        //Check for Velvie's tags
+        if(!VEditorFunc.VelvieTagIsExist())
+        {
+            VEditorFunc.CreateTag();
+        }
+        
         var all = Resources.FindObjectsOfTypeAll<VCoreUtil>();
         var vgraphs = PortsUtils.GetVGprahsScriptableObjects();
 
