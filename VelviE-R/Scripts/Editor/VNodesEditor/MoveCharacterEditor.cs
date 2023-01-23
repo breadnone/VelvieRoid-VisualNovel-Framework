@@ -601,7 +601,7 @@ namespace VIEditor
                 }
                 else
                 {
-                    var stages = Resources.FindObjectsOfTypeAll<VStageUtil>();
+                    var stages = VEditorFunc.EditorGetVStageUtils();
                     t.MainStage = Array.Find(stages, xx => xx.vstageName == x.newValue);
                     tbm.SetEnabled(true);
                     tbmTo.SetEnabled(true);
