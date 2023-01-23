@@ -35,6 +35,7 @@ namespace VIEditor
                 }
                 
                 var getcom = vg.GetComponent<VInputBuffer>();
+                
                 if(getcom != null)
                 {
                     getcom.hideFlags = HideFlags.HideInInspector;
