@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91d4edc1a3195c2459a7b81920c02ea0, type: 3}
-  m_Name: VelviE-R-VGraphAssets-66016354
+  m_Name: VelviE-R-VGraphAssets-1574140693
   m_EditorClassIdentifier: 
   vports:
-  - guid: 775eb572-2e7b-4e2a-b47b-66a709df6ff0
+  - guid: 12ef80f5-e911-4125-85ec-fec933bacdf9
     vport:
       vnodeProperty:
         nodeName: Node
@@ -21,38 +21,38 @@ MonoBehaviour:
         nodePosition:
           serializedVersion: 2
           x: 510.4
-          y: 316
-          width: 149.6
-          height: 110.400024
-        nodeId: ee487714-5ae6-4d87-ae84-c4068e8ce8d81322343532
+          y: 313.6
+          width: 150.4
+          height: 110.399994
+        nodeId: d7100e76-c9d7-47b5-b93f-44af9332c7c8794546129
         isGameStarted: 1
       connectedTo:
-      - a19e1693-0570-4da3-bc43-696c3fd7d2061485061676
-      vParentNodeId: 58ab1f25-eacc-40df-8af3-671b8ca7e520555744989
-      vportInstanceGuid: a07bf694-f380-4adb-8d31-69d9f230c5d41966979829
-  - guid: 2d406a8f-f82f-42b1-8ff4-92a3bb088052
+      - b42187fc-bbc9-4f24-a86c-ff4bbd5ebfca325614683
+      vParentNodeId: fb03d89c-e2db-4283-b683-2b5572ddb7411502636425
+      vportInstanceGuid: 2f2111f7-29f3-4c4f-9dd2-afff51eba1072049176237
+  - guid: 6e0c1062-9a3e-4064-983c-f18325258fa1
     vport:
       vnodeProperty:
         nodeName: Node1
         nodeTitle: VNode
         nodePosition:
           serializedVersion: 2
-          x: 770.4
-          y: 326.40002
-          width: 150.39996
-          height: 109.599976
-        nodeId: d29d5a4e-9e49-4d84-bfa0-e252f01bc99c1081525714
+          x: 757.6
+          y: 313.6
+          width: 149.60004
+          height: 110.399994
+        nodeId: cef413a3-b870-4b31-9412-d846150c7ab11991987713
         isGameStarted: 0
       connectedTo: []
-      vParentNodeId: bc6aa89b-2503-4fc5-8469-6926720c151c104057128
-      vportInstanceGuid: a19e1693-0570-4da3-bc43-696c3fd7d2061485061676
+      vParentNodeId: e3c0141b-e734-4d39-b136-0dc3ec04282b1240367303
+      vportInstanceGuid: b42187fc-bbc9-4f24-a86c-ff4bbd5ebfca325614683
   graphState:
     InspectorBtnStates: 1
     miniMapActiveState: 0
     entityBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
-    graphStateId: 66016354
+    graphStateId: 1574140693
   vgraphGOname: VGraph
-  govcoreid: 66016354
-  path: Assets/VelviE-R/Resources/VelviE-R-VGraphAssets-66016354.asset
+  govcoreid: 1574140693
+  path: Assets/VelviE-R/Resources/VelviE-R-VGraphAssets-1574140693.asset
   entityIndex: 1
   sceneGuid: 6ee244b7e54ffec469a2464b5dafc221
