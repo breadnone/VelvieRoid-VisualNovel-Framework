@@ -321,6 +321,7 @@ namespace VIEditor
                 menuTwo.menu.AppendAction("Add VDialogue", a =>
                 {
                     GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel")) as GameObject;
+                    VEditorFunc.AssignAndAddTag(go);
                     PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
                 });
             }
@@ -335,6 +336,7 @@ namespace VIEditor
                 popupTwo.menu.AppendAction("Add VStage", a =>
                 {
                     GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VStage")) as GameObject;
+                    VEditorFunc.AssignAndAddTag(go);
                     PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
                 }, a => DropdownMenuAction.Status.Normal);
             }
@@ -349,6 +351,7 @@ namespace VIEditor
                 popupMenu.menu.AppendAction("Add VMenu", a =>
                 {
                     GameObject go = PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VMenu")) as GameObject;
+                    VEditorFunc.AssignAndAddTag(go);
                     PrefabUtility.UnpackPrefabInstance(go, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
                 }, a => DropdownMenuAction.Status.Normal);
             }
