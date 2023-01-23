@@ -58,11 +58,11 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Variable : ";
 
             ToolbarMenu vis = new ToolbarMenu();
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.Variable == null)
             {
@@ -137,7 +137,7 @@ namespace VIEditor
             firstSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Condition : ";
 
             firstSlot.Add(txtLabel);
@@ -184,7 +184,7 @@ namespace VIEditor
             else
             {
                 ToolbarMenu tb = new ToolbarMenu();
-                tb.style.width = 220;
+                tb.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 tb.SetEnabled(false);
                 firstSlot.Add(tb);
             }
@@ -193,7 +193,7 @@ namespace VIEditor
         private ToolbarMenu BooleanActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("True", (x) =>
@@ -212,7 +212,7 @@ namespace VIEditor
         private ToolbarMenu VListActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("VListContains", (x) =>
@@ -235,7 +235,7 @@ namespace VIEditor
         private ToolbarMenu ValueActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.ECondition == EnumCondition.BiggerThan)
                 dropd.text = ">";
@@ -290,7 +290,7 @@ namespace VIEditor
         private ToolbarMenu StringActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("Equal", (x) =>
@@ -335,7 +335,7 @@ namespace VIEditor
         private ToolbarMenu VectorActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("DistanceEqual", (x) =>
@@ -356,7 +356,7 @@ namespace VIEditor
         private ToolbarMenu GameObjectAction(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             dropd.menu.AppendAction("Equal", (x) =>
             {
@@ -413,7 +413,7 @@ namespace VIEditor
         private ToolbarMenu TransformActions(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("LocalPositionNotEqual", (x) =>
@@ -446,7 +446,7 @@ namespace VIEditor
         private ToolbarMenu NoneAction(If t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("<None>", (x) =>
@@ -466,12 +466,12 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Comparer type : ";
 
             ToolbarMenu vis = new ToolbarMenu();
             tmenu = vis;
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (String.IsNullOrEmpty(t.LocalorValue))
             {
@@ -524,11 +524,11 @@ namespace VIEditor
             secondSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Variable comparer : ";
 
             ToolbarMenu vis = new ToolbarMenu();
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.LocalVariable == null)
             {
@@ -584,7 +584,7 @@ namespace VIEditor
             secondSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Value comparer : ";
 
             VisualElement vis = new VisualElement();
@@ -824,7 +824,7 @@ namespace VIEditor
                 vis = new TextField();
             }
 
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             secondSlot.Add(txtLabel);
             secondSlot.Add(vis);
         }
