@@ -88,16 +88,6 @@ namespace VIEditor
                 TriggerOnChangedSummary();
             }
         }
-        public static void SetLblWidth(VisualElement vis)
-        {
-            vis.style.marginBottom = 5;
-            vis.style.width = 120;
-        }
-        public static void SetFieldWidth(VisualElement vis)
-        {
-            vis.style.marginBottom = 5;
-            vis.style.width = 220;
-        }
         public static Box GetTemplate(string lblTitle, FlexDirection flexDirection = FlexDirection.Row)
         {
             var root = new Box();
@@ -138,12 +128,12 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var vis = new DropdownField();
             vis.name = "ease";
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (PortsUtils.variable.ivar.Count > 0)
             {
@@ -312,7 +302,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();
@@ -395,7 +385,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();
@@ -473,7 +463,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();
@@ -528,7 +518,7 @@ namespace VIEditor
             subroot.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = labelName;
 
             var visCon = new VisualElement();
