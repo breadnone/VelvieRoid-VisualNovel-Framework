@@ -142,7 +142,7 @@ namespace VIEditor
                     }
                     else
                     {
-                        var getStages = Resources.FindObjectsOfTypeAll<VStageUtil>();
+                        var getStages = VEditorFunc.EditorGetVStageUtils();
                         t.ActiveVStage = Array.Find(getStages, xx => xx.vstageName == x.newValue);
 
                         if (t.ActiveVStage != null)
