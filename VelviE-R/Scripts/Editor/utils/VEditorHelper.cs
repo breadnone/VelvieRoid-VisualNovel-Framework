@@ -84,6 +84,27 @@ namespace VIEditor
             
             return dials.ToArray();
         }
+        public static VCharacterUtil[] EditorGetVCharacterUtils()
+        {
+            var t = GameObject.FindGameObjectsWithTag("VelvieRoid");
+
+            if(t == null || t.Length == 0)
+                return null;
+
+            List<VCharacterUtil> dials = new List<VCharacterUtil>();
+
+            for(int i = 0; i < t.Length; i++)
+            {
+                var com = t[i].GetComponent<VCharacterUtil>();
+
+                if(com != null)
+                {
+                    dials.Add(com);
+                }
+            }
+            
+            return dials.ToArray();
+        }
         public static VMenuOption[] EditorGetVMenuUtils()
         {
             var t = GameObject.FindGameObjectsWithTag("VelvieRoid");
