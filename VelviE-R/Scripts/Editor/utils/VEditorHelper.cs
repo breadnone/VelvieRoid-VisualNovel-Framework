@@ -33,7 +33,6 @@ namespace VIEditor
             DelTag(txt);
         }
 
-        [UnityEditor.Callbacks.DidReloadScripts]
         private static void AddTag(string txt)
         {
             var arTags = InternalEditorUtility.tags;
@@ -45,7 +44,6 @@ namespace VIEditor
                 InternalEditorUtility.AddTag(txt);
         }
 
-        [UnityEditor.Callbacks.DidReloadScripts]
         private static void DelTag(string txt)
         {
             var arTags = InternalEditorUtility.tags;
