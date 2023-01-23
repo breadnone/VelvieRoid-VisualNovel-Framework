@@ -384,7 +384,7 @@ namespace VIEditor
                 if (!PortsUtils.PlayMode)
                 {
                     var inst = PortsUtils.variable.ivar[(int)this.userData];
-                    var vcores = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+                    var vcores = VEditorFunc.EditorGetVCoreUtils();
 
                     if (inst == null || inst is not VDouble)
                         return;
