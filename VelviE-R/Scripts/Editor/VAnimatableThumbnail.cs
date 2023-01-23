@@ -83,7 +83,7 @@ namespace VIEditor
                 DrawList(null, true);
             });
 
-            var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+            var chars = VEditorFunc.EditorGetVCharacterUtils();
 
             foreach (var vchar in chars)
             {

@@ -38,7 +38,7 @@ namespace VIEditor
         public static Box ActiveInspectorContainer {get;set;}
         public static VCharacterV[] GetCharacters()
         {
-            var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+            var chars = VEditorFunc.EditorGetVCharacterUtils();
             VCharacterV[] vchars = new VCharacterV[chars.Length];
 
             if (chars != null && chars.Length > 0)

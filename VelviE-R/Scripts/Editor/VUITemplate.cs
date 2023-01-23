@@ -279,7 +279,7 @@ namespace VIEditor
             ActiveCharacter.Add(vis);
             subroot.userData = visCon as VisualElement;
 
-            var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+            var chars = VEditorFunc.EditorGetVCharacterUtils();
 
             if (chars.Length > 0)
             {
@@ -657,7 +657,7 @@ namespace VIEditor
         }
         public static void RePoolCharacter()
         {
-            var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+            var chars = VEditorFunc.EditorGetVCharacterUtils();
             var varlist = new List<string>();
             bool init = false;
 

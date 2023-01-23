@@ -128,7 +128,7 @@ namespace VIEditor
                     }
                     else
                     {
-                        var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+                        var chars = VEditorFunc.EditorGetVCharacterUtils();
                         t.Character = Array.Find(chars, xx => xx.character.name == x.newValue).character;
                         ShufflingMenu(t);
                         PortsUtils.SetActiveAssetDirty();
@@ -166,7 +166,7 @@ namespace VIEditor
                     }
                     else
                     {
-                        var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+                        var chars = VEditorFunc.EditorGetVCharacterUtils();
                         t.CharacterToSwap = Array.Find(chars, xx => xx.character.name == x.newValue).character;
                         PortsUtils.SetActiveAssetDirty();
                         ShufflingMenu(t);

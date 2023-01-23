@@ -637,7 +637,7 @@ public class SayWordEditor : Editor
             vis.child.value = "<None>";
         }
 
-        var vcharas = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+        var vcharas = VEditorFunc.EditorGetVCharacterUtils();
 
         ComboBox();
 
@@ -669,7 +669,7 @@ public class SayWordEditor : Editor
                         Resets(t);
                         /////
 
-                        t.Character = Array.Find(Resources.FindObjectsOfTypeAll<VCharacterUtil>(), x => x.character.name == evt.newValue).character;
+                        t.Character = Array.Find(VEditorFunc.EditorGetVCharacterUtils(), x => x.character.name == evt.newValue).character;
                         RePoolPortrait(t, spriteList);
                         RePoolThumbnail(t, thmList);
                         thumbnailElement.SetEnabled(true);
@@ -984,7 +984,7 @@ public class SayWordEditor : Editor
         objElement.style.marginLeft = 4;
         objElement.style.width = 220;
 
-        var chars = Resources.FindObjectsOfTypeAll<VCharacterUtil>();
+        var chars = VEditorFunc.EditorGetVCharacterUtils();
 
         if (t.AnimatableThumbnailProp != null && !String.IsNullOrEmpty(t.AnimatableThumbnailProp.name))
         {

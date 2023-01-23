@@ -92,7 +92,7 @@ namespace VIEditor
                     }
                     else
                     {
-                        t.Character = Array.Find(Chars(), xx => xx.character.name == x.newValue).character;
+                        t.Character = Array.Find(VEditorFunc.EditorGetVCharacterUtils(), xx => xx.character.name == x.newValue).character;
 
                         if (t.Character == null)
                         {
@@ -113,11 +113,6 @@ namespace VIEditor
             return vchar.root;
         }
 
-
-        private VCharacterUtil[] Chars()
-        {
-            return Resources.FindObjectsOfTypeAll<VCharacterUtil>();
-        }
         private Box DrawStage(SetPortrait t)
         {
             var vstage = VUITemplate.VStageTemplate();
