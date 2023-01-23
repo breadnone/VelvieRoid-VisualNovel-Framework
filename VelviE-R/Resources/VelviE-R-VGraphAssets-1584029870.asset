@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4edc1a3195c2459a7b81920c02ea0, type: 3}
+  m_Name: VelviE-R-VGraphAssets-1584029870
+  m_EditorClassIdentifier: 
+  vports: []
+  graphState:
+    InspectorBtnStates: 0
+    miniMapActiveState: 0
+    entityBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    graphStateId: 
+  vgraphGOname: VGraph
+  govcoreid: 1584029870
+  path: Assets/VelviE-R/Resources/VelviE-R-VGraphAssets-1584029870.asset
+  entityIndex: 1
+  sceneGuid: 6ee244b7e54ffec469a2464b5dafc221
