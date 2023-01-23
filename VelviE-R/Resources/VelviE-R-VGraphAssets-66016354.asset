@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4edc1a3195c2459a7b81920c02ea0, type: 3}
+  m_Name: VelviE-R-VGraphAssets-66016354
+  m_EditorClassIdentifier: 
+  vports:
+  - guid: 775eb572-2e7b-4e2a-b47b-66a709df6ff0
+    vport:
+      vnodeProperty:
+        nodeName: Node
+        nodeTitle: VNode
+        nodePosition:
+          serializedVersion: 2
+          x: 510.4
+          y: 316
+          width: 149.6
+          height: 110.400024
+        nodeId: ee487714-5ae6-4d87-ae84-c4068e8ce8d81322343532
+        isGameStarted: 1
+      connectedTo:
+      - a19e1693-0570-4da3-bc43-696c3fd7d2061485061676
+      vParentNodeId: 58ab1f25-eacc-40df-8af3-671b8ca7e520555744989
+      vportInstanceGuid: a07bf694-f380-4adb-8d31-69d9f230c5d41966979829
+  - guid: 2d406a8f-f82f-42b1-8ff4-92a3bb088052
+    vport:
+      vnodeProperty:
+        nodeName: Node1
+        nodeTitle: VNode
+        nodePosition:
+          serializedVersion: 2
+          x: 770.4
+          y: 326.40002
+          width: 150.39996
+          height: 109.599976
+        nodeId: d29d5a4e-9e49-4d84-bfa0-e252f01bc99c1081525714
+        isGameStarted: 0
+      connectedTo: []
+      vParentNodeId: bc6aa89b-2503-4fc5-8469-6926720c151c104057128
+      vportInstanceGuid: a19e1693-0570-4da3-bc43-696c3fd7d2061485061676
+  graphState:
+    InspectorBtnStates: 1
+    miniMapActiveState: 0
+    entityBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    graphStateId: 66016354
+  vgraphGOname: VGraph
+  govcoreid: 66016354
+  path: Assets/VelviE-R/Resources/VelviE-R-VGraphAssets-66016354.asset
+  entityIndex: 1
+  sceneGuid: 6ee244b7e54ffec469a2464b5dafc221
