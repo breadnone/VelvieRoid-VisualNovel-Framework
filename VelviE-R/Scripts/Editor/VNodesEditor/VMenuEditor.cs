@@ -457,7 +457,7 @@ namespace VIEditor
                     {
                         var tb = child as DropdownField;
                         tb.choices.Clear();
-                        var instMenu = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+                        var instMenu = VEditorFunc.EditorGetVCoreUtils();
                         var asList = new List<string>();
 
                         Array.ForEach(instMenu, x => asList.Add(x.vcorename));
