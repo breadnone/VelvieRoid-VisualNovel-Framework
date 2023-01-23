@@ -12,6 +12,15 @@ namespace VIEditor
 {
     public class VEditorFunc
     {
+        public static bool VelvieTagIsExist()
+        {
+            var arTags = InternalEditorUtility.tags;
+
+            if(arTags == null || arTags.Length == 0)
+                return false;
+
+            return Array.Exists(arTags, x => x == "VelvieRoid");
+        }
         public static VelvieDialogue[] EditorGetVDialogues()
         {
             var t = GameObject.FindGameObjectsWithTag("VelvieRoid");
@@ -104,7 +113,7 @@ namespace VIEditor
             CreateTag(tag);
             obj.tag = tag;
         }
-        public static void CreateTag(string txt)
+        public static void CreateTag(string txt = "VelvieRoid")
         {
             if(String.IsNullOrEmpty(txt))
                 return;
