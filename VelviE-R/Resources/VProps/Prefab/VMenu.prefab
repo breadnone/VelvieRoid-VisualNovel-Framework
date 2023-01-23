@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8694331751153890745}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c437b2be7045b8a4fa0fbe4ba6de2933, type: 3}
+  m_Script: {fileID: 11500000, guid: 80f6a3c4ba0733b4484c19c1999c25a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animType: 6
@@ -1220,7 +1220,7 @@ MonoBehaviour:
   - {fileID: 8694331750772836429}
   - {fileID: 8694331751469037306}
   vmenuName: VMenu
-  vmenuId: d3224326-0421-48e4-88ec-66d4e52266151309344334
+  vmenuId: 46773947-e565-4b18-8244-a953331fda5a601090218
   menuRect: {fileID: 8694331751153890741}
 --- !u!1 &8694331751389840059
 GameObject:

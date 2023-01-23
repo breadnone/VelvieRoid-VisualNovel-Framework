@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 4004669722847669215}
   - component: {fileID: 4004669722847669214}
   - component: {fileID: 4004669722847669219}
-  - component: {fileID: 1083011233341602931}
+  - component: {fileID: 7160046567199699794}
   m_Layer: 5
   m_Name: VDialogPanel
   m_TagString: Untagged
@@ -326,7 +326,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1083011233341602931
+--- !u!114 &7160046567199699794
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4004669722847669208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b9c0189f7741994bb4abf053a3df8ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 9776f7adf15593047a316e9316daaad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   auSource:
@@ -360,7 +360,7 @@ MonoBehaviour:
     stereoPanLevel: 0
   enderAudioClip: {fileID: 8300000, guid: 66c399d6e0705e842801e7474bae266a, type: 3}
   tmpComponent: {fileID: 4004669723447114226}
-  textSpeed: 0.02
+  textSpeed: 0.06
   textEffectType: 0
   writingIndicatorText: writing...
   pauseBetweenWords: 0.1
@@ -378,13 +378,14 @@ MonoBehaviour:
   thumbnail: {fileID: 0}
   spritesDuration: 0.2
   thumbnailDuration: 0.2
+  vtextSpeed: 10
   characterName: {fileID: 0}
   canvyG: {fileID: 0}
   parentpanel: {fileID: 0}
   continueThreeDots: {fileID: 0}
   vdialogDefaultPosition: {x: 0, y: 0, z: 0}
   velvieDialogueName: VDialogPanel
-  velvieDialogueId: e81365f6-c7ed-4443-83e2-b2d85d35e25a191487271
+  velvieDialogueId: d983d59a-b31d-4615-9ae5-0fad466626b1799312259
   audioSource:
     audioSource: {fileID: 0}
     name: 

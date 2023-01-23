@@ -840,14 +840,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4880911234616164451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c65f56589d6f2934782ba2f5edca7693, type: 3}
+  m_Script: {fileID: 11500000, guid: dd6f2093aaf021640ba6f13dbbbd06d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TwoDStage:
   - name: LeftStage
     stageObject: {fileID: 4880911233344335643}
     stageTransform: {fileID: 4880911233344335642}
-    stageHashId: 9804c4c1-6ad3-4c5f-adf2-0baaf7358c8c
+    stageHashId: 45115e08-8fef-404b-9b56-bc58ba38d54e
     stageDefaultPos: {x: 354.7, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -855,7 +855,7 @@ MonoBehaviour:
   - name: OffscreenLeftStage
     stageObject: {fileID: 4880911233559021472}
     stageTransform: {fileID: 4880911233559021479}
-    stageHashId: 59a50995-68e9-40e0-b6ae-cb18b71da584
+    stageHashId: 78493f61-f571-4918-86dc-2bcc40b45ecf
     stageDefaultPos: {x: -451, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -863,7 +863,7 @@ MonoBehaviour:
   - name: RightStage
     stageObject: {fileID: 4880911233705600110}
     stageTransform: {fileID: 4880911233705600109}
-    stageHashId: c46864cd-3ba7-4f9e-bbe1-b8d8fc2a9981
+    stageHashId: a2e1597c-cba5-475b-bd50-8a342a0027c7
     stageDefaultPos: {x: 1565.3, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -871,7 +871,7 @@ MonoBehaviour:
   - name: OffscreenRightStage
     stageObject: {fileID: 4880911233144706911}
     stageTransform: {fileID: 4880911233144706910}
-    stageHashId: ddaf20d9-a1cb-4ea9-bbdc-53509c8c54ec
+    stageHashId: 8e9e424e-0ee2-405b-898c-7ae0b820e098
     stageDefaultPos: {x: 2371, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -879,7 +879,7 @@ MonoBehaviour:
   - name: middle
     stageObject: {fileID: 4880911235083212519}
     stageTransform: {fileID: 4880911235083212518}
-    stageHashId: e3e77ef5-a7c0-4255-8b7a-158da777c8d9
+    stageHashId: 84a936e8-adf7-4d10-bdb9-6f254667d1fe
     stageDefaultPos: {x: 960, y: 460.70694, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -887,7 +887,7 @@ MonoBehaviour:
   - name: VCharacter
     stageObject: {fileID: 4880911234155824603}
     stageTransform: {fileID: 4880911234155824601}
-    stageHashId: d9781e19-89ee-48a0-92c9-70bd1e4dc5e0
+    stageHashId: 42f8099e-da0a-4870-b1ed-6c3034ef8554
     stageDefaultPos: {x: 960, y: 540, z: 0}
     stageDefaultScale: {x: 1, y: 1, z: 1}
     stageIs2d: 0
@@ -896,7 +896,7 @@ MonoBehaviour:
   - name: LeftStage
     stageObject: {fileID: 4880911233692053124}
     stageTransform: {fileID: 4880911233692053131}
-    stageHashId: 353398e8-a9c8-4d9f-bd3d-e8ab712b836e
+    stageHashId: 827b0fff-e613-4192-bf87-0038d1480e77
     stageDefaultPos: {x: -458, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -904,7 +904,7 @@ MonoBehaviour:
   - name: RightStage
     stageObject: {fileID: 4880911233346433830}
     stageTransform: {fileID: 4880911233346433829}
-    stageHashId: 20b636e1-b2fa-460c-a028-c9671ac3644c
+    stageHashId: 875371d2-3648-48a0-b5aa-bbe8001e056c
     stageDefaultPos: {x: 457.6, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -912,7 +912,7 @@ MonoBehaviour:
   - name: OffScreenRightStage
     stageObject: {fileID: 4880911233679710572}
     stageTransform: {fileID: 4880911233679710483}
-    stageHashId: e51b9f8a-b1d6-48b0-91fb-52d46271cad9
+    stageHashId: 50ebe7fa-e9e8-4e63-a0d7-e43218ad50f2
     stageDefaultPos: {x: 1068, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -920,7 +920,7 @@ MonoBehaviour:
   - name: OffScreenLeftStage
     stageObject: {fileID: 4880911235134246711}
     stageTransform: {fileID: 4880911235134246710}
-    stageHashId: 51849925-95bb-4956-9b34-e5f1d5a507a0
+    stageHashId: c26890fb-5ee2-47db-87bf-a52b411a5df2
     stageDefaultPos: {x: -1057, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
@@ -928,12 +928,12 @@ MonoBehaviour:
   - name: middle
     stageObject: {fileID: 4880911233847987940}
     stageTransform: {fileID: 4880911233847987947}
-    stageHashId: 0868f3d8-a019-402a-a3f1-b45d496154f6
+    stageHashId: 39e8f48e-87cf-4cf3-bcc8-e31adbff5652
     stageDefaultPos: {x: 0, y: -36.599976, z: 719.6}
     stageDefaultScale: {x: 444, y: 914.6, z: 15}
     stageIs2d: 0
     rect: {fileID: 0}
-  vstageId: 9032ad83-feb5-4883-bb15-1c3edb5c422165802933
+  vstageId: 7c64014f-ef3f-4635-b626-133c418477da2030801982
   vstageName: VStage
   twodobj: {fileID: 4880911234720892111}
   threedobj: {fileID: 4880911233191930331}
