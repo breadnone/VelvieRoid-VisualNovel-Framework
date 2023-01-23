@@ -37,29 +37,33 @@ namespace VelvieR
             {
                 var objs = transform.Find("2DStage");
                 twodobj = objs.gameObject;
-                var child = objs.GetComponentsInChildren<RectTransform>();
 
-                if(child != null && child.Length > 0)
+                if(objs != null)
                 {
-                    foreach(var stage in child)
+                    var child = objs.GetComponentsInChildren<RectTransform>();
+
+                    if(child != null && child.Length > 0)
                     {
-                        if(stage.name == "2DStage")
-                            continue;
-
-                        var nuClass = new VStageClass
+                        foreach(var stage in child)
                         {
-                            name = stage.name,
-                            stageObject = stage.gameObject,
-                            stageDefaultPos = stage.position,
-                            stageDefaultScale = stage.localScale,
-                            stageHashId = Guid.NewGuid().ToString(),
-                            rect = stage,
-                            stageTransform = stage
-                        };
+                            if(stage.name == "2DStage")
+                                continue;
 
-                        if(!TwoDStage.Exists(x => x.name == stage.name))
-                        {
-                            TwoDStage.Add(nuClass);
+                            var nuClass = new VStageClass
+                            {
+                                name = stage.name,
+                                stageObject = stage.gameObject,
+                                stageDefaultPos = stage.position,
+                                stageDefaultScale = stage.localScale,
+                                stageHashId = Guid.NewGuid().ToString(),
+                                rect = stage,
+                                stageTransform = stage
+                            };
+
+                            if(!TwoDStage.Exists(x => x.name == stage.name))
+                            {
+                                TwoDStage.Add(nuClass);
+                            }
                         }
                     }
                 }
