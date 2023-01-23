@@ -18,10 +18,10 @@ namespace VIEditor
             {
                 //Vgraph object
                 GameObject vg = new GameObject();
-                VEditorFunc.AssignAndAddTag(vg);
                 vg.name = GetNames();
                 vg.AddComponent<VCoreUtil>();
                 vg.AddComponent<VInputBuffer>();
+                VEditorFunc.AssignAndAddTag(vg);
 
                 vGraphGameObjects.Add(vg);
                 var com = vg.GetComponent<VCoreUtil>();
