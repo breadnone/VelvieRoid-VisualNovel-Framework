@@ -59,7 +59,7 @@ public class CallEditor : Editor
         {
             boxGraph.child.RegisterValueChangedCallback((x) =>
             {
-                var vgraphs = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+                var vgraphs = VEditorFunc.EditorGetVCoreUtils();
 
                 if(vgraphs == null || vgraphs.Length == 0)
                     return;
