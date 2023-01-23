@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using System;
 using System.Linq;
 
+#if UNITY_EDITOR
+using VIEditor;
+#endif
+
 namespace VelvieR
 {
     public class VCharacterManager : VStageManager
@@ -159,6 +163,15 @@ namespace VelvieR
                     {
                         var tmpDialog = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(Resources.Load("VProps/Prefab/VDialogPanel"));
                         UnityEditor.PrefabUtility.UnpackPrefabInstance(tmpDialog, UnityEditor.PrefabUnpackMode.Completely, UnityEditor.InteractionMode.AutomatedAction);
+                        var arTags = UnityEditorInternal.InternalEditorUtility.tags;
+
+                        if(arTags == null || arTags.Length == 0)
+                            return;
+
+                        if(!Array.Exists(arTags, x => x == "VelvieRoid"))
+                            UnityEditorInternal.InternalEditorUtility.AddTag("VelvieRoid");
+
+                        tmpDialog.tag = "VelvieRoid";
                         activeDialog = tmpDialog.GetComponent<VelvieDialogue>();
                     }
                     else
