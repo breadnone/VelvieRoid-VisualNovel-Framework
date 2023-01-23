@@ -91,7 +91,7 @@ public class CallEditor : Editor
     private void RepoPulateGraphMenus(Call t)
     {
         objfld.menu.MenuItems().Clear();
-        var loadasset = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+        var loadasset = VEditorFunc.EditorGetVCoreUtils();
 
         foreach (var loadAset in loadasset)
         {
