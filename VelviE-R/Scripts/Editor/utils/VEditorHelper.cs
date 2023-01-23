@@ -96,6 +96,7 @@ namespace VIEditor
             
             return dials.ToArray();
         }
+    
         public static void AssignAndAddTag(GameObject obj, string tag = "VelvieRoid")
         {
             if(obj == null)
