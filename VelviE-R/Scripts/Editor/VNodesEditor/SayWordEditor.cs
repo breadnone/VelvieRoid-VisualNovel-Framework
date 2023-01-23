@@ -12,11 +12,8 @@ using System.Linq;
 [CustomEditor(typeof(SayWord))]
 public class SayWordEditor : Editor
 {
-    public DropdownField waitForClick { get; set; }
-    public DropdownField vdialogues { get; set; }
     private VisualElement toggleCharaAudio;
     private VisualElement delay;
-    private SayWord SayWord;
     private VisualElement dummySlotProps;
 
     public override VisualElement CreateInspectorGUI()
@@ -24,8 +21,6 @@ public class SayWordEditor : Editor
         VisualElement myInspector = new VisualElement();
         myInspector.style.flexDirection = FlexDirection.Column;
         var t = target as SayWord;
-
-        SayWord = t;
 
         //Animatableprops here
         dummySlotProps = new VisualElement();
@@ -85,12 +80,13 @@ public class SayWordEditor : Editor
         strContent.style.overflow = Overflow.Visible;
         strContent.style.whiteSpace = WhiteSpace.Normal;
         strContent.style.unityOverflowClipBox = OverflowClipBox.ContentBox;
-        strContent.style.height = 100;
+        strContent.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+
         strContent.multiline = true;
 
         if (!PortsUtils.PlayMode)
         {
-            strContent.RegisterValueChangedCallback((x) =>
+            strContent.RegisterCallback<FocusOutEvent>((x) =>
             {
                 t.Words = strContent.value;
                 EditorUtility.SetDirty(t.gameObject);
@@ -275,7 +271,6 @@ public class SayWordEditor : Editor
 
         var wait = new DropdownField();
         wait.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-        waitForClick = wait;
 
         visCon.Add(wait);
 
@@ -523,8 +518,6 @@ public class SayWordEditor : Editor
     public Box DrawVDialogue(SayWord t)
     {
         var vdialog = VUITemplate.VDialogTemplate("Vdialog : ");
-        vdialogues = vdialog.child;
-
         var vdialogueCom = RePoolVDialogues();
 
         if (t.VDialogue != null)
