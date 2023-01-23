@@ -21,6 +21,7 @@ namespace VIEditor
                 vg.name = GetNames();
                 vg.AddComponent<VCoreUtil>();
                 vg.AddComponent<VInputBuffer>();
+                VEditorFunc.AssignAndAddTag(vg);
 
                 vGraphGameObjects.Add(vg);
                 var com = vg.GetComponent<VCoreUtil>();
@@ -34,6 +35,7 @@ namespace VIEditor
                 }
                 
                 var getcom = vg.GetComponent<VInputBuffer>();
+                
                 if(getcom != null)
                 {
                     getcom.hideFlags = HideFlags.HideInInspector;

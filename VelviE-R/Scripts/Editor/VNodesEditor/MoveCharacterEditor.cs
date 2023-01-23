@@ -452,7 +452,7 @@ namespace VIEditor
         {
             if (t.MainStage != null && t.Character != null)
             {
-                var stages = Resources.FindObjectsOfTypeAll<VStageUtil>();
+                var stages = VEditorFunc.EditorGetVStageUtils();
                 var vstages = stages[0].TwoDStage;
                 var vstages3 = stages[0].ThreeDStage;
 
@@ -601,7 +601,7 @@ namespace VIEditor
                 }
                 else
                 {
-                    var stages = Resources.FindObjectsOfTypeAll<VStageUtil>();
+                    var stages = VEditorFunc.EditorGetVStageUtils();
                     t.MainStage = Array.Find(stages, xx => xx.vstageName == x.newValue);
                     tbm.SetEnabled(true);
                     tbmTo.SetEnabled(true);

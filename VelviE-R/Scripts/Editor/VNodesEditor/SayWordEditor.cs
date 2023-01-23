@@ -609,7 +609,7 @@ public class SayWordEditor : Editor
 
     public VelvieDialogue[] RePoolVDialogues()
     {
-        return Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+        return VEditorFunc.EditorGetVDialogues();
     }
     public Box DrawCharacters(SayWord t)
     {

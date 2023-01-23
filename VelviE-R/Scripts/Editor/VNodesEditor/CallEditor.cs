@@ -59,7 +59,7 @@ public class CallEditor : Editor
         {
             boxGraph.child.RegisterValueChangedCallback((x) =>
             {
-                var vgraphs = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+                var vgraphs = VEditorFunc.EditorGetVCoreUtils();
 
                 if(vgraphs == null || vgraphs.Length == 0)
                     return;
@@ -91,7 +91,7 @@ public class CallEditor : Editor
     private void RepoPulateGraphMenus(Call t)
     {
         objfld.menu.MenuItems().Clear();
-        var loadasset = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+        var loadasset = VEditorFunc.EditorGetVCoreUtils();
 
         foreach (var loadAset in loadasset)
         {

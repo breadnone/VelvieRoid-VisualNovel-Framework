@@ -157,7 +157,7 @@ public class HideVDialogueEditor : Editor
 
     private VelvieDialogue[] RePoolVDialogues()
     {
-        return Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+        return VEditorFunc.EditorGetVDialogues();
     }
     public void RefreshThis()
     {

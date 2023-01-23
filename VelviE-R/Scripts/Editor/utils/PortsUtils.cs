@@ -350,7 +350,8 @@ namespace VIEditor
                 allAssets[0].graphState.InspectorBtnStates = true;
             }
 
-            LoadAssets(graphContainer, true);
+            //LoadAssets(graphContainer, true);
+            LoadAssets(assetObj, true);
         }
         public static void LoadAssets(VGraphsContainer vgraph, bool firstInit) //e.g : VelviE-R-VGraphAssets-" + id + ".asset
         {
@@ -582,7 +583,7 @@ namespace VIEditor
         public static GameObject FindVGraphObject()
         {
             GameObject vgo = null;
-            var all = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+            var all = VEditorFunc.EditorGetVCoreUtils();
 
             foreach (var go in all)
             {
