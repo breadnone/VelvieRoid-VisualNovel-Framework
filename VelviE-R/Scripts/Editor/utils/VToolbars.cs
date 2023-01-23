@@ -26,7 +26,7 @@ namespace VIEditor
                     if (buttons[i] == null)
                         continue;
 
-                    if(contexts[i] != null)
+                    if(contexts != null && contexts.Count > 0 && contexts[i] != null)
                         buttons[i].RemoveManipulator(contexts[i]);
                         
                     buttons[i].RemoveFromHierarchy();
