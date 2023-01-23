@@ -969,13 +969,13 @@ namespace VIEditor
         {
             if (inputs.Count == 0)
             {                
-                var all = Resources.FindObjectsOfTypeAll<VInputBuffer>();
+                var all = VEditorFunc.EditorGetVInput();
                 inputs = all.ToList();
             }
         }
         public VInputBuffer GetSingleInput()
         {
-            var all = Resources.FindObjectsOfTypeAll<VInputBuffer>();
+            var all = VEditorFunc.EditorGetVInput();
 
             if (all.Length > 0)
                 return inputs[0];
