@@ -28,7 +28,7 @@ namespace VIEditor
         }
         private Box DrawMenu(VMenu t)
         {
-            var menus = Resources.FindObjectsOfTypeAll<VMenuOption>();
+            var menus = VEditorFunc.EditorGetVMenuUtils();
             var asList = new List<string>();
             Array.ForEach(menus, x => asList.Add(x.VmenuName));
             var root = VUITemplate.VDropDownFieldTemplate(asList, "Menu : ", true);
