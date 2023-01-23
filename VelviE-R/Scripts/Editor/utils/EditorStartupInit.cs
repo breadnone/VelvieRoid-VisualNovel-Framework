@@ -212,7 +212,7 @@ static class HierarchyMonitor
         ////////////////////
 
         //check VelvieDialogue
-        var dialogue = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+        var dialogue = VEditorFunc.EditorGetVDialogues();
 
         if (dialogue.Length > 0)
         {
