@@ -113,15 +113,14 @@ public class CallEditor : Editor
         boxVnodeName.style.flexDirection = FlexDirection.Row;
 
         Label strLbl = new Label();
-        strLbl.style.width = 120;
-        strLbl.style.marginLeft = 5;
+        strLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strLbl.text = "VNode : ";
         boxVnodeName.Add(strLbl);
 
         var objField = new ToolbarMenu();
         txtfld = objField;
         objField.style.marginLeft = 4;
-        objField.style.width = 220;
+        objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         txtfld.RegisterCallback<MouseEnterEvent>((x) =>
         {
@@ -268,14 +267,13 @@ public class CallEditor : Editor
         boxVnodeName.style.flexDirection = FlexDirection.Row;
 
         Label strLbl = new Label();
-        strLbl.style.width = 120;
-        strLbl.style.marginLeft = 5;
+        strLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strLbl.text = "State : ";
         boxVnodeName.Add(strLbl);
 
         var objField = new ToolbarMenu();
         objField.style.marginLeft = 4;
-        objField.style.width = 220;
+        objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         objField.text = t.ContinueState.ToString();
         boxVnodeName.Add(objField);
 
