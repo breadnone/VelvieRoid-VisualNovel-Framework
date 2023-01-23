@@ -57,8 +57,7 @@ public class SayWordEditor : Editor
         boxStr.style.flexDirection = FlexDirection.Row;
 
         Label strLbl = new Label();
-        strLbl.style.marginLeft = 5;
-        strLbl.style.width = 115;
+        strLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strLbl.text = "Words : ";
         boxStr.Add(strLbl);
 
@@ -262,7 +261,7 @@ public class SayWordEditor : Editor
         boxEnumWait.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         Label waitLbl = new Label();
-        waitLbl.style.width = 120;
+        waitLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         waitLbl.text = "Wait for click : ";
         boxEnumWait.Add(waitLbl);
 
@@ -323,8 +322,7 @@ public class SayWordEditor : Editor
         boxCharaSound.style.flexDirection = FlexDirection.Row;
 
         Label strCharaClip = new Label();
-        strCharaClip.style.width = 120;
-        strCharaClip.style.marginLeft = 5;
+        strCharaClip.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strCharaClip.text = "Play character audio : ";
         boxCharaSound.Add(strCharaClip);
 
@@ -365,13 +363,12 @@ public class SayWordEditor : Editor
         boxLoopCharaSound.style.flexDirection = FlexDirection.Row;
 
         Label strLoopCharaClip = new Label();
-        strLoopCharaClip.style.width = 120;
-        strLoopCharaClip.style.marginLeft = 5;
+        strLoopCharaClip.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strLoopCharaClip.text = "Loop chara audio : ";
         boxLoopCharaSound.Add(strLoopCharaClip);
 
         var auLoopCharaClip = new Toggle();
-        auLoopCharaClip.style.width = 200;
+        auLoopCharaClip.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         boxLoopCharaSound.Add(auLoopCharaClip);
         auLoopCharaClip.value = t.LoopCharacterAudio;
         if (!PortsUtils.PlayMode)
@@ -399,8 +396,7 @@ public class SayWordEditor : Editor
         boxSlider.style.flexDirection = FlexDirection.Row;
 
         Label strSlider = new Label();
-        strSlider.style.width = 120;
-        strSlider.style.marginLeft = 5;
+        strSlider.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strSlider.text = "Chara audio vol : ";
         boxSlider.Add(strSlider);
 
@@ -458,8 +454,7 @@ public class SayWordEditor : Editor
         boxAu.Add(boxSub);
 
         Label strAu = new Label();
-        strAu.style.width = 120;
-        strAu.style.marginLeft = 5;
+        strAu.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strAu.text = "Play oneshot audio : ";
         boxSub.Add(strAu);
 
@@ -493,8 +488,7 @@ public class SayWordEditor : Editor
         boxAu.Add(boxSubTwo);
 
         Label lbl = new Label();
-        lbl.style.width = 120;
-        lbl.style.marginLeft = 5;
+        lbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         lbl.text = "Custom symbol : ";
         boxSubTwo.Add(lbl);
 
@@ -517,7 +511,7 @@ public class SayWordEditor : Editor
     }
     public Box DrawVDialogue(SayWord t)
     {
-        var vdialog = VUITemplate.VDialogTemplate("Vdialog : ");
+        var vdialog = VUITemplate.VDialogTemplate("VDialog : ");
         var vdialogueCom = RePoolVDialogues();
 
         if (t.VDialogue != null)
@@ -531,7 +525,7 @@ public class SayWordEditor : Editor
                 vdialog.child.value = "<None>";
                 t.VDialogue = null;
                 WarningCheck(t);
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
         }
         else
@@ -546,7 +540,7 @@ public class SayWordEditor : Editor
                 vdialog.child.value = "<None>";
                 t.VDialogue = null;
                 WarningCheck(t);
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
             else
             {
@@ -558,7 +552,7 @@ public class SayWordEditor : Editor
                 }
 
                 WarningCheck(t);
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
         });
 
@@ -572,8 +566,7 @@ public class SayWordEditor : Editor
         boxEnder.style.flexDirection = FlexDirection.Row;
 
         Label strEnder = new Label();
-        strEnder.style.width = 120;
-        strEnder.style.marginLeft = 5;
+        strEnder.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strEnder.text = "Ender delay : ";
         boxEnder.Add(strEnder);
 
@@ -708,7 +701,7 @@ public class SayWordEditor : Editor
 
         var lblName = new Label();
         lblName.text = "Thm animation : ";
-        lblName.style.width = 120;
+        lblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var visCon = new VisualElement();
         visCon.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
@@ -852,9 +845,8 @@ public class SayWordEditor : Editor
         vis.style.flexDirection = FlexDirection.Row;
 
         var lblName = new Label();
-        lblName.style.marginLeft = 5;
         lblName.text = "Thm anim power : ";
-        lblName.style.width = 120;
+        lblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var visConPower = new VisualElement();
         visConPower.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
@@ -930,9 +922,8 @@ public class SayWordEditor : Editor
         vis.style.flexDirection = FlexDirection.Row;
 
         var lblName = new Label();
-        lblName.style.marginLeft = 5;
         lblName.text = "Loop count : ";
-        lblName.style.width = 120;
+        lblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var visConCount = new VisualElement();
         visConCount.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
@@ -977,12 +968,12 @@ public class SayWordEditor : Editor
         var lblName = new Label();
         lblName.style.marginLeft = 5;
         lblName.text = "AnimatableProps : ";
-        lblName.style.width = 120;
+        lblName.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var objElement = new ToolbarMenu();
         animatableTb = objElement;
         objElement.style.marginLeft = 4;
-        objElement.style.width = 220;
+        objElement.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         var chars = VEditorFunc.EditorGetVCharacterUtils();
 
@@ -1029,11 +1020,11 @@ public class SayWordEditor : Editor
         var lblNameTwo = new Label();
         lblNameTwo.style.marginLeft = 5;
         lblNameTwo.text = "Framerate : ";
-        lblNameTwo.style.width = 120;
+        lblNameTwo.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var objElementTwo = new IntegerField();
         objElementTwo.style.marginLeft = 4;
-        objElementTwo.style.width = 50;
+        objElementTwo.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         objElementTwo.value = t.FrameRate;
 
         if (!PortsUtils.PlayMode)
@@ -1051,11 +1042,11 @@ public class SayWordEditor : Editor
         var lblNameThree = new Label();
         lblNameThree.style.marginLeft = 5;
         lblNameThree.text = "Loop type : ";
-        lblNameThree.style.width = 120;
+        lblNameThree.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var objElementThree = new ToolbarMenu();
         objElementThree.style.marginLeft = 4;
-        objElementThree.style.width = 220;
+        objElementThree.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         if (t.AnimatableThumbnailProp != null && t.AnimatableThumbnailProp.loopClamp)
         {
@@ -1092,11 +1083,11 @@ public class SayWordEditor : Editor
         var lblNameHuman = new Label();
         lblNameHuman.style.marginLeft = 5;
         lblNameHuman.text = "Sync timing : ";
-        lblNameHuman.style.width = 120;
+        lblNameHuman.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
 
         var objElementHuman = new ToolbarMenu();
         objElementHuman.style.marginLeft = 4;
-        objElementHuman.style.width = 220;
+        objElementHuman.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
         if (t.HumanLikePause)
         {
