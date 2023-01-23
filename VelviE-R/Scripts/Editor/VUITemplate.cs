@@ -325,7 +325,8 @@ namespace VIEditor
             visCon.Add(vis);
 
             ActiveDialog.Add(vis);
-            var chars = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+            //var chars = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+            var chars = VEditorFunc.EditorGetVDialogues();
 
             if (chars.Length > 0)
             {
@@ -365,7 +366,8 @@ namespace VIEditor
             visCon.Add(vis);
 
             ActiveStage.Add(vis);
-            var chars = Resources.FindObjectsOfTypeAll<VStageUtil>();
+            //var chars = Resources.FindObjectsOfTypeAll<VStageUtil>();
+            var chars = VEditorFunc.EditorGetVStageUtils();
 
             if (chars.Length > 0)
             {
@@ -406,7 +408,8 @@ namespace VIEditor
             visCon.Add(vis);
 
             ActiveMenuDialog.Add(vis);
-            var chars = Resources.FindObjectsOfTypeAll<VMenuOption>();
+            //var chars = Resources.FindObjectsOfTypeAll<VMenuOption>();
+            var chars = VEditorFunc.EditorGetVMenuUtils();
 
             if (chars.Length > 0)
             {
@@ -485,7 +488,8 @@ namespace VIEditor
 
             //pool this
             ActiveVgraph.Add(vis);
-            var graphs = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+            //var graphs = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+            var graphs = VEditorFunc.EditorGetVCoreUtils();
 
             if (graphs != null && graphs.Length > 0)
             {
@@ -678,7 +682,8 @@ namespace VIEditor
         }
         public static void RePoolStage()
         {
-            var chars = Resources.FindObjectsOfTypeAll<VStageUtil>();
+            //var chars = Resources.FindObjectsOfTypeAll<VStageUtil>();
+            var chars = VEditorFunc.EditorGetVStageUtils();
             var varlist = new List<string>();
             bool init = false;
 
@@ -703,7 +708,9 @@ namespace VIEditor
         }
         public static void RePoolMenu()
         {
-            var chars = Resources.FindObjectsOfTypeAll<VMenuOption>();
+            //var chars = Resources.FindObjectsOfTypeAll<VMenuOption>();
+
+            var chars = VEditorFunc.EditorGetVMenuUtils();
             var varlist = new List<string>();
             bool init = false;
 
@@ -801,7 +808,8 @@ namespace VIEditor
         {
             var varlist = new List<string>();
             bool init = false;
-            var chars = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+            //var chars = Resources.FindObjectsOfTypeAll<VelvieDialogue>();
+            var chars = VEditorFunc.EditorGetVDialogues();
 
             foreach (var dial in ActiveDialog.ToList())
             {
@@ -824,7 +832,8 @@ namespace VIEditor
         {
             var varlist = new List<string>();
             bool init = false;
-            var chars = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+            //var chars = Resources.FindObjectsOfTypeAll<VCoreUtil>();
+            var chars = VEditorFunc.EditorGetVCoreUtils();
 
             foreach (var dial in ActiveVgraph.ToList())
             {
