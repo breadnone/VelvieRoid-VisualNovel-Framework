@@ -584,21 +584,30 @@ namespace VIEditor
         {
             GameObject vgo = null;
             var all = VEditorFunc.EditorGetVCoreUtils();
+            bool mismatchGuid = false;
 
             foreach (var go in all)
             {
                 if (go.name == activeVGraphAssets.vgraphGOname)
-                {
+                {                    
                     if (go.vcoreid == activeVGraphAssets.govcoreid)
                     {
                         vgo = go.gameObject;
                         break;
                     }
+
+                    mismatchGuid = true;                    
                 }
+            }
+
+            if(mismatchGuid)
+            {
+                Debug.LogError("VGraph's GUID mismatch! Most probably due to re-generated meta files");
             }
 
             return vgo;
         }
+
         public static VGraphsContainer activeVGraphAssets { get; set; }
         public static void SetActiveVgraph(VGraphsContainer vgraph)
         {
