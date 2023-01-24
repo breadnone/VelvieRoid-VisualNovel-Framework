@@ -448,6 +448,9 @@ namespace VIEditor
                     AddRemoveListv(true);
                 }
 
+                if(PortsUtils.activeVObject == null)
+                    PortsUtils.FindVGraphObject();
+
                 VCoreUtil vcoreObj = PortsUtils.activeVObject.GetComponent<VCoreUtil>();
 
                 int index = 0;
