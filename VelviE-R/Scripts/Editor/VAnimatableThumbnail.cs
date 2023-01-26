@@ -494,20 +494,22 @@ namespace VIEditor
                 var aslbl = e as ObjectField;
                 aslbl.value = sprites[i];
 
-                aslbl.RegisterValueChangedCallback((x) =>
+                if(!PortsUtils.PlayMode)
                 {
-                    if ((Sprite)aslbl.value != null)
+                    aslbl.RegisterValueChangedCallback((x) =>
                     {
-                        sprites[i] = aslbl.value as Sprite;
-                    }
-                    else
-                    {
-                        sprites[i] = null;
-                    }
+                        if ((Sprite)aslbl.value != null)
+                        {
+                            sprites[i] = aslbl.value as Sprite;
+                        }
+                        else
+                        {
+                            sprites[i] = null;
+                        }
 
-                    if (t.gameObject != null)
-                        EditorUtility.SetDirty(t.gameObject);
-                });
+                        EditorUtility.SetDirty(t);
+                    });
+                }
 
                 aslbl.RegisterCallback<MouseDownEvent>((x) =>
                 {
