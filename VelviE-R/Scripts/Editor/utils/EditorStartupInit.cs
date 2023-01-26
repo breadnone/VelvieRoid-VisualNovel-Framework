@@ -208,7 +208,7 @@ static class HierarchyMonitor
         //check VStages
         var stages = VEditorFunc.EditorGetVStageComponent();
 
-        if (stages != null || stages.Length > 0)
+        if (stages != null && stages.Length > 0)
         {
             for (int i = 0; i < stages.Length; i++)
             {
