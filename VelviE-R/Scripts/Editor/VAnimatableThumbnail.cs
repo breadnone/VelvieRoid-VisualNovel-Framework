@@ -87,7 +87,7 @@ namespace VIEditor
 
             foreach (var vchar in chars)
             {
-                if(vchar == null)
+                if (vchar == null)
                     continue;
 
                 tbMenu.menu.AppendAction(vchar.character.name, (x) =>
@@ -96,7 +96,7 @@ namespace VIEditor
                     DrawList(vchar, false);
                 });
             }
-            
+
             return rootel;
         }
         private VisualElement activeList;
@@ -143,23 +143,23 @@ namespace VIEditor
 
             Action<VisualElement, int> bindItem = (e, i) =>
             {
-                if(!PortsUtils.PlayMode)
+                if (!PortsUtils.PlayMode)
                 {
                     var aslbl = e as Label;
                     ResetPlayState();
 
-                    if(t.animatableThumbnail[i] == null)
+                    if (t.animatableThumbnail[i] == null)
                     {
                         t.animatableThumbnail[i] = new AnimThumbnailProps();
                         t.animatableThumbnail[i].name = CheckNames("NoName", t.animatableThumbnail);
                         t.animatableThumbnail[i].description = "<Empty>";
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                     else
                     {
                         aslbl.text = t.animatableThumbnail[i].name;
-                    }                                                       
-                    
+                    }
+
                     aslbl.userData = (int)i;
                     aslbl.text = t.animatableThumbnail[i].name;
 
@@ -193,11 +193,16 @@ namespace VIEditor
             listView.reorderable = true;
             listView.selectionType = SelectionType.Single;
             listView.reorderMode = ListViewReorderMode.Animated;
-            listView.itemsSourceChanged += ()=>
+
+            if (!PortsUtils.PlayMode)
             {
-                EditorUtility.SetDirty(t.gameObject);
-            };
-            vis.Add(listView);
+                listView.itemsSourceChanged += () =>
+                {
+                    EditorUtility.SetDirty(t);
+                };
+                vis.Add(listView);
+            }
+
             dummyElement.Add(vis);
         }
 
@@ -209,13 +214,13 @@ namespace VIEditor
 
             void Check()
             {
-                if(list.Count != 0)
+                if (list.Count != 0)
                 {
-                    foreach(var l in list)
+                    foreach (var l in list)
                     {
-                        if(l.name == strName)
+                        if (l.name == strName)
                         {
-                            if(counta == 0)
+                            if (counta == 0)
                             {
                                 counta++;
                                 strName += counta;
@@ -224,7 +229,7 @@ namespace VIEditor
                             }
                             else
                             {
-                                char[] charsToTrim = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+                                char[] charsToTrim = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
                                 var t = strName.TrimEnd(charsToTrim);
                                 counta++;
                                 strName = t += counta;
@@ -279,7 +284,6 @@ namespace VIEditor
                 }
             }
         }
-        private Button playBtn;
         private void DrawImagePreview(Sprite spr)
         {
             if (dummyElementThree.childCount > 0)
@@ -307,7 +311,6 @@ namespace VIEditor
             box.style.flexDirection = FlexDirection.Row;
 
             var btnPlay = new Button();
-            playBtn = btnPlay;
             btnPlay.style.backgroundColor = Color.green;
 
             btnPlay.clicked += () =>
@@ -371,12 +374,15 @@ namespace VIEditor
             objField.style.width = 200;
             objField.value = props.name;
 
-            objField.RegisterCallback<FocusOutEvent>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                props.name = CheckNames(objField.value, t.animatableThumbnail);
-                lbl.text = props.name;
-                EditorUtility.SetDirty(t.gameObject);
-            });
+                objField.RegisterCallback<FocusOutEvent>((x) =>
+                {
+                    props.name = CheckNames(objField.value, t.animatableThumbnail);
+                    lbl.text = props.name;
+                    EditorUtility.SetDirty(t);
+                });
+            }
 
             box.Add(lblName);
             box.Add(objField);
@@ -407,28 +413,30 @@ namespace VIEditor
 
             var tbOpt = new ToolbarMenu();
             tbOpt.style.width = 200;
+            if (!PortsUtils.PlayMode)
+            {
+                if (props.loopClamp)
+                {
+                    tbOpt.text = "Clamp";
+                }
+                else
+                {
+                    tbOpt.text = "PingPong";
+                }
 
-            if (props.loopClamp)
-            {
-                tbOpt.text = "Clamp";
+                tbOpt.menu.AppendAction("Clamp", (x) =>
+                {
+                    tbOpt.text = "Clamp";
+                    props.loopClamp = true;
+                    EditorUtility.SetDirty(t);
+                });
+                tbOpt.menu.AppendAction("PingPong", (x) =>
+                {
+                    tbOpt.text = "PingPong";
+                    props.loopClamp = false;
+                    EditorUtility.SetDirty(t);
+                });
             }
-            else
-            {
-                tbOpt.text = "PingPong";
-            }
-
-            tbOpt.menu.AppendAction("Clamp", (x) =>
-            {
-                tbOpt.text = "Clamp";
-                props.loopClamp = true;
-                EditorUtility.SetDirty(t.gameObject);
-            });
-            tbOpt.menu.AppendAction("PingPong", (x) =>
-            {
-                tbOpt.text = "PingPong";
-                props.loopClamp = false;
-                EditorUtility.SetDirty(t.gameObject);
-            });
 
             boxOpt.Add(lblopt);
             boxOpt.Add(tbOpt);
@@ -446,22 +454,29 @@ namespace VIEditor
             var objFieldDelay = new FloatField();
             objFieldDelay.style.width = 200;
             objFieldDelay.value = props.delay;
-            objFieldDelay.RegisterCallback<FocusOutEvent>((x) =>
+
+            if (!PortsUtils.PlayMode)
             {
-                props.delay = objFieldDelay.value;
-                lbl.text = props.name;
-                EditorUtility.SetDirty(t.gameObject);
-            });
+                objFieldDelay.RegisterCallback<FocusOutEvent>((x) =>
+                {
+                    props.delay = objFieldDelay.value;
+                    lbl.text = props.name;
+                    EditorUtility.SetDirty(t);
+                });
+            }
 
             boxDelay.Add(lblNameDelay);
             boxDelay.Add(objFieldDelay);
             ///////////////////////
 
-            objFieldDesc.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                props.description = objFieldDesc.value;
-                EditorUtility.SetDirty(t.gameObject);
-            });
+                objFieldDesc.RegisterValueChangedCallback((x) =>
+                {
+                    props.description = objFieldDesc.value;
+                    EditorUtility.SetDirty(t);
+                });
+            }
             ///////////////////////
 
             ///Draw ListView
@@ -490,8 +505,8 @@ namespace VIEditor
                         sprites[i] = null;
                     }
 
-                    if(t.gameObject != null)
-                    EditorUtility.SetDirty(t.gameObject);
+                    if (t.gameObject != null)
+                        EditorUtility.SetDirty(t.gameObject);
                 });
 
                 aslbl.RegisterCallback<MouseDownEvent>((x) =>

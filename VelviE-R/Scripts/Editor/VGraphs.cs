@@ -9,14 +9,89 @@ using System.Linq;
 using VelvieR;
 using UnityEditor.UIElements;
 using UnityEditor.SceneManagement;
+using System.Reflection;
+using System.Globalization;
 
 namespace VIEditor
 {
+    class SquareResizer : MouseManipulator
+    {
+        private Vector2 m_Start;
+        protected bool m_Active;
+
+        public SquareResizer()
+        {
+            activators.Add(new ManipulatorActivationFilter { button = MouseButton.LeftMouse });
+            m_Active = false;
+        }
+
+        protected override void RegisterCallbacksOnTarget()
+        {
+            target.RegisterCallback<MouseDownEvent>(OnMouseDown);
+            target.RegisterCallback<MouseMoveEvent>(OnMouseMove);
+            target.RegisterCallback<MouseUpEvent>(OnMouseUp);
+        }
+
+        protected override void UnregisterCallbacksFromTarget()
+        {
+            target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
+            target.UnregisterCallback<MouseMoveEvent>(OnMouseMove);
+            target.UnregisterCallback<MouseUpEvent>(OnMouseUp);
+        }
+
+        protected void OnMouseDown(MouseDownEvent e)
+        {
+            if (m_Active)
+            {
+                e.StopImmediatePropagation();
+                return;
+            }
+
+            if (CanStartManipulation(e))
+            {
+                m_Start = e.localMousePosition;
+
+                m_Active = true;
+                target.CaptureMouse();
+                e.StopPropagation();
+            }
+        }
+
+        protected void OnMouseMove(MouseMoveEvent e)
+        {
+            if (!m_Active || !target.HasMouseCapture())
+                return;
+
+            Vector2 diff = e.localMousePosition - m_Start;
+
+            target.parent.style.height = target.parent.layout.height + diff.x;
+            target.parent.style.width = target.parent.layout.width + diff.x;
+
+            e.StopPropagation();
+        }
+
+        protected void OnMouseUp(MouseUpEvent e)
+        {
+            if (!m_Active || !target.HasMouseCapture() || !CanStopManipulation(e))
+                return;
+
+            m_Active = false;
+            target.ReleaseMouse();
+            e.StopPropagation();
+        }
+    }
     public class VGraphs : GraphViewEditorWindow
     {
-        public VViews graphView;
+        public VViews graphView { get; set; }
         public VToolbars activeVToolbar { get; set; }
-        public ResizableElement[] resizables;
+        private MiniMap miniMap;
+        private ScrollView graphEntity_ScrollView;
+        public Box graphEntity_ScrollView_Box { get; set; }
+        private Box activeBoxPopup;
+        public VisualElement inspectorWindow { get; set; }
+        public bool inspectorIsActive { get; set; }
+        public VisualElement parentInspectorBox { get; set; }
+        private Box dummyTargetBox;
 
         [MenuItem("VelviE-R/VGraphs")]
         public static void CreateVGraphsWindow()
@@ -246,7 +321,6 @@ namespace VIEditor
             PortsUtils.SetActiveAssetDirty();
         }
 
-        private MiniMap miniMap;
         public void EnableMinimap()
         {
             if (!PortsUtils.activeVGraphAssets.graphState.miniMapActiveState)
@@ -290,13 +364,11 @@ namespace VIEditor
                 parentInspectorBox.Remove(VBlockPopupWindow);
 
             VBlockPopupWindow = new VBlockWindow(this);
-            //VBlockPopupWindow.Add(new ResizableElement());
             parentInspectorBox.Add(VBlockPopupWindow);
             parentInspectorBox.MarkDirtyRepaint();
             PortsUtils.SetActiveAssetDirty();
         }
-        private ScrollView graphEntity_ScrollView;
-        public Box graphEntity_ScrollView_Box;
+
         public void VGraphEntityWindow()
         {
             if (graphEntity_ScrollView == null)
@@ -383,11 +455,6 @@ namespace VIEditor
 
             PortsUtils.SetActiveAssetDirty();
         }
-        private Box activeBoxPopup;
-        public VisualElement inspectorWindow;
-        public bool inspectorIsActive { get; set; }
-        public VisualElement parentInspectorBox { get; set; }
-        private Box dummyTargetBox;
         public void InspectorWindow(Box box)
         {
             inspectorIsActive = true;
@@ -395,14 +462,13 @@ namespace VIEditor
             if (parentInspectorBox == null)
             {
                 parentInspectorBox = new VisualElement();
-                parentInspectorBox.style.position = Position.Relative;
+                parentInspectorBox.style.flexDirection = FlexDirection.Column;
                 parentInspectorBox.style.alignSelf = Align.FlexStart;
-                parentInspectorBox.style.flexGrow = new StyleFloat(1);
                 parentInspectorBox.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
                 parentInspectorBox.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 parentInspectorBox.name = "parentInspectorBox";
-                parentInspectorBox.contentContainer.Add(new ResizableElement());
                 rootVisualElement.Add(parentInspectorBox);
+                parentInspectorBox.Add(new ResizableElement());
             }
 
             if (inspectorWindow != null)
@@ -429,7 +495,6 @@ namespace VIEditor
             var t = new VGetDefaultInspector();
             inspectorWindow = t.SetPopUpContainerWindow();
             parentInspectorBox.Add(inspectorWindow);
-
             activeBoxPopup = box;
             inspectorWindow.Add(box);
             VBlockWindow();
@@ -445,7 +510,7 @@ namespace VIEditor
                     AddRemoveListv(true);
                 }
 
-                if(PortsUtils.activeVObject == null)
+                if (PortsUtils.activeVObject == null)
                     PortsUtils.FindVGraphObject();
 
                 VCoreUtil vcoreObj = PortsUtils.activeVObject.GetComponent<VCoreUtil>();
@@ -529,7 +594,6 @@ namespace VIEditor
                     vb.SetIndicators(vb.VBlockToggle);
 
                     VColorAttr.GetColor(vb.VBlockContent, vbcom.vblocks[i].vcolor);
-
                     var ints = i + 1;
                     vb.VBlockLineNumber.text = ints.ToString();
                 };
@@ -547,15 +611,18 @@ namespace VIEditor
                     listV.unbindItem = unbindItem;
                     ListProperties(listV);
 
-                    listV.itemIndexChanged += (x, y) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        PrevSelected();
-                    };
+                        listV.itemIndexChanged += (x, y) =>
+                        {
+                            PrevSelected();
+                        };
 
-                    listV.itemsRemoved += (x) =>
-                    {
-                        RefreshListV();
-                    };
+                        listV.itemsRemoved += (x) =>
+                        {
+                            RefreshListV();
+                        };
+                    }
                 }
                 else
                 {
@@ -700,8 +767,8 @@ namespace VIEditor
             listV.horizontalScrollingEnabled = false;
             listV.style.alignContent = Align.Center;
             listV.style.flexGrow = new StyleFloat(1);
-            listV.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-            listV.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+            VEditorFunc.SetUIDynamicSize(listV, 100, true);
+            VEditorFunc.SetUIDynamicSize(listV, 100, false);
         }
         public void ShowSelectedVblockSerializedFields(bool refresh = false)
         {
@@ -721,7 +788,7 @@ namespace VIEditor
                 }
                 else
                 {
-                    if(PortsUtils.ActiveInspector != null)
+                    if (PortsUtils.ActiveInspector != null)
                     {
                         PortsUtils.ActiveInspectorContainer?.RemoveFromHierarchy();
                         dummyTargetBox = DrawVInspectorWindow(PortsUtils.ActiveInspector);
@@ -729,8 +796,6 @@ namespace VIEditor
                         inspectorWindow.Add(dummyTargetBox);
                     }
                 }
-
-                //inspectorWindow.Add(new ResizableElement());
             }
         }
         public void RemoveActiveNodeFromView()
@@ -769,7 +834,6 @@ namespace VIEditor
             if (vbcom != null)
                 ReArrangeIfEndIfs(vbcom);
 
-            //listV.ClearSelection();
             listV.Rebuild();
             PortsUtils.SetActiveAssetDirty();
         }
@@ -787,20 +851,18 @@ namespace VIEditor
                     break;
                 }
             }
+
             var box = new Box();
             box.name = "drawInspectorWindow";
 
             var scrollV = new ScrollView();
+            scrollV.pickingMode = PickingMode.Ignore;
             inspectorScrolllView = scrollV;
             scrollV.verticalScrollerVisibility = ScrollerVisibility.Auto;
             scrollV.horizontalScrollerVisibility = ScrollerVisibility.Auto;
-            box.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-            box.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-            
-
-            //box.style.width = 380;
+            VEditorFunc.SetUIDynamicSize(box, 100, true);
+            VEditorFunc.SetUIDynamicSize(box, 100, false);
             box.Add(scrollV);
-
             scrollV.Add(GenerateInspectorsBox(component));
             return box;
         }
