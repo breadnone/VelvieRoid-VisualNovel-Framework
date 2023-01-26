@@ -111,25 +111,38 @@ namespace VIEditor
             styleSheets.Add(Resources.Load<StyleSheet>("VGrpahs"));
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
 
-            this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new SelectionDragger());
-            this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new ShortcutHandler(new Dictionary<Event, ShortcutDelegate>
+            if(!PortsUtils.PlayMode)
             {
-                {Event.KeyboardEvent("a"), FrameAll },
-                {Event.KeyboardEvent("b"), FrameSelection }
-            }));
+                this.AddManipulator(new ContentDragger());
+                this.AddManipulator(new SelectionDragger());
+                this.AddManipulator(new RectangleSelector());
+                this.AddManipulator(new ShortcutHandler(new Dictionary<Event, ShortcutDelegate>
+                {
+                    {Event.KeyboardEvent("a"), FrameAll },
+                    {Event.KeyboardEvent("b"), FrameSelection }
+                }));
 
-            this.serializeGraphElements += VNodeCaches;
-            this.unserializeAndPaste += PasteVNodes;
-            this.canPasteSerializedData += AllowCopy;
+                this.RegisterCallback<MouseDownEvent>(x =>
+                {
+                    if(x.target is not VNodes)
+                    {
+                        if(PortsUtils.VGraph.inspectorIsActive)
+                            PortsUtils.VGraph.HideInspector();
+                    }
+                }, TrickleDown.TrickleDown);
+            
+                this.serializeGraphElements += VNodeCaches;
+                this.unserializeAndPaste += PasteVNodes;
+                this.canPasteSerializedData += AllowCopy;
+                this.deleteSelection += DeleteSelectedVNodes;
+            }
+
             this.focusable = true;
-            this.deleteSelection += DeleteSelectedVNodes;
-
             var grid = new GridBackground();
             Insert(0, grid);
             grid.StretchToParentSize();
         }
+
         public List<VNodes> nodeCache = new List<VNodes>();
         public void DeleteSelectedVNodes(string operationName, AskUser askUser = AskUser.DontAskUser)
         {
