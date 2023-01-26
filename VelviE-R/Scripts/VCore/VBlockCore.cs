@@ -26,17 +26,6 @@ public class VBlockCore : MonoBehaviour, IVNodes
             cts.Dispose();
         }
     }
-    private void RunningOperation(bool state)
-    {
-        if (state)
-        {
-            VBlockManager.runningVcoreBlock.Add(thisVblock);
-        }
-        else
-        {
-            VBlockManager.runningVcoreBlock.Remove(thisVblock);
-        }
-    }
     public virtual void ExecStartVBlock(int index)
     {
         thisIndex = index;
@@ -79,7 +68,6 @@ public class VBlockCore : MonoBehaviour, IVNodes
     private void StartVBlock(int index)
     {
         VBlockEnterListener.Value = VBlockCoreEnterState.Enter;
-        RunningOperation(true);
 
         #if UNITY_EDITOR
         if (VBlockManager.VgraphsOpenInstance)
@@ -112,8 +100,6 @@ public class VBlockCore : MonoBehaviour, IVNodes
                 stopFlagIndex = null;
             }
         }
-
-        RunningOperation(false);
 
         #if UNITY_EDITOR
         if (VBlockManager.VgraphsOpenInstance && thisVblock != null)
