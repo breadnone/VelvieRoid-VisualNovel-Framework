@@ -22,20 +22,18 @@ namespace VIEditor
         public static VInventory ActiveInventory { get; set; }
         public static VCharacterContainer VCharaContainer { get; set; }
         public static Variables variable { get; set; }
-        public static VInputBuffer ActiveInputHandle { get; set; }
         public static List<VEditorNotify> RefreshBinds = new List<VEditorNotify>();
         public static List<VCoreUtil> Vcores = new List<VCoreUtil>();
         public static VCharacter activeVCharacter { get; set; }
         public static VNodes activeVNode { get; set; }
         public static GameObject activeVObject { get; set; }
-        public static List<VBlockLabel> vblocks = new List<VBlockLabel>();
         public static VGraphs VGraph { get; set; }
         public static string savePath { get; set; } = "Assets/VelviE-R/Resources/";
         public static VGraphsContainer LastPlayedVContainer { get; set; }
         public static bool waitLoading { get; set; }
         public static bool PlayMode { get; set; }
-        public static Component ActiveInspector {get;set;}
-        public static Box ActiveInspectorContainer {get;set;}
+        public static Component ActiveInspector { get; set; }
+        public static Box ActiveInspectorContainer { get; set; }
         public static VCharacterV[] GetCharacters()
         {
             var chars = VEditorFunc.EditorGetVCharacterUtils();
@@ -173,10 +171,6 @@ namespace VIEditor
 
                 if (exists && !forceDuplicates)
                 {
-                    //stack them if any
-                    //NOTE: If any graphical glitches of stacking when loading/saving/removing, then here where it comes from!
-                    //thisVPortInstance.connectedTo.Add(thatVPortInstance.vportInstanceGuid);
-                    //thisVPortInstance.connectedTo.Add(thatVPortInstance.vportInstanceGuid);
                     return;
                 }
                 else
@@ -187,10 +181,11 @@ namespace VIEditor
                     outputPort.Connect(edge);
                     VGraph.graphView.AddElement(edge);
 
-                    //WORKAROUND
-                    //Disable Mouse events on edges!
-                    //TODO: Unsubscribe this when saving! -> PortUtils
-                    edge.RegisterCallback<MouseDownEvent>(e => e.StopImmediatePropagation(), TrickleDown.TrickleDown);
+                    if (!PortsUtils.PlayMode)
+                    {
+                        edge.RegisterCallback<MouseDownEvent>(e => e.StopImmediatePropagation(), TrickleDown.TrickleDown);
+                    }
+
                     thisVnodes.titleContainer.style.backgroundColor = Color.blue;
                     thatVnodes.titleContainer.style.backgroundColor = Color.blue;
                     thisVPortInstance.vnodeProperty.nodeColor = Color.blue;
@@ -255,9 +250,9 @@ namespace VIEditor
                 var inNode = edge.input.node as VNodes;
                 var outNode = edge.output.node as VNodes;
 
-                if(inNode == null || outNode == null)
+                if (inNode == null || outNode == null)
                     continue;
-                    
+
                 bool isInParent = parent.Contains(inNode);
                 bool isOutParent = parent.Contains(outNode);
 
@@ -355,10 +350,10 @@ namespace VIEditor
         }
         public static void LoadAssets(VGraphsContainer vgraph, bool firstInit) //e.g : VelviE-R-VGraphAssets-" + id + ".asset
         {
-            if(!waitLoading)
+            if (!waitLoading)
             {
                 waitLoading = true;
-                
+
                 if (vgraph == null)
                 {
                     return;
@@ -417,9 +412,9 @@ namespace VIEditor
 
                             if (vnode.IsGameStarted == EnableState.GameStarted)
                                 dropEventType.text = "GameStart";
-                            else if(vnode.IsGameStarted == EnableState.None)
+                            else if (vnode.IsGameStarted == EnableState.None)
                                 dropEventType.text = "EventType";
-                            else if(vnode.IsGameStarted == EnableState.Scheduler)
+                            else if (vnode.IsGameStarted == EnableState.Scheduler)
                                 dropEventType.text = "Scheduler";
 
                             vnode.titleContainer.Add(dropEventType);
@@ -452,9 +447,9 @@ namespace VIEditor
                                 vportInstanceGuid = vnodeinstance.vport.vportInstanceGuid
                             };
 
-                            txtDescription.RegisterCallback<FocusOutEvent>((x) =>
+                            if (!PortsUtils.PlayMode)
                             {
-                                if (!PortsUtils.PlayMode)
+                                txtDescription.RegisterCallback<FocusOutEvent>((x) =>
                                 {
                                     var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vins.vnodeProperty.nodeId);
 
@@ -463,8 +458,8 @@ namespace VIEditor
                                         vpFound.vport.vnodeProperty.nodeName = VGraph.graphView.GetNonDuplicateName(txtDescription.name, txtDescription.value, vnode);
                                         txtDescription.value = vpFound.vport.vnodeProperty.nodeName;
                                     }
-                                }
-                            });
+                                });
+                            }
 
                             if (vnodeinstance.vport.connectedTo.Count > 0)
                             {
@@ -508,8 +503,11 @@ namespace VIEditor
                                     var edge = outputPort.ConnectTo(inputPort);
                                     outputPort.Connect(edge);
 
-                                    edge.RegisterCallback<MouseDownEvent>(e => e.StopImmediatePropagation(), TrickleDown.TrickleDown);
-                                    nuView.AddElement(edge);
+                                    if (!PortsUtils.PlayMode)
+                                    {
+                                        edge.RegisterCallback<MouseDownEvent>(e => e.StopImmediatePropagation(), TrickleDown.TrickleDown);
+                                        nuView.AddElement(edge);
+                                    }
                                 }
                             }
                         }
@@ -529,7 +527,7 @@ namespace VIEditor
 
                 VGraph.SetToolbar();
                 SetActiveAssetDirty();
-                VGraph.rootVisualElement.schedule.Execute(() => {waitLoading = false;}).ExecuteLater(1);
+                VGraph.rootVisualElement.schedule.Execute(() => { waitLoading = false; }).ExecuteLater(1);
             }
         }
         public static void SetActiveAssetDirty()
@@ -538,9 +536,6 @@ namespace VIEditor
             {
                 EditorUtility.SetDirty(activeVGraphAssets);
             }
-
-            if (activeVObject != null)
-                EditorUtility.SetDirty(activeVObject);
 
             if (variable != null)
             {
@@ -589,18 +584,18 @@ namespace VIEditor
             foreach (var go in all)
             {
                 if (go.name == activeVGraphAssets.vgraphGOname)
-                {                    
+                {
                     if (go.vcoreid == activeVGraphAssets.govcoreid)
                     {
                         vgo = go.gameObject;
                         break;
                     }
 
-                    mismatchGuid = true;                    
+                    mismatchGuid = true;
                 }
             }
 
-            if(mismatchGuid)
+            if (mismatchGuid)
             {
                 Debug.LogError("VGraph's GUID mismatch! Most probably due to re-generated meta files");
             }
