@@ -292,11 +292,14 @@ namespace VIEditor
         //Create VBlock inspector window
         public void VBlockWindow()
         {
-            if (VBlockPopupWindow != null && parentInspectorBox.Contains(VBlockPopupWindow))
-                parentInspectorBox.Remove(VBlockPopupWindow);
+            var pchild = ((VisualElement, VisualElement))parentInspectorBox.userData;
+
+            if (VBlockPopupWindow != null && pchild.Item2.Contains(VBlockPopupWindow))
+                pchild.Item2.Remove(VBlockPopupWindow);
 
             VBlockPopupWindow = new VBlockWindow(this);
-            parentInspectorBox.Add(VBlockPopupWindow);
+            var tmp = ((VisualElement, VisualElement))parentInspectorBox.userData;
+            tmp.Item2.Add(VBlockPopupWindow);
             parentInspectorBox.MarkDirtyRepaint();
             PortsUtils.SetActiveAssetDirty();
         }
@@ -401,6 +404,24 @@ namespace VIEditor
                 parentInspectorBox.name = "parentInspectorBox";
                 rootVisualElement.Add(parentInspectorBox);
                 parentInspectorBox.Add(new ResizableElement());
+
+                var paneTop = new VisualElement();
+                paneTop.style.alignContent = Align.Center;
+                var paneBottom = new VisualElement();
+                paneBottom.style.alignContent = Align.Center;
+                paneTop.name = "top";
+                paneBottom.name = "bottom";
+
+                VEditorFunc.SetUIDynamicSize(paneTop, 50, false);
+                VEditorFunc.SetUIDynamicSize(paneBottom, 50, false);
+                VEditorFunc.SetUIDynamicSize(paneTop, 100, true);
+                VEditorFunc.SetUIDynamicSize(paneBottom, 100, true);
+
+                parentInspectorBox.Add(paneTop);
+                parentInspectorBox.Add(paneBottom);
+
+                (VisualElement, VisualElement) objDat = (paneTop, paneBottom);
+                parentInspectorBox.userData = ((VisualElement, VisualElement))objDat;
             }
 
             if (inspectorWindow != null)
@@ -420,13 +441,15 @@ namespace VIEditor
                     }
                 }
 
-                if (parentInspectorBox.Contains(inspectorWindow))
-                    parentInspectorBox.Remove(inspectorWindow);
+                var pchild = ((VisualElement, VisualElement))parentInspectorBox.userData;
+                if (pchild.Item1.Contains(inspectorWindow))
+                    pchild.Item1.Remove(inspectorWindow);
             }
 
             var t = new VGetDefaultInspector();
             inspectorWindow = t.SetPopUpContainerWindow();
-            parentInspectorBox.Add(inspectorWindow);
+            var tmp = ((VisualElement, VisualElement))parentInspectorBox.userData;
+            tmp.Item1.Add(inspectorWindow);
             activeBoxPopup = box;
             inspectorWindow.Add(box);
             VBlockWindow();
@@ -790,8 +813,9 @@ namespace VIEditor
             var scrollV = new ScrollView();
             scrollV.pickingMode = PickingMode.Ignore;
             inspectorScrolllView = scrollV;
+            scrollV.mode = ScrollViewMode.Vertical;
             scrollV.verticalScrollerVisibility = ScrollerVisibility.Auto;
-            scrollV.horizontalScrollerVisibility = ScrollerVisibility.Auto;
+            scrollV.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
             VEditorFunc.SetUIDynamicSize(box, 100, true);
             VEditorFunc.SetUIDynamicSize(box, 100, false);
             box.Add(scrollV);
@@ -845,13 +869,15 @@ namespace VIEditor
                         }
                     }
 
-                    if (VBlockPopupWindow != null && parentInspectorBox.Contains(VBlockPopupWindow))
+                    var pchild = ((VisualElement, VisualElement))parentInspectorBox.userData;
+
+                    if (VBlockPopupWindow != null && pchild.Item2.Contains(VBlockPopupWindow))
                     {
-                        parentInspectorBox.Remove(VBlockPopupWindow);
+                        pchild.Item2.Remove(VBlockPopupWindow);
                     }
 
-                    if (parentInspectorBox.Contains(inspectorWindow))
-                        parentInspectorBox.Remove(inspectorWindow);
+                    if (pchild.Item1.Contains(inspectorWindow))
+                        pchild.Item1.Remove(inspectorWindow);
 
                     rootVisualElement.Remove(parentInspectorBox);
                     parentInspectorBox = null;
