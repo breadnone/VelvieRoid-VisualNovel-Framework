@@ -121,8 +121,6 @@ namespace VIEditor
 
             this.Add(tb);
             this.Add(blockBox);
-
-            PortsUtils.VGraph.ParentVBlockBox = blockBox;
             this.MarkDirtyRepaint();
         }
         private VisualElement fparent;
