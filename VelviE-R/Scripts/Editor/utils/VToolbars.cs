@@ -5,7 +5,6 @@ using UnityEditor.UIElements;
 using System;
 using VelvieR;
 using UnityEditor;
-using System.Linq;
 
 namespace VIEditor
 {
@@ -65,8 +64,8 @@ namespace VIEditor
             btn.style.marginLeft = 3;
             btn.style.unityTextAlign = TextAnchor.MiddleCenter;
             btn.style.backgroundColor = vgContainer.graphState.entityBackgroundColor;
-            btn.style.height = 40;
-            btn.style.width = 120;
+            VEditorFunc.SetUIDynamicSize(btn, 90, false);
+            btn.style.width = 140;
             btn.text = vgContainer.vgraphGOname;
             btn.name = vgContainer.entityIndex.ToString();
 
@@ -304,14 +303,29 @@ namespace VIEditor
             toolbarTwo.style.height = 30;
             toolbarTwo.style.backgroundColor = Color.yellow;
 
-            var nodeInspectorBtn = new Button(() => PortsUtils.VGraph.HideInspector());
+            var nodeInspectorBtn = new Button();
+            
+            if(!PortsUtils.PlayMode)
+            {
+                nodeInspectorBtn.clicked += (() => 
+                {
+                    PortsUtils.VGraph.HideInspector();
+                });
+            }
+
             nodeInspectorBtn.style.backgroundColor = Color.blue;
-            nodeInspectorBtn.text = "Show/Hide Inspector";
+            nodeInspectorBtn.text = "PropertyTab";
+            nodeInspectorBtn.style.width = new StyleLength(new Length(10, LengthUnit.Percent));
             toolbarTwo.Add(nodeInspectorBtn);
 
-            var minimapBtn = new Button(() => PortsUtils.VGraph.EnableMinimap());
+            var minimapBtn = new Button();
+            
+            if(!PortsUtils.PlayMode)
+                minimapBtn.clicked += (() => PortsUtils.VGraph.EnableMinimap());
+
             minimapBtn.style.backgroundColor = Color.blue;
-            minimapBtn.text = "Enable MiniMap";
+            minimapBtn.style.width = new StyleLength(new Length(10, LengthUnit.Percent));
+            minimapBtn.text = "MiniMap";
             toolbarTwo.Add(minimapBtn);
 
             var menuTwo = new ToolbarMenu { text = "Create VDialogue" };
@@ -360,6 +374,10 @@ namespace VIEditor
 
             toolbarTwo.Add(popupMenu);
             var clickableMenu = new ToolbarMenu { text = "Create Clickables", variant = ToolbarMenu.Variant.Default };
+
+            //TODO disable this for now
+            clickableMenu.SetEnabled(false);
+
             clickableMenu.style.backgroundColor = Color.green;
             clickableMenu.style.color = Color.black;
 
@@ -370,6 +388,9 @@ namespace VIEditor
 
             toolbarTwo.Add(clickableMenu);
             var inventoryMenu = new ToolbarMenu { text = "Create VInventorySystem", variant = ToolbarMenu.Variant.Default };
+            
+            //TODO disable this for now
+            inventoryMenu.SetEnabled(false);
             inventoryMenu.style.backgroundColor = Color.green;
             inventoryMenu.style.color = Color.black;
             if (!PortsUtils.PlayMode)
@@ -380,6 +401,9 @@ namespace VIEditor
 
             toolbarTwo.Add(inventoryMenu);
             var questMenu = new ToolbarMenu { text = "Create VQuestSystem", variant = ToolbarMenu.Variant.Default };
+            
+            //TODO disable this for now
+            questMenu.SetEnabled(false);
             questMenu.style.backgroundColor = Color.green;
             questMenu.style.color = Color.black;
 
@@ -398,28 +422,45 @@ namespace VIEditor
             toolbarThree.style.borderBottomColor = Color.grey;
             toolbarThree.style.borderBottomWidth = 3;
             toolbarThree.style.position = Position.Relative;
-            toolbarThree.style.height = 30;
+            toolbarThree.style.height = 35;
             toolbarThree.style.backgroundColor = Color.gray;
 
-            var addVNode = new Button(() => VGraphUtil.CreateVGraph());
-            addVNode.style.width = 90;
+            var addVNode = new Button();
+            
+            if(!PortsUtils.PlayMode)
+                addVNode.clicked += (() => VGraphUtil.CreateVGraph());
+            
+            VEditorFunc.SetUIDynamicSize(addVNode, 10, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(addVNode, 100, isWidth:false);
             addVNode.style.backgroundColor = Color.grey;
             addVNode.text = "ADD VGraph";
             toolbarThree.Add(addVNode);
 
-            var addvnodeTool = new Button(AddVNode);
-            addvnodeTool.style.width = 60;
+            var addvnodeTool = new Button();
+            
+            if(!PortsUtils.PlayMode)
+                addvnodeTool.clicked += AddVNode;
+
+            VEditorFunc.SetUIDynamicSize(addvnodeTool, 10, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(addvnodeTool, 100, isWidth:false);
             addvnodeTool.style.backgroundColor = Color.grey;
             addvnodeTool.text = "+ VNode";
             toolbarThree.Add(addvnodeTool);
 
-            var delvnodeTool = new Button(() => PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion"));
-            delvnodeTool.style.width = 60;
+            var delvnodeTool = new Button();
+            
+            if(!PortsUtils.PlayMode)
+                delvnodeTool.clicked += (() => PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion"));
+            
+            VEditorFunc.SetUIDynamicSize(delvnodeTool, 10, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(delvnodeTool, 100, isWidth:false);
             delvnodeTool.style.backgroundColor = Color.grey;
             delvnodeTool.text = "- VNode";
             toolbarThree.Add(delvnodeTool);
 
             var toolbarSearchField = new ToolbarSearchField();
+            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 20, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 100, isWidth:false);
             toolbarSearchField.style.cursor = default(UnityEngine.UIElements.Cursor);
 
             if (!PortsUtils.PlayMode)
@@ -436,6 +477,8 @@ namespace VIEditor
 
             toolbarThree.Add(toolbarSearchField);
             var variableBtn = new Button();
+            VEditorFunc.SetUIDynamicSize(variableBtn, 17, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(variableBtn, 100, isWidth:false);
 
             if (!PortsUtils.PlayMode)
             {
@@ -458,6 +501,8 @@ namespace VIEditor
             toolbarThree.Add(variableBtn);
 
             var bwBtn = new Button();
+            VEditorFunc.SetUIDynamicSize(bwBtn, 17, isWidth:true);
+            VEditorFunc.SetUIDynamicSize(bwBtn, 100, isWidth:false);
 
             if (!PortsUtils.PlayMode)
             {
@@ -487,7 +532,7 @@ namespace VIEditor
             toolbarFourth.style.borderBottomColor = Color.gray;
             toolbarFourth.style.borderBottomWidth = 5;
             toolbarFourth.style.position = Position.Relative;
-            toolbarFourth.style.height = 70;
+            VEditorFunc.SetUIDynamicSize(toolbarFourth, 17, isWidth:false);
             toolbarFourth.style.backgroundColor = Color.grey;
             toolbarFourth.name = "toolbarFourth";
             Toolbars.Add(toolbarFourth);
