@@ -373,33 +373,4 @@ public class CallEditor : Editor
                 EditorUtility.SetDirty(PortsUtils.activeVGraphAssets);
         }
     }
-
-    private void PersistentInvoker(Call t)
-    {
-        var parentType = this.GetType();
-        MethodInfo[] vmethods = parentType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-
-        foreach (var vmethod in vmethods)
-        {
-            var mName = vmethod.Name;
-
-            if (vmethod != null && vmethod.Name == "RepopulateNodesGraphs")
-            {
-                try
-                {
-                    UnityEditor.Events.UnityEventTools.RemovePersistentListener(t.RePoolNodes, 0);
-                }
-                catch (Exception)
-                {
-                    //skip
-                }
-
-                UnityAction act = Delegate.CreateDelegate(typeof(UnityAction), this, vmethod) as UnityAction;
-                UnityEditor.Events.UnityEventTools.AddPersistentListener(t.RePoolNodes, act);
-                EditorUtility.SetDirty(t.VGraph.gameObject);
-                EditorUtility.SetDirty(PortsUtils.activeVGraphAssets);
-                break;
-            }
-        }
-    }
 }
