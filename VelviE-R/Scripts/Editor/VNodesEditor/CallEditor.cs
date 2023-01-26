@@ -367,7 +367,7 @@ public class CallEditor : Editor
             }
 
             if (t != null && t.gameObject != null)
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
 
             if (PortsUtils.activeVGraphAssets != null)
                 EditorUtility.SetDirty(PortsUtils.activeVGraphAssets);

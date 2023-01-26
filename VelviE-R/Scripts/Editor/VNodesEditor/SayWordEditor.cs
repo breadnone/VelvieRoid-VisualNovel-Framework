@@ -83,7 +83,7 @@ public class SayWordEditor : Editor
             strContent.RegisterCallback<FocusOutEvent>((x) =>
             {
                 t.Words = strContent.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         boxStr.Add(visCon);
@@ -121,7 +121,7 @@ public class SayWordEditor : Editor
             {
                 tbMenu.value = "<None>";
                 t.Thumbnail = null;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
             if (!PortsUtils.PlayMode)
             {
@@ -132,13 +132,13 @@ public class SayWordEditor : Editor
                         tbMenu.value = "<None>";
                         t.Thumbnail = null;
                         EnablePortraitBoxes(false, t);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                     else
                     {
                         t.Thumbnail = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
                         EnablePortraitBoxes(true, t);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                 });
             }
@@ -166,7 +166,7 @@ public class SayWordEditor : Editor
         {
             tbMenu.value = "<None>";
             t.Thumbnail = null;
-            EditorUtility.SetDirty(t.gameObject);
+            EditorUtility.SetDirty(t);
         }
 
     }
@@ -199,7 +199,7 @@ public class SayWordEditor : Editor
             {
                 tbMenu.value = "<None>";
                 t.Portrait = null;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
             if (!PortsUtils.PlayMode)
             {
@@ -210,13 +210,13 @@ public class SayWordEditor : Editor
                         tbMenu.value = "<None>";
                         t.Portrait = null;
                         EnablePortraitBoxes(false, t);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                     else
                     {
                         t.Portrait = t.Character.charaPortrait.Find(x => x.portraitSprite.name == evt.newValue);
                         EnablePortraitBoxes(true, t);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                 });
             }
@@ -244,7 +244,7 @@ public class SayWordEditor : Editor
         {
             tbMenu.value = "<None>";
             t.Portrait = null;
-            EditorUtility.SetDirty(t.gameObject);
+            EditorUtility.SetDirty(t);
         }
     }
     public Box DrawWaitForClick(SayWord t)
@@ -279,13 +279,13 @@ public class SayWordEditor : Editor
                 {
                     t.WaitForClick = WaitForClick.Enable;
                     delay.SetEnabled(false);
-                    EditorUtility.SetDirty(t.gameObject);
+                    EditorUtility.SetDirty(t);
                 }
                 else
                 {
                     t.WaitForClick = WaitForClick.Disable;
                     delay.SetEnabled(true);
-                    EditorUtility.SetDirty(t.gameObject);
+                    EditorUtility.SetDirty(t);
                 }
             });
         }
@@ -349,7 +349,7 @@ public class SayWordEditor : Editor
                     t.CharacterSound = null;
                     toggleCharaAudio.SetEnabled(false);
                 }
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         bxx[0] = boxCharaSound;
@@ -374,7 +374,7 @@ public class SayWordEditor : Editor
             auLoopCharaClip.RegisterValueChangedCallback((x) =>
             {
                 t.LoopCharacterAudio = auLoopCharaClip.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         bxx[1] = boxLoopCharaSound;
@@ -426,7 +426,7 @@ public class SayWordEditor : Editor
             slider.RegisterValueChangedCallback((x) =>
             {
                 t.CharacterSoundVolume = slider.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         return bxx;
@@ -477,7 +477,7 @@ public class SayWordEditor : Editor
                 else
                     t.PlayAudioClip = null;
 
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         var boxSubTwo = new Box();
@@ -589,7 +589,7 @@ public class SayWordEditor : Editor
             ender.RegisterValueChangedCallback((x) =>
             {
                 t.EnderDelay = ender.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
 
@@ -621,7 +621,7 @@ public class SayWordEditor : Editor
                 EnablePortraitBoxes(false, t);
                 thmAnim?.SetEnabled(false);
                 thmAnimTb.value = "<None>";
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             }
         }
         else
@@ -653,7 +653,7 @@ public class SayWordEditor : Editor
                         portraitElements.SetEnabled(false);
                         EnablePortraitBoxes(false, t);
                         thmAnim?.SetEnabled(false);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                     else
                     {
@@ -668,7 +668,7 @@ public class SayWordEditor : Editor
                         portraitElements.SetEnabled(true);
                         EnablePortraitBoxes(true, t);
                         thmAnim?.SetEnabled(true);
-                        EditorUtility.SetDirty(t.gameObject);
+                        EditorUtility.SetDirty(t);
                     }
                 });
             }
@@ -779,7 +779,7 @@ public class SayWordEditor : Editor
                             t.EffectThm = ThumbnailEffects.PlayAnimatableProps;
                             EnablePortraitBoxes(true, t);
                             AddRemoveAnimatableProps(t, true);
-                            EditorUtility.SetDirty(t.gameObject);
+                            EditorUtility.SetDirty(t);
                         }
                         else
                         {
@@ -787,7 +787,7 @@ public class SayWordEditor : Editor
                             t.EffectThm = ThumbnailEffects.None;
                             EnablePortraitBoxes(false, t);
                             AddRemoveAnimatableProps(t, false);
-                            EditorUtility.SetDirty(t.gameObject);
+                            EditorUtility.SetDirty(t);
                         }
                     }
                     else
@@ -802,7 +802,7 @@ public class SayWordEditor : Editor
                                 t.AnimatableThumbnailProp = null;
                                 EnablePortraitBoxes(true, t);
                                 AddRemoveAnimatableProps(t, false);
-                                EditorUtility.SetDirty(t.gameObject);
+                                EditorUtility.SetDirty(t);
                                 break;
                             }
                         }
@@ -861,7 +861,7 @@ public class SayWordEditor : Editor
             objElement.RegisterValueChangedCallback((x) =>
             {
                 t.Magnitude = objElement.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         vis.Add(lblName);
@@ -939,7 +939,7 @@ public class SayWordEditor : Editor
             objElement.RegisterValueChangedCallback((x) =>
             {
                 t.LoopCount = objElement.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
 
@@ -990,9 +990,11 @@ public class SayWordEditor : Editor
         {
             t.AnimatableThumbnailProp = null;
             objElement.text = "<None>";
-            EditorUtility.SetDirty(t.gameObject);
+            EditorUtility.SetDirty(t);
         });
 
+        if(!PortsUtils.PlayMode)
+        {
         foreach (var child in chars)
         {
             if (child.character.name == t.Character.name)
@@ -1006,11 +1008,12 @@ public class SayWordEditor : Editor
                         {
                             t.AnimatableThumbnailProp = prop;
                             objElement.text = prop.name;
-                            EditorUtility.SetDirty(t.gameObject);
+                            EditorUtility.SetDirty(t);
                         });
                     }
                 }
             }
+        }
         }
 
         var visTwo = new Box();
@@ -1031,7 +1034,7 @@ public class SayWordEditor : Editor
             objElementTwo.RegisterValueChangedCallback((x) =>
             {
                 t.FrameRate = objElementTwo.value;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
 
@@ -1064,7 +1067,7 @@ public class SayWordEditor : Editor
                 {
                     objElementThree.text = "Clamp";
                     t.AnimatableThumbnailProp.loopClamp = true;
-                    EditorUtility.SetDirty(t.gameObject);
+                    EditorUtility.SetDirty(t);
                 }
             });
             objElementThree.menu.AppendAction("PingPong", (x) =>
@@ -1073,7 +1076,7 @@ public class SayWordEditor : Editor
                 {
                     objElementThree.text = "PingPong";
                     t.AnimatableThumbnailProp.loopClamp = false;
-                    EditorUtility.SetDirty(t.gameObject);
+                    EditorUtility.SetDirty(t);
                 }
             });
         }
@@ -1106,13 +1109,13 @@ public class SayWordEditor : Editor
             {
                 objElementHuman.text = "NaturalPauses";
                 t.HumanLikePause = true;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
             objElementHuman.menu.AppendAction("Linear", (x) =>
             {
                 objElementHuman.text = "Linear";
                 t.HumanLikePause = false;
-                EditorUtility.SetDirty(t.gameObject);
+                EditorUtility.SetDirty(t);
             });
         }
         ///
