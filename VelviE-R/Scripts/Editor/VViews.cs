@@ -292,6 +292,7 @@ namespace VIEditor
             {
                 txtDescription.RegisterCallback<FocusOutEvent>((x) =>
                 {
+                    /*
                     var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vportinstance.vnodeProperty.nodeId);
 
                     if (vpFound != null)
@@ -302,7 +303,20 @@ namespace VIEditor
                         vportinstance.vnodeProperty.nodeName = getname;
                     }
 
-                    PortsUtils.VGraph.RefreshListV();
+                    
+                    */
+                                if (!PortsUtils.PlayMode)
+                                {
+                                    var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vportinstance.vnodeProperty.nodeId);
+
+                                    if (vpFound != null && PortsUtils.VGraph != null)
+                                    {
+                                        vpFound.vport.vnodeProperty.nodeName = PortsUtils.VGraph.graphView.GetNonDuplicateName(txtDescription.name, txtDescription.value, vnode);
+                                        txtDescription.value = vpFound.vport.vnodeProperty.nodeName;
+                                    }
+                                }
+
+                                PortsUtils.VGraph.RefreshListV();
                 });
             }
 
