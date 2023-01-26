@@ -520,9 +520,46 @@ namespace VIEditor
                 };
             }
 
-            bwBtn.text = "Background Scheduler";
+            bwBtn.text = "BackgroundScheduler";
             bwBtn.style.backgroundColor = Color.grey;
             toolbarThree.Add(bwBtn);
+
+            var dropDmode = new DropdownField();
+            dropDmode.choices = new List<string>{"NormalMode", "DebugMode"};
+
+            if(!EditorPrefs.HasKey("v-Debug-v-Mode"))
+            {
+                EditorPrefs.SetBool("v-Debug-v-Mode", false);
+            }
+
+            bool tmpbool = EditorPrefs.GetBool("v-Debug-v-Mode");
+
+            if(tmpbool)
+            {
+                dropDmode.value = "DebugMode";
+            }
+            else
+            {
+                dropDmode.value = "NormalMode";
+            }
+
+            if(!PortsUtils.PlayMode)
+            {
+                dropDmode.RegisterValueChangedCallback(x =>
+                {
+                    if(x.newValue == "DebugMode")
+                    {
+                        EditorPrefs.SetBool("v-Debug-v-Mode", true);
+                        PortsUtils.VGraph.DrawDebugWindow(true);
+                    }
+                    else
+                    {
+                        EditorPrefs.SetBool("v-Debug-v-Mode", false);
+                        PortsUtils.VGraph.DrawDebugWindow(false);
+                    }
+                });
+            }
+            toolbarThree.Add(dropDmode);
 
             Toolbars.Add(toolbarThree);
 
