@@ -450,7 +450,7 @@ namespace VIEditor
             var delvnodeTool = new Button();
             
             if(!PortsUtils.PlayMode)
-                delvnodeTool.clicked += (() => PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion"));
+                delvnodeTool.clicked += () => PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion");
             
             VEditorFunc.SetUIDynamicSize(delvnodeTool, 10, isWidth:true);
             VEditorFunc.SetUIDynamicSize(delvnodeTool, 100, isWidth:false);
