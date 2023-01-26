@@ -76,7 +76,7 @@ namespace VIEditor
                                 vn.OnSelected();
                                 PortsUtils.VGraph.listV.ScrollToItem(velvieBlockIndex);
                                 PortsUtils.VGraph.listV.SetSelection(velvieBlockIndex);
-                                PortsUtils.VGraph.ShowSelectedVblockSerializedFields(fromRuntime: true);
+                                PortsUtils.VGraph.ShowSelectedVblockSerializedFields();
                                 activeIndex = velvieBlockIndex;
                                 break;
                             }
