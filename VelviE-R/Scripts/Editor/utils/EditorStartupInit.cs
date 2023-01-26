@@ -206,9 +206,9 @@ static class HierarchyMonitor
         }
 
         //check VStages
-        var stages = Resources.FindObjectsOfTypeAll<VStageComponent>();
+        var stages = VEditorFunc.EditorGetVStageComponent();
 
-        if (stages.Length > 0)
+        if (stages != null || stages.Length > 0)
         {
             for (int i = 0; i < stages.Length; i++)
             {
