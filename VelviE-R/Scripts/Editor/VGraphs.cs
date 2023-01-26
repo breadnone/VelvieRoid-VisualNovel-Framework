@@ -16,6 +16,7 @@ namespace VIEditor
     {
         public VViews graphView;
         public VToolbars activeVToolbar { get; set; }
+        public ResizableElement[] resizables;
 
         [MenuItem("VelviE-R/VGraphs")]
         public static void CreateVGraphsWindow()
@@ -24,9 +25,6 @@ namespace VIEditor
             window.titleContent = new GUIContent("Velvie Graph");
             window.titleContent.tooltip = "Flowchart Graph";
         }
-        public void ActivateWindow() { CreateVGraphsWindow(); }
-        public void SetActiveVgraph() { PortsUtils.VGraph = this; }
-
         public void Refresh(bool repaintActiveInspector = false)
         {
             if (!repaintActiveInspector)
@@ -63,7 +61,7 @@ namespace VIEditor
             if (!PortsUtils.PlayMode)
                 this.rootVisualElement.RegisterCallback<MouseMoveEvent>(VUITemplate.RegSummaryCallBack);
 
-            SetActiveVgraph();
+            PortsUtils.VGraph = this;
             var graphs = PortsUtils.GetVGprahsScriptableObjects();
             var getIvar = PortsUtils.GetVariableScriptableObjects();
 
@@ -292,7 +290,7 @@ namespace VIEditor
                 parentInspectorBox.Remove(VBlockPopupWindow);
 
             VBlockPopupWindow = new VBlockWindow(this);
-            VBlockPopupWindow.Add(new ResizableElement());
+            //VBlockPopupWindow.Add(new ResizableElement());
             parentInspectorBox.Add(VBlockPopupWindow);
             parentInspectorBox.MarkDirtyRepaint();
             PortsUtils.SetActiveAssetDirty();
@@ -388,7 +386,7 @@ namespace VIEditor
         private Box activeBoxPopup;
         public VisualElement inspectorWindow;
         public bool inspectorIsActive { get; set; }
-        public Box parentInspectorBox { get; set; }
+        public VisualElement parentInspectorBox { get; set; }
         private Box dummyTargetBox;
         public void InspectorWindow(Box box)
         {
@@ -396,14 +394,14 @@ namespace VIEditor
 
             if (parentInspectorBox == null)
             {
-                parentInspectorBox = new Box();
-                //parentInspectorBox.style.width = 392;
+                parentInspectorBox = new VisualElement();
                 parentInspectorBox.style.position = Position.Relative;
                 parentInspectorBox.style.alignSelf = Align.FlexStart;
                 parentInspectorBox.style.flexGrow = new StyleFloat(1);
                 parentInspectorBox.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
                 parentInspectorBox.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 parentInspectorBox.name = "parentInspectorBox";
+                parentInspectorBox.contentContainer.Add(new ResizableElement());
                 rootVisualElement.Add(parentInspectorBox);
             }
 
@@ -437,9 +435,7 @@ namespace VIEditor
             VBlockWindow();
         }
         //Add VBlock to the inspector's scrollview
-        public Box ParentVBlockBox { get; set; }
         public ListView listV { get; set; } = null;
-        public List<int> dummyList = new List<int>(0);
         public void AddVBlockLabel(string titleCon, VColor col, string componentName, VNodes playModeNode = null)
         {
             if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null)
@@ -563,7 +559,7 @@ namespace VIEditor
                 }
                 else
                 {
-                    listV = new ListView(dummyList, itemHeight, makeItem, bindItem);
+                    listV = new ListView(new List<int>(0), itemHeight, makeItem, bindItem);
                     ListProperties(listV);
                 }
 
@@ -734,10 +730,8 @@ namespace VIEditor
                     }
                 }
 
-                inspectorWindow.Add(new ResizableElement());
+                //inspectorWindow.Add(new ResizableElement());
             }
-
-
         }
         public void RemoveActiveNodeFromView()
         {
