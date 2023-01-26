@@ -309,7 +309,7 @@ namespace VIEditor
                 graphEntity_ScrollView.mode = ScrollViewMode.Horizontal;
                 graphEntity_ScrollView.horizontalScrollerVisibility = ScrollerVisibility.Auto;
                 graphEntity_ScrollView.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-                graphEntity_ScrollView.style.height = 70;
+                graphEntity_ScrollView.style.height = new StyleLength(new Length(80, LengthUnit.Percent));
             }
 
             if (graphEntity_ScrollView_Box != null)
@@ -334,6 +334,7 @@ namespace VIEditor
             box.pickingMode = PickingMode.Ignore;
             box.name = "entityBox";
             box.style.flexDirection = FlexDirection.Row;
+            VEditorFunc.SetUIDynamicSize(box, 100, false);
             graphEntity_ScrollView.Add(box);
             graphEntity_ScrollView_Box = box;
 
