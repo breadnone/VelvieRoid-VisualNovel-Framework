@@ -16,7 +16,7 @@ namespace VIEditor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            if(!PortsUtils.PlayMode)
+            if (!PortsUtils.PlayMode)
             {
                 if (evt.target is GraphView)
                 {
@@ -305,18 +305,18 @@ namespace VIEditor
 
                     
                     */
-                                if (!PortsUtils.PlayMode)
-                                {
-                                    var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vportinstance.vnodeProperty.nodeId);
+                    if (!PortsUtils.PlayMode)
+                    {
+                        var vpFound = PortsUtils.activeVGraphAssets.vports.Find(x => x.vport.vnodeProperty.nodeId == vportinstance.vnodeProperty.nodeId);
 
-                                    if (vpFound != null && PortsUtils.VGraph != null)
-                                    {
-                                        vpFound.vport.vnodeProperty.nodeName = PortsUtils.VGraph.graphView.GetNonDuplicateName(txtDescription.name, txtDescription.value, vnode);
-                                        txtDescription.value = vpFound.vport.vnodeProperty.nodeName;
-                                    }
-                                }
+                        if (vpFound != null && PortsUtils.VGraph != null)
+                        {
+                            vpFound.vport.vnodeProperty.nodeName = PortsUtils.VGraph.graphView.GetNonDuplicateName(txtDescription.name, txtDescription.value, vnode);
+                            txtDescription.value = vpFound.vport.vnodeProperty.nodeName;
+                        }
+                    }
 
-                                PortsUtils.VGraph.RefreshListV();
+                    PortsUtils.VGraph.RefreshListV();
                 });
             }
 
