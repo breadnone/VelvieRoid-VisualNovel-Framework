@@ -12,6 +12,13 @@ namespace VIEditor
 {
     public class VEditorFunc
     {
+        public static void SetUIDynamicSize(VisualElement element, int length, bool isWidth)
+        {
+            if(isWidth)
+                element.style.width = new StyleLength(new Length(length, LengthUnit.Percent));
+            else
+                element.style.height = new StyleLength(new Length(length, LengthUnit.Percent));
+        }
         public static bool VelvieTagIsExist()
         {
             var arTags = InternalEditorUtility.tags;
@@ -138,6 +145,27 @@ namespace VIEditor
             for(int i = 0; i < t.Length; i++)
             {
                 var com = t[i].gameObject.GetComponent<VInputBuffer>();
+
+                if(com != null)
+                {
+                    dials.Add(com);
+                }
+            }
+            
+            return dials.ToArray();
+        }
+        public static VStageComponent[] EditorGetVStageComponent()
+        {
+            var t = EditorGetVCharacterUtils();
+
+            if(t == null || t.Length == 0)
+                return null;
+
+            List<VStageComponent> dials = new List<VStageComponent>();
+
+            for(int i = 0; i < t.Length; i++)
+            {
+                var com = t[i].gameObject.GetComponent<VCharacterUtil>() as VStageComponent;
 
                 if(com != null)
                 {
