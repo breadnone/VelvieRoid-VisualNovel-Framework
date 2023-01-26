@@ -124,7 +124,7 @@ namespace VIEditor
 
                 this.RegisterCallback<MouseDownEvent>(x =>
                 {
-                    if(x.target is not VNodes)
+                    if(x.button == 0 && x.target is not VNodes)
                     {
                         if(PortsUtils.VGraph.inspectorIsActive)
                             PortsUtils.VGraph.HideInspector();
