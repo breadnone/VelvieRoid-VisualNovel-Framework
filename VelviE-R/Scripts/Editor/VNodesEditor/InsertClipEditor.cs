@@ -7,10 +7,8 @@ using UnityEngine;
 namespace VIEditor
 {
     [CustomEditor(typeof(InsertClip))]
-
     public class InsertClipEditor : Editor
     {
-        private VisualElement dummy;
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
@@ -19,7 +17,7 @@ namespace VIEditor
             root.Add(DrawAu(t));
             root.Add(DrawClip(t));
             root.Add(DrawPlay(t));
-            
+
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, t.OnVSummary);
             return root;
@@ -36,10 +34,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.audioSource;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.audioSource = objField.value as AudioSource;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.audioSource = objField.value as AudioSource;
+                });
+            }
 
             return rootBox;
         }
@@ -48,17 +49,20 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Audio clip : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-            
+
             objField.objectType = typeof(AudioClip);
             objField.allowSceneObjects = false;
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.auclip;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.auclip = objField.value as AudioClip;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.auclip = objField.value as AudioClip;
+                });
+            }
 
             return rootBox;
         }
@@ -66,16 +70,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Play : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.play;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.play = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.play = objField.value;
+                });
+            }
 
             return rootBox;
         }

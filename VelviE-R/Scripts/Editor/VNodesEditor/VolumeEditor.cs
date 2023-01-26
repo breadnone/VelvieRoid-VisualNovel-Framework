@@ -20,11 +20,9 @@ namespace VIEditor
             root.Add(DrawAu(t));
             root.Add(DrawVal(t));
             root.Add(DrawLerp(t));
-
             root.Add(dummy);
             dummy.Add(DrawDuration(t));
             dummy.Add(DrawWait(t));
-
             dummy.SetEnabled(t.lerp);
 
             //Always add this at the end!
@@ -35,7 +33,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("AudioSource : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(AudioSource);
             objField.allowSceneObjects = true;
@@ -43,10 +40,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.audioSource;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.audioSource = objField.value as AudioSource;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.audioSource = objField.value as AudioSource;
+                });
+            }
 
             return rootBox;
         }
@@ -54,7 +54,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Volume : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Slider();
             objField.highValue = 1f;
             objField.lowValue = 0f;
@@ -62,10 +61,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.value;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.value = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -73,16 +75,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -90,17 +94,19 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Lerp : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.lerp;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.lerp = objField.value;
-                dummy.SetEnabled(t.lerp);
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.lerp = objField.value;
+                    dummy.SetEnabled(t.lerp);
+                });
+            }
 
             return rootBox;
         }
@@ -108,16 +114,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.duration;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = objField.value;
+                });
+            }
 
             return rootBox;
         }

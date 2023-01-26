@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -23,8 +21,8 @@ namespace VIEditor
 
             root.Add(DrawToggleAll(t));
 
-            if(!t.cancelAll)
-            DrawObject(t);
+            if (!t.cancelAll)
+                DrawObject(t);
 
             root.Add(dummy);
             root.Add(DrawToggleonComplete(t));
@@ -37,7 +35,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Object to cancel : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(GameObject);
             objField.allowSceneObjects = true;
@@ -45,10 +42,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetobject;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetobject = objField.value as GameObject;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetobject = objField.value as GameObject;
+                });
+            }
 
             dummy.Add(rootBox);
         }
@@ -56,50 +56,54 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Cancell all : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.cancelAll;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.cancelAll = x.newValue;
-
-                if(x.newValue)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    if(dummy.childCount > 0)
+                    t.cancelAll = x.newValue;
+
+                    if (x.newValue)
                     {
-                        foreach(var list in dummy.Children().ToList())
+                        if (dummy.childCount > 0)
                         {
-                            list.RemoveFromHierarchy();
+                            foreach (var list in dummy.Children().ToList())
+                            {
+                                list.RemoveFromHierarchy();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    DrawObject(t);
-                    t.targetobject = null;
-                }
-            });
-            
+                    else
+                    {
+                        DrawObject(t);
+                        t.targetobject = null;
+                    }
+                });
+            }
+
             return rootBox;
         }
         private VisualElement DrawToggleonComplete(CancelAnimation t)
         {
             var rootBox = VUITemplate.GetTemplate("Execute onComplete : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.executeOnComplete;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.executeOnComplete = x.newValue;
-            });
-            
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.executeOnComplete = x.newValue;
+                });
+            }
+
             return rootBox;
         }
     }

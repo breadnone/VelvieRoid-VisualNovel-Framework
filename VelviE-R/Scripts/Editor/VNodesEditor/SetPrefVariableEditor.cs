@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -18,7 +16,7 @@ namespace VIEditor
             var root = new VisualElement();
             var t = target as SetPrefVariable;
             dummySlot = new VisualElement();
-            
+
             root.Add(DrawKey(t));
             root.Add(DrawVars(t));
             root.Add(dummySlot);
@@ -26,11 +24,11 @@ namespace VIEditor
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
-            return root; 
+            return root;
         }
         private VisualElement DrawVars(SetPrefVariable t)
         {
-            if(t.localVariable == null)
+            if (t.localVariable == null)
                 RemoveChild();
 
             var varTemplate = VUITemplate.VariableTemplate();
@@ -55,30 +53,32 @@ namespace VIEditor
             {
                 var varlist = new List<string>();
                 PortsUtils.variable.ivar.ForEach((x) => { varlist.Add(x.Name); });
-
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    RemoveChild();
+                    if (PortsUtils.variable.ivar.Count > 0)
+                    {
+                        RemoveChild();
 
-                    if (evt.newValue == "<None>")
-                    {
-                        t.localVariable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.localVariable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.localVariable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            dummySlot.Add(DrawVals(t));
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.localVariable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        dummySlot.Add(DrawVals(t));
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -103,7 +103,7 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Value : ";
 
             var vis = new VisualElement();
@@ -112,139 +112,163 @@ namespace VIEditor
             {
                 t.anyType.type = VTypes.Boolean;
                 var vas = new Toggle();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.boolVal;                    
+                    vas.value = t.anyType.boolVal;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.boolVal = vas.value;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.boolVal = vas.value;
+                    });
+                }
             }
 
             else if (t.localVariable is VVector2)
             {
                 t.anyType.type = VTypes.Vector2;
                 var vas = new Vector2Field();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.vec2Val;                    
+                    vas.value = t.anyType.vec2Val;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.vec2Val = vas.value;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.vec2Val = vas.value;
+                    });
+                }
             }
             else if (t.localVariable is VVector3)
             {
                 t.anyType.type = VTypes.Vector3;
                 var vas = new Vector3Field();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.vec3Val;                    
+                    vas.value = t.anyType.vec3Val;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.vec3Val = vas.value;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.vec3Val = vas.value;
+                    });
+                }
             }
             else if (t.localVariable is VVector4)
             {
                 t.anyType.type = VTypes.Vector4;
                 var vas = new Vector4Field();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.vec4Val;                    
+                    vas.value = t.anyType.vec4Val;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.vec4Val = vas.value;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.vec4Val = vas.value;
+                    });
+                }
             }
             else if (t.localVariable is VInteger)
             {
                 t.anyType.type = VTypes.Integer;
                 var vas = new IntegerField();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.intVal;                    
+                    vas.value = t.anyType.intVal;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.intVal = x.newValue;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.intVal = x.newValue;
+                    });
+                }
             }
 
             else if (t.localVariable is VDouble)
             {
                 t.anyType.type = VTypes.Double;
                 var vas = new DoubleField();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.doubleVal;                    
+                    vas.value = t.anyType.doubleVal;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.doubleVal = x.newValue;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.doubleVal = x.newValue;
+                    });
+                }
             }
             else if (t.localVariable is VFloat)
             {
                 t.anyType.type = VTypes.Float;
                 var vas = new FloatField();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.floatVal;                    
+                    vas.value = t.anyType.floatVal;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.floatVal = x.newValue;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.floatVal = x.newValue;
+                    });
+                }
             }
             else if (t.localVariable is VString)
             {
                 t.anyType.type = VTypes.String;
                 var vas = new TextField();
-                vas.style.width = 220;
+                vas.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 vis.Add(vas);
 
                 if (t.anyType != null)
                 {
-                    vas.value = t.anyType.strVal;                    
+                    vas.value = t.anyType.strVal;
                 }
 
-                vas.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.anyType.strVal = x.newValue;
-                });
+                    vas.RegisterValueChangedCallback((x) =>
+                    {
+                        t.anyType.strVal = x.newValue;
+                    });
+                }
             }
 
             subroot.Add(txtLabel);
@@ -255,16 +279,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Key : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.key;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.key = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.key = objField.value;
+                });
+            }
 
             return rootBox;
         }

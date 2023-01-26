@@ -31,19 +31,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Animator : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Animator);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.animator;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.animator = objField.value as Animator;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animator = objField.value as Animator;
+                });
+            }
 
             return rootBox;
         }
@@ -64,16 +65,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Param : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.paramStr;
 
-            objField.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.paramStr = x.newValue;
-            });
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
+                {
+                    t.paramStr = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -81,28 +84,29 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Param type : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
-            field.Add(objField);
-
             objField.value = t.paramType.ToString();
             objField.choices = Enum.GetNames(typeof(AnimatorParamType)).ToList();
+            field.Add(objField);
 
-            objField.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                foreach (var vparam in Enum.GetValues(typeof(AnimatorParamType)))
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    var astype = (AnimatorParamType)vparam;
-                    if (astype.ToString() == x.newValue)
+                    foreach (var vparam in Enum.GetValues(typeof(AnimatorParamType)))
                     {
-                        t.paramType = astype;
-                        ClearDummy();
-                        dummy.Add(DrawFields(t, astype));
-                        break;
+                        var astype = (AnimatorParamType)vparam;
+                        if (astype.ToString() == x.newValue)
+                        {
+                            t.paramType = astype;
+                            ClearDummy();
+                            dummy.Add(DrawFields(t, astype));
+                            break;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -115,41 +119,48 @@ namespace VIEditor
             {
                 var objField = new IntegerField();
                 objField.style.width = field.style.width;
+                objField.value = t.intvalue;
                 field.Add(objField);
 
-                objField.value = t.intvalue;
-
-                objField.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.intvalue = objField.value;
-                });
+                    objField.RegisterValueChangedCallback((x) =>
+                    {
+                        t.intvalue = objField.value;
+                    });
+                }
             }
             else if (type == AnimatorParamType.Float)
             {
                 var objField = new FloatField();
                 objField.style.width = field.style.width;
+                objField.value = t.floatvalue;
                 field.Add(objField);
 
-                objField.value = t.floatvalue;
-
-                objField.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.floatvalue = objField.value;
-                });
+                    objField.RegisterValueChangedCallback((x) =>
+                    {
+                        t.floatvalue = objField.value;
+                    });
+                }
             }
             else
             {
                 var objField = new Toggle();
                 objField.style.width = field.style.width;
+                objField.value = t.boolvalue;
                 field.Add(objField);
 
-                objField.value = t.boolvalue;
-
-                objField.RegisterValueChangedCallback((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    t.boolvalue = objField.value;
-                });
+                    objField.RegisterValueChangedCallback((x) =>
+                    {
+                        t.boolvalue = objField.value;
+                    });
+                }
             }
+            
             return rootBox;
         }
     }

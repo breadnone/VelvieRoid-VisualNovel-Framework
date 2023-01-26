@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using VelvieR;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -11,7 +8,6 @@ using VIEditor;
 public class HideVDialogueEditor : Editor
 {
     private ToolbarMenu vdialogues;
-    private VisualElement thisInspector;
     private HideVDialogue hidevdialogue;
     private VEditorNotify activeBind;
     public override VisualElement CreateInspectorGUI()
@@ -29,7 +25,6 @@ public class HideVDialogueEditor : Editor
 
         activeBind = binds;
         PortsUtils.RefreshBinds.Add(binds);
-
         myInspector.Add(DrawVDialogue(t));
         myInspector.Add(DrawSummary(t));
 
@@ -47,11 +42,11 @@ public class HideVDialogueEditor : Editor
         bosVdialogue.style.flexDirection = FlexDirection.Row;
 
         Label vdialogueLbl = new Label();
-        vdialogueLbl.style.width = 120;
+        vdialogueLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         vdialogueLbl.style.height = 15;
         vdialogueLbl.style.marginLeft = 5;
         vdialogueLbl.style.marginTop = 5;
-        vdialogueLbl.text = "Set VDialogue : ";
+        vdialogueLbl.text = "VDialogue : ";
         bosVdialogue.Add(vdialogueLbl);
 
         var vdialogue = new ToolbarMenu { text = "None" };
@@ -90,7 +85,7 @@ public class HideVDialogueEditor : Editor
             }
         }
 
-        vdialogue.style.width = 220;
+        vdialogue.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         bosVdialogue.Add(vdialogue);
         return bosVdialogue;
     }
@@ -103,7 +98,7 @@ public class HideVDialogueEditor : Editor
         boxSum.style.flexDirection = FlexDirection.Row;
 
         Label vsumLbl = new Label();
-        vsumLbl.style.width = 120;
+        vsumLbl.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         vsumLbl.style.height = 20;
         vsumLbl.style.marginLeft = 5;
         vsumLbl.style.marginTop = 5;
@@ -112,48 +107,16 @@ public class HideVDialogueEditor : Editor
 
         var vsum = new Label { text = "Hides active VDialoguePanel in the scene. Hiding active VDialoguePanel will prematurely cancel all running operations in the VDialoguePanel." };
         vsum.style.height = 20;
-        vsum.style.width = 220;
+        vsum.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         vsum.style.marginLeft = 4;
         vsum.style.marginTop = 5;
-
         vsum.style.flexDirection = FlexDirection.Column;
-
         vsum.style.whiteSpace = WhiteSpace.Normal;
         vsum.style.unityOverflowClipBox = OverflowClipBox.ContentBox;
 
         boxSum.Add(vsum);
         return boxSum;
     }
-    /*
-    private Box DrawWaitUntil(HideVDialogue t)
-    {
-        var boxToggle = new Box();
-        boxToggle.style.marginTop = 5;
-        boxToggle.style.marginBottom = 5;
-        boxToggle.style.flexDirection = FlexDirection.Row;
-
-        Label vtoggleLbl = new Label();
-        vtoggleLbl.style.width = 120;
-        vtoggleLbl.style.marginLeft = 5;
-        vtoggleLbl.style.marginTop = 5;
-        vtoggleLbl.text = "Wait current task : ";
-        boxToggle.Add(vtoggleLbl);
-
-        var vtoggle = new Toggle();
-        vtoggle.style.marginLeft = 4;
-        vtoggle.style.marginTop = 5;
-
-        vtoggle.value = t.WaitUntilCurrentTaskFinished;
-
-        vtoggle.RegisterValueChangedCallback((x)=>
-        {
-            t.WaitUntilCurrentTaskFinished = vtoggle.value;
-        });
-
-        boxToggle.Add(vtoggle);
-        return boxToggle;
-    }
-    */
 
     private VelvieDialogue[] RePoolVDialogues()
     {
@@ -173,9 +136,9 @@ public class HideVDialogueEditor : Editor
         if (vdialogueCom.Length == 0)
             return;
 
-        vdialogues.menu.AppendAction("None", (x) =>
+        vdialogues.menu.AppendAction("<None>", (x) =>
         {
-            vdialogues.text = "None";
+            vdialogues.text = "<None>";
             hidevdialogue.Vdialogue = null;
         });
 

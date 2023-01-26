@@ -20,11 +20,9 @@ namespace VIEditor
             root.Add(DrawAu(t));
             root.Add(DrawVal(t));
             root.Add(DrawLerp(t));
-
             root.Add(dummy);
             dummy.Add(DrawDuration(t));
             dummy.Add(DrawWait(t));
-
             dummy.SetEnabled(t.lerp);
 
             //Always add this at the end!
@@ -42,10 +40,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.audioSource;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.audioSource = objField.value as AudioSource;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.audioSource = objField.value as AudioSource;
+                });
+            }
 
             return rootBox;
         }
@@ -60,10 +61,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.value;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.value = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -76,10 +80,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -92,11 +99,14 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.lerp;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.lerp = objField.value;
-                dummy.SetEnabled(t.lerp);
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.lerp = objField.value;
+                    dummy.SetEnabled(t.lerp);
+                });
+            }
 
             return rootBox;
         }
@@ -109,10 +119,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.duration;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = objField.value;
+                });
+            }
 
             return rootBox;
         }

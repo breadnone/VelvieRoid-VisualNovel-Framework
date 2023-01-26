@@ -1,20 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using VelvieR;
 using UnityEditor.UIElements;
-using System;
 using UnityEngine.UIElements;
 using System.Linq;
-using TMPro;
 
 namespace VIEditor
 {
     [CustomEditor(typeof(While))]
     public class WhileEditor : Editor
     {
-        private VisualElement Root;
         private VisualElement firstSlot;
         private VisualElement secondSlot;
         public override VisualElement CreateInspectorGUI()
@@ -23,13 +17,11 @@ namespace VIEditor
             secondSlot = new VisualElement();
             VisualElement root = new VisualElement();
             var t = target as While;
-            Root = root;
 
             root.Add(DrawOperator(t));
             root.Add(DrawVars(t));
             root.Add(firstSlot);
             root.Add(secondSlot);
-
             DrawVariableDrawer(t);
 
             if (t.isLocal)
@@ -44,6 +36,7 @@ namespace VIEditor
                 DrawValue(t);
                 t.isLocal = false;
             }
+
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
@@ -56,11 +49,11 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "While : ";
 
             ToolbarMenu vis = new ToolbarMenu();
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.Variable == null)
             {
@@ -144,7 +137,7 @@ namespace VIEditor
             firstSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Condition : ";
 
             firstSlot.Add(txtLabel);
@@ -180,7 +173,7 @@ namespace VIEditor
             else
             {
                 ToolbarMenu tb = new ToolbarMenu();
-                tb.style.width = 220;
+                tb.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
                 tb.SetEnabled(false);
                 firstSlot.Add(tb);
             }
@@ -189,41 +182,47 @@ namespace VIEditor
         private ToolbarMenu BooleanActions(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("True", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.True;
-                dropd.text = t.ECondition.ToString();
-            });
-            dropd.menu.AppendAction("False", (x) =>
-            {
-                t.ECondition = EnumCondition.False;
-                dropd.text = t.ECondition.ToString();
-            });
+                dropd.menu.AppendAction("True", (x) =>
+                {
+                    t.ECondition = EnumCondition.True;
+                    dropd.text = t.ECondition.ToString();
+                });
+                dropd.menu.AppendAction("False", (x) =>
+                {
+                    t.ECondition = EnumCondition.False;
+                    dropd.text = t.ECondition.ToString();
+                });
+            }
 
             return dropd;
         }
         private ToolbarMenu VListActions(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("VListContains", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.VListContains;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("VListContains", (x) =>
+                {
+                    t.ECondition = EnumCondition.VListContains;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
 
-            dropd.menu.AppendAction("VListExist", (x) =>
-            {
-                t.ECondition = EnumCondition.VListContains;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("VListExist", (x) =>
+                {
+                    t.ECondition = EnumCondition.VListContains;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -231,7 +230,7 @@ namespace VIEditor
         private ToolbarMenu ValueActions(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.ECondition == EnumCondition.BiggerThan)
                 dropd.text = ">";
@@ -244,108 +243,117 @@ namespace VIEditor
             else
                 dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction(">", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                dropd.text = ">";
-                t.ECondition = EnumCondition.BiggerThan;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction(">=", (x) =>
-            {
-                dropd.text = ">=";
-                t.ECondition = EnumCondition.BiggerThanEqual;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("<", (x) =>
-            {
-                dropd.text = "<";
-                t.ECondition = EnumCondition.SmallerThan;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("<=", (x) =>
-            {
-                t.ECondition = EnumCondition.SmallerThanEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("Equal", (x) =>
-            {
-                t.ECondition = EnumCondition.Equal;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction(">", (x) =>
+                {
+                    dropd.text = ">";
+                    t.ECondition = EnumCondition.BiggerThan;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction(">=", (x) =>
+                {
+                    dropd.text = ">=";
+                    t.ECondition = EnumCondition.BiggerThanEqual;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("<", (x) =>
+                {
+                    dropd.text = "<";
+                    t.ECondition = EnumCondition.SmallerThan;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("<=", (x) =>
+                {
+                    t.ECondition = EnumCondition.SmallerThanEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("Equal", (x) =>
+                {
+                    t.ECondition = EnumCondition.Equal;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
         private ToolbarMenu StringActions(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("Equal", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.Equal;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("EqualCaseInsensitive", (x) =>
-            {
-                t.ECondition = EnumCondition.EqualCaseInsensitive;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("StartsWith", (x) =>
-            {
-                t.ECondition = EnumCondition.StartsWith;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("EndsWith", (x) =>
-            {
-                t.ECondition = EnumCondition.EndsWith;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("Length", (x) =>
-            {
-                t.ECondition = EnumCondition.Length;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("Equal", (x) =>
+                {
+                    t.ECondition = EnumCondition.Equal;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("EqualCaseInsensitive", (x) =>
+                {
+                    t.ECondition = EnumCondition.EqualCaseInsensitive;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("StartsWith", (x) =>
+                {
+                    t.ECondition = EnumCondition.StartsWith;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("EndsWith", (x) =>
+                {
+                    t.ECondition = EnumCondition.EndsWith;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("Length", (x) =>
+                {
+                    t.ECondition = EnumCondition.Length;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
         private ToolbarMenu VectorActions(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("DistanceEqual", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.DistanceEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("DistanceNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.DistanceNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("DistanceEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.DistanceEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("DistanceNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.DistanceNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -353,7 +361,7 @@ namespace VIEditor
         private ToolbarMenu NoneAction(While t)
         {
             ToolbarMenu dropd = new ToolbarMenu();
-            dropd.style.width = 220;
+            dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
             dropd.menu.AppendAction("<None>", (x) =>
@@ -373,12 +381,12 @@ namespace VIEditor
             subroot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Comparer type : ";
 
             ToolbarMenu vis = new ToolbarMenu();
             tmenu = vis;
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (!t.isLocal)
             {
@@ -430,11 +438,11 @@ namespace VIEditor
             secondSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Variable comparer : ";
 
             ToolbarMenu vis = new ToolbarMenu();
-            vis.style.width = 220;
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
             if (t.LocalVariable == null)
             {
@@ -457,16 +465,19 @@ namespace VIEditor
                     PortsUtils.SetActiveAssetDirty();
                 });
 
-                foreach (var vars in PortsUtils.variable.ivar)
+                if (!PortsUtils.PlayMode)
                 {
-                    if (vars != null && t.Variable != null && vars.GetVtype() == t.Variable.GetVtype())
+                    foreach (var vars in PortsUtils.variable.ivar)
                     {
-                        vis.menu.AppendAction(vars.Name, (x) =>
+                        if (vars != null && t.Variable != null && vars.GetVtype() == t.Variable.GetVtype())
                         {
-                            vis.text = vars.Name;
-                            t.LocalVariable = vars;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
+                            vis.menu.AppendAction(vars.Name, (x) =>
+                            {
+                                vis.text = vars.Name;
+                                t.LocalVariable = vars;
+                                PortsUtils.SetActiveAssetDirty();
+                            });
+                        }
                     }
                 }
             }
@@ -490,7 +501,7 @@ namespace VIEditor
             secondSlot.style.flexDirection = FlexDirection.Row;
 
             Label txtLabel = new Label();
-            txtLabel.style.width = 120;
+            txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Value comparer : ";
 
             VisualElement vis = new VisualElement();
@@ -506,14 +517,13 @@ namespace VIEditor
                     {
                         tmp.value = t.anyType.strVal;
                     }
-
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
                             t.anyType.strVal = tmp.value;
-                        }
-                    });
+                        });
+                    }
 
                 }
                 else if (t.Variable.GetVtype() == VTypes.Float || t.Variable.GetVtype() == VTypes.Double || t.Variable.GetVtype() == VTypes.Integer)
@@ -528,13 +538,13 @@ namespace VIEditor
                             tmp.value = t.anyType.floatVal;
                         }
 
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.floatVal = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                     else if (t.Variable.GetVtype() == VTypes.Double)
                     {
@@ -545,14 +555,13 @@ namespace VIEditor
                         {
                             tmp.value = t.anyType.doubleVal;
                         }
-
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.doubleVal = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                     else if (t.Variable.GetVtype() == VTypes.Integer)
                     {
@@ -563,14 +572,13 @@ namespace VIEditor
                         {
                             tmp.value = t.anyType.intVal;
                         }
-
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.intVal = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Boolean)
@@ -582,14 +590,14 @@ namespace VIEditor
                     {
                         tmp.value = t.anyType.boolVal;
                     }
-
-                    tmp.RegisterValueChangedCallback((x) =>
+                    if (!PortsUtils.PlayMode)
                     {
-                        if (!PortsUtils.PlayMode)
+                        tmp.RegisterValueChangedCallback((x) =>
                         {
                             t.anyType.boolVal = tmp.value;
-                        }
-                    });
+
+                        });
+                    }
                 }
                 else if (t.Variable.GetVtype() == VTypes.Vector2 || t.Variable.GetVtype() == VTypes.Vector3 || t.Variable.GetVtype() == VTypes.Vector4)
                 {
@@ -602,14 +610,13 @@ namespace VIEditor
                         {
                             tmp.value = t.anyType.vec2Val;
                         }
-
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.vec2Val = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                     else if (t.Variable.GetVtype() == VTypes.Vector3)
                     {
@@ -620,14 +627,13 @@ namespace VIEditor
                         {
                             tmp.value = t.anyType.vec3Val;
                         }
-
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.vec3Val = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                     else if (t.Variable.GetVtype() == VTypes.Vector4)
                     {
@@ -638,18 +644,18 @@ namespace VIEditor
                         {
                             tmp.value = t.anyType.vec4Val;
                         }
-
-                        tmp.RegisterValueChangedCallback((x) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (!PortsUtils.PlayMode)
+                            tmp.RegisterValueChangedCallback((x) =>
                             {
                                 t.anyType.vec4Val = tmp.value;
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
-            vis.style.width = 220;
+            
+            vis.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             secondSlot.Add(txtLabel);
             secondSlot.Add(vis);
         }

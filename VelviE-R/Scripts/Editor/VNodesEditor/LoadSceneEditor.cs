@@ -27,26 +27,28 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Scene : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
 
             objField.value = t.load;
-            
-            int sceneCount = SceneManager.sceneCountInBuildSettings;     
+
+            int sceneCount = SceneManager.sceneCountInBuildSettings;
             string[] scenes = new string[sceneCount];
-            for( int i = 0; i < sceneCount; i++ )
+            for (int i = 0; i < sceneCount; i++)
             {
-                scenes[i] = Path.GetFileNameWithoutExtension( UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex( i ) );
+                scenes[i] = Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i));
             }
 
             objField.choices = scenes.ToList();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.load = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.load = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -54,7 +56,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Mode : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
@@ -62,18 +63,21 @@ namespace VIEditor
             objField.value = t.sceneMode.ToString();
             objField.choices = Enum.GetNames(typeof(LoadSceneMode)).ToList();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                foreach(var tt in Enum.GetValues(typeof(LoadSceneMode)))
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    var astype = (LoadSceneMode)tt;
-
-                    if(tt.ToString() == x.newValue)
+                    foreach (var tt in Enum.GetValues(typeof(LoadSceneMode)))
                     {
-                        t.sceneMode = astype;
+                        var astype = (LoadSceneMode)tt;
+
+                        if (tt.ToString() == x.newValue)
+                        {
+                            t.sceneMode = astype;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

@@ -30,7 +30,7 @@ namespace VIEditor
             root.Add(dummySlot);
             root.Add(dummyLast);
 
-            if(t.is2D)
+            if (t.is2D)
             {
                 dummySlot.Add(DrawRbodyTwoD(t));
             }
@@ -39,7 +39,7 @@ namespace VIEditor
                 dummySlot.Add(DrawRbodyThreeD(t));
                 dummyLast.Add(DrawBoolCollision(t));
             }
-            
+
             root.Add(DrawBoolIsKinematic(t));
 
             //Always add this at the end!
@@ -51,17 +51,19 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("RigidBody2D : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(Rigidbody2D);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.rbody2d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.rbody2d = x.newValue as Rigidbody2D;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rbody2d = x.newValue as Rigidbody2D;
+                });
+            }
 
             return rootBox;
         }
@@ -70,16 +72,18 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("RigidBody : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(Rigidbody);
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.rbody3d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.rbody3d = objField.value as Rigidbody;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rbody3d = objField.value as Rigidbody;
+                });
+            }
 
             return rootBox;
         }
@@ -88,15 +92,17 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("DetectCollission : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Toggle();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.detectCollision;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.detectCollision = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.detectCollision = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -105,15 +111,17 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("IsKinematic : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Toggle();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.isKinematic;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.isKinematic = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.isKinematic = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -122,53 +130,55 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Is2D : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Toggle();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.is2D;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.is2D = objField.value;
-                
-                if(dummySlot != null && dummySlot.childCount > 0)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var child in dummySlot.Children().ToList())
+                    t.is2D = objField.value;
+
+                    if (dummySlot != null && dummySlot.childCount > 0)
                     {
-                        child.RemoveFromHierarchy();
+                        foreach (var child in dummySlot.Children().ToList())
+                        {
+                            child.RemoveFromHierarchy();
+                        }
                     }
-                }
 
-                if(dummy != null && dummy.childCount > 0)
-                {
-                    foreach(var child in dummy.Children().ToList())
+                    if (dummy != null && dummy.childCount > 0)
                     {
-                        child.RemoveFromHierarchy();
+                        foreach (var child in dummy.Children().ToList())
+                        {
+                            child.RemoveFromHierarchy();
+                        }
                     }
-                }
 
-                if(dummyLast != null && dummyLast.childCount > 0)
-                {
-                    foreach(var child in dummyLast.Children().ToList())
+                    if (dummyLast != null && dummyLast.childCount > 0)
                     {
-                        child.RemoveFromHierarchy();
+                        foreach (var child in dummyLast.Children().ToList())
+                        {
+                            child.RemoveFromHierarchy();
+                        }
                     }
-                }
-                
-                dummy.Add(DrawRbodSlot(t));
-                dummy.Add(DrawRbodSlotROT(t));
 
-                if(t.is2D)
-                {
-                    dummySlot.Add(DrawRbodyTwoD(t));
-                }
-                else
-                {
-                    dummySlot.Add(DrawRbodyThreeD(t));
-                    dummyLast.Add(DrawBoolCollision(t));
-                }
+                    dummy.Add(DrawRbodSlot(t));
+                    dummy.Add(DrawRbodSlotROT(t));
 
-            });
+                    if (t.is2D)
+                    {
+                        dummySlot.Add(DrawRbodyTwoD(t));
+                    }
+                    else
+                    {
+                        dummySlot.Add(DrawRbodyThreeD(t));
+                        dummyLast.Add(DrawBoolCollision(t));
+                    }
+
+                });
+            }
 
             return rootBox;
         }
@@ -177,11 +187,10 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("ConstraintPosition : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new DropdownField();
-
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.is2D)
+            if (t.is2D)
             {
                 objField.value = t.rbodyConstraint2d.ToString();
                 objField.choices = Enum.GetNames(typeof(RigidbodyConstraints2D)).Where(x => x.Contains("Position") || x.Equals("FreezePosition") || x.Equals("None")).ToList();
@@ -192,33 +201,36 @@ namespace VIEditor
                 objField.choices = Enum.GetNames(typeof(RigidbodyConstraints)).Where(x => x.Contains("Position") || x.Equals("FreezePosition") || x.Equals("None")).ToList();
             }
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if(t.is2D)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var num in Enum.GetValues(typeof(RigidbodyConstraints2D)))
+                    if (t.is2D)
                     {
-                        var astype = (RigidbodyConstraints2D)num;
-
-                        if(astype.ToString() == x.newValue)
+                        foreach (var num in Enum.GetValues(typeof(RigidbodyConstraints2D)))
                         {
-                            t.rbodyConstraint2d = astype;
+                            var astype = (RigidbodyConstraints2D)num;
+
+                            if (astype.ToString() == x.newValue)
+                            {
+                                t.rbodyConstraint2d = astype;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    foreach(var num in Enum.GetValues(typeof(RigidbodyConstraints)))
+                    else
                     {
-                        var astype = (RigidbodyConstraints)num;
-
-                        if(astype.ToString() == x.newValue)
+                        foreach (var num in Enum.GetValues(typeof(RigidbodyConstraints)))
                         {
-                            t.rbodyConstraint3d = astype;
+                            var astype = (RigidbodyConstraints)num;
+
+                            if (astype.ToString() == x.newValue)
+                            {
+                                t.rbodyConstraint3d = astype;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -227,11 +239,10 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("ConstraintRotation : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new DropdownField();
-
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.is2D)
+            if (t.is2D)
             {
                 objField.value = t.rbodyROTConstraint2d.ToString();
                 objField.choices = Enum.GetNames(typeof(RigidbodyConstraints2D)).Where(x => x.Contains("Rotation") || x.Equals("FreezeRotation") || x.Equals("None")).ToList();
@@ -244,12 +255,12 @@ namespace VIEditor
 
             objField.RegisterValueChangedCallback((x) =>
             {
-                if(t.is2D)
+                if (t.is2D)
                 {
-                    foreach(var num in Enum.GetValues(typeof(RigidbodyConstraints2D)))
+                    foreach (var num in Enum.GetValues(typeof(RigidbodyConstraints2D)))
                     {
                         var astype = (RigidbodyConstraints2D)num;
-                        if(astype.ToString() == x.newValue)
+                        if (astype.ToString() == x.newValue)
                         {
                             t.rbodyROTConstraint2d = astype;
                         }
@@ -257,10 +268,10 @@ namespace VIEditor
                 }
                 else
                 {
-                    foreach(var num in Enum.GetValues(typeof(RigidbodyConstraints)))
+                    foreach (var num in Enum.GetValues(typeof(RigidbodyConstraints)))
                     {
                         var astype = (RigidbodyConstraints)num;
-                        if(astype.ToString() == x.newValue)
+                        if (astype.ToString() == x.newValue)
                         {
                             t.rbodyROTConstraint3d = astype;
                         }

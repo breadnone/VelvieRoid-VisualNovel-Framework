@@ -46,32 +46,35 @@ namespace VIEditor
             if (PortsUtils.variable.ivar.Count > 0)
             {
                 var varlist = new List<string>();
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(x.GetVtype() == VTypes.Boolean)
-                    varlist.Add(x.Name); 
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (x.GetVtype() == VTypes.Boolean)
+                        varlist.Add(x.Name);
                 });
 
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -79,7 +82,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target position : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -87,10 +89,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.target;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.target = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.target = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -98,7 +103,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Compare position : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -106,10 +110,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetPosition;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetPosition = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetPosition = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }

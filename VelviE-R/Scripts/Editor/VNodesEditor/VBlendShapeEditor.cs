@@ -43,28 +43,29 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("SkinnedMesh : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(SkinnedMeshRenderer);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.vmesh;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.vmesh = objField.value as SkinnedMeshRenderer;
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.vmesh = objField.value as SkinnedMeshRenderer;
 
-                if (t.vmesh == null)
-                {
-                    dummy.SetEnabled(false);
-                }
-                else
-                {
-                    dummy.SetEnabled(true);
-                }
-            });
+                    if (t.vmesh == null)
+                    {
+                        dummy.SetEnabled(false);
+                    }
+                    else
+                    {
+                        dummy.SetEnabled(true);
+                    }
+                });
+            }
 
             return rootBox;
         }
@@ -72,18 +73,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Cancel previous : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.cancelPrevious;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.cancelPrevious = objField.value;
-
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.cancelPrevious = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -91,17 +92,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -109,15 +111,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Force complete : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.forceCompletePrevious;
-            objField.RegisterValueChangedCallback((x) =>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.forceCompletePrevious = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.forceCompletePrevious = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -244,30 +249,33 @@ namespace VIEditor
                 astype.Item1.highValue = t.values[i].max;
                 astype.Item1.lowValue = t.values[i].min;
 
-                astype.Item6.RegisterCallback<ChangeEvent<float>>((x)=>
+                if (!PortsUtils.PlayMode)
                 {
-                    var idx = i;
-                    t.values[idx].min = x.newValue;
-                    astype.Item1.lowValue = x.newValue;
-
-                    if(t.values[idx].blendValue < astype.Item1.lowValue)
+                    astype.Item6.RegisterCallback<ChangeEvent<float>>((x) =>
                     {
-                        t.values[idx].blendValue = astype.Item1.lowValue;
-                        astype.Item1.value = astype.Item1.lowValue;
-                    }
-                });
-                astype.Item7.RegisterCallback<ChangeEvent<float>>((x)=>
-                {
-                    var idx = i;
-                    t.values[idx].max = x.newValue;
-                    astype.Item1.highValue = x.newValue;
+                        var idx = i;
+                        t.values[idx].min = x.newValue;
+                        astype.Item1.lowValue = x.newValue;
 
-                    if(t.values[idx].blendValue > astype.Item1.highValue)
+                        if (t.values[idx].blendValue < astype.Item1.lowValue)
+                        {
+                            t.values[idx].blendValue = astype.Item1.lowValue;
+                            astype.Item1.value = astype.Item1.lowValue;
+                        }
+                    });
+                    astype.Item7.RegisterCallback<ChangeEvent<float>>((x) =>
                     {
-                        t.values[idx].blendValue = astype.Item1.highValue;
-                        astype.Item1.value = astype.Item1.highValue;
-                    }
-                });
+                        var idx = i;
+                        t.values[idx].max = x.newValue;
+                        astype.Item1.highValue = x.newValue;
+
+                        if (t.values[idx].blendValue > astype.Item1.highValue)
+                        {
+                            t.values[idx].blendValue = astype.Item1.highValue;
+                            astype.Item1.value = astype.Item1.highValue;
+                        }
+                    });
+                }
 
                 t.values[i].blendShapeindex = i;
 
@@ -280,45 +288,48 @@ namespace VIEditor
                     astype.Item1.SetEnabled(true);
                 }
 
-                if(String.IsNullOrEmpty(t.values[i].blendName))
+                if (String.IsNullOrEmpty(t.values[i].blendName))
                 {
                     astype.Item3.value = "<None>";
                 }
 
-                astype.Item1.RegisterCallback<ChangeEvent<float>>((x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    var idx = i;
-                    t.values[idx].blendValue = x.newValue;
-                    astype.Item4.value = x.newValue;
-               });
-                astype.Item5.RegisterCallback<ChangeEvent<float>>((x) =>
-                {
-                    var idx = i;
-                    t.values[idx].duration = x.newValue;
-               });
-                astype.Item3.RegisterCallback<ChangeEvent<string>>((x) =>
-                {
-                    var idx = i;
-                    t.values[idx].blendName = x.newValue;
-
-                    if (String.IsNullOrEmpty(t.values[idx].blendName) || x.newValue == "<None>")
+                    astype.Item1.RegisterCallback<ChangeEvent<float>>((x) =>
                     {
-                        astype.Item1.SetEnabled(false);
-                        t.values[idx].blendName = string.Empty;
-                    }
-                    else
+                        var idx = i;
+                        t.values[idx].blendValue = x.newValue;
+                        astype.Item4.value = x.newValue;
+                    });
+                    astype.Item5.RegisterCallback<ChangeEvent<float>>((x) =>
                     {
-                        astype.Item1.SetEnabled(true);
-                    }
+                        var idx = i;
+                        t.values[idx].duration = x.newValue;
+                    });
+                    astype.Item3.RegisterCallback<ChangeEvent<string>>((x) =>
+                    {
+                        var idx = i;
+                        t.values[idx].blendName = x.newValue;
 
-                    EditorUtility.SetDirty(t.gameObject);
-                });
+                        if (String.IsNullOrEmpty(t.values[idx].blendName) || x.newValue == "<None>")
+                        {
+                            astype.Item1.SetEnabled(false);
+                            t.values[idx].blendName = string.Empty;
+                        }
+                        else
+                        {
+                            astype.Item1.SetEnabled(true);
+                        }
 
-                astype.Item2.RegisterValueChangedCallback((x) =>
-                {
-                    var idx = i;
-                    t.values[idx].zeroedPrevValue = x.newValue;
-                });
+                        EditorUtility.SetDirty(t.gameObject);
+                    });
+
+                    astype.Item2.RegisterValueChangedCallback((x) =>
+                    {
+                        var idx = i;
+                        t.values[idx].zeroedPrevValue = x.newValue;
+                    });
+                }
             };
 
             const int itemHeight = 100;

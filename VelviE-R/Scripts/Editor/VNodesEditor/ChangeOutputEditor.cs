@@ -4,18 +4,17 @@ using UnityEngine.UIElements;
 using VelvieR;
 using UnityEngine;
 using UnityEngine.Audio;
+
 namespace VIEditor
 {
     [CustomEditor(typeof(ChangeOutput))]
 
     public class ChangeOutputEditor : Editor
     {
-        private VisualElement dummy;
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
             var t = target as ChangeOutput;
-            dummy = new VisualElement();
 
             root.Add(DrawAu(t));
             root.Add(DrawMixer(t));
@@ -29,7 +28,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("AudioSource : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(AudioSource);
             objField.allowSceneObjects = true;
@@ -37,10 +35,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.audioSource;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.audioSource = objField.value as AudioSource;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.audioSource = objField.value as AudioSource;
+                });
+            }
 
             return rootBox;
         }
@@ -48,7 +49,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Mixer : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(AudioMixerGroup);
             objField.allowSceneObjects = true;
@@ -56,10 +56,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.mixerGroup;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.mixerGroup = objField.value as AudioMixerGroup;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.mixerGroup = objField.value as AudioMixerGroup;
+                });
+            }
 
             return rootBox;
         }
@@ -67,16 +70,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Play : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.play;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.play = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.play = objField.value;
+                });
+            }
 
             return rootBox;
         }

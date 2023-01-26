@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System;
 using VelvieR;
 
 namespace VIEditor
@@ -29,16 +25,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Value : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.value;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.value = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -46,16 +44,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Reset : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.resetToDefault;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.resetToDefault = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.resetToDefault = objField.value;
+                });
+            }
 
             return rootBox;
         }

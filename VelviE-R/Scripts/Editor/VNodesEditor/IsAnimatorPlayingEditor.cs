@@ -3,8 +3,6 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace VIEditor
@@ -15,7 +13,6 @@ namespace VIEditor
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
-
             var t = target as IsAnimatorPlaying;
             root.Add(DrawAnimator(t));
             root.Add(DrawVars(t));

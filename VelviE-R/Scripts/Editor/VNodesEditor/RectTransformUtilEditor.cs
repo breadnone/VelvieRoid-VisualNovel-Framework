@@ -12,15 +12,13 @@ namespace VIEditor
     public class RectTransformUtilEditor : Editor
     {
         private VisualElement dummySlot;
-        private VisualElement dummyParent;
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
             root.style.flexDirection = FlexDirection.Column;
             var t = target as RectTransformUtil;
             dummySlot = new VisualElement();
-            dummyParent = new VisualElement();
-            
+
             root.Add(DrawRect(t));
             root.Add(DrawRectTypes(t));
             root.Add(dummySlot);
@@ -28,16 +26,16 @@ namespace VIEditor
             ReDraw(t);
 
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
         private void ReDraw(RectTransformUtil t)
         {
-            if(t.rectUtil == RectUtilv.RectIsOverlap)
+            if (t.rectUtil == RectUtilv.RectIsOverlap)
             {
                 dummySlot.Add(DrawRectTarget(t));
             }
-            else if(t.rectUtil == RectUtilv.FlipX || t.rectUtil == RectUtilv.FlixY)
+            else if (t.rectUtil == RectUtilv.FlipX || t.rectUtil == RectUtilv.FlixY)
             {
                 dummySlot.Add(DrawRecDuration(t));
                 dummySlot.Add(DrawRectAnime(t));
@@ -46,7 +44,7 @@ namespace VIEditor
                 dummySlot.Add(DrawRecLoopCount(t));
                 dummySlot.Add(DrawRectWait(t));
             }
-            else if(t.rectUtil == RectUtilv.WidthHeight)
+            else if (t.rectUtil == RectUtilv.WidthHeight)
             {
                 dummySlot.Add(DrawRectVector(t));
             }
@@ -55,19 +53,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("RectTransform : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(RectTransform);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.rect;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.rect = objField.value as RectTransform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rect = objField.value as RectTransform;
+                });
+            }
 
             return rootBox;
         }
@@ -75,40 +74,38 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Utility : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.rectUtil.ToString();
             objField.choices = Enum.GetNames(typeof(RectUtilv)).ToList();
 
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    foreach(var asEnum in Enum.GetValues(typeof(RectUtilv)))
+                    foreach (var asEnum in Enum.GetValues(typeof(RectUtilv)))
                     {
                         var asetype = (RectUtilv)asEnum;
 
-                        if(asetype.ToString() == x.newValue)
+                        if (asetype.ToString() == x.newValue)
                         {
                             t.rectUtil = asetype;
 
-                            if(dummySlot.childCount > 0)
+                            if (dummySlot.childCount > 0)
                             {
-                                foreach(var child in dummySlot.Children().ToList())
+                                foreach (var child in dummySlot.Children().ToList())
                                 {
                                     child.RemoveFromHierarchy();
                                 }
                             }
-                                
+
                             ReDraw(t);
                             break;
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -116,16 +113,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Animation : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.animate;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.animate = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animate = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -133,16 +132,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Loop count : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new IntegerField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.loopCount;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.loopCount = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.loopCount = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -150,16 +151,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.waitUntilFinished;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -167,16 +170,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Clamp : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.clamp;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.clamp = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.clamp = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -184,16 +189,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Disable on complete : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.disableOnComplete;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.disableOnComplete = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.disableOnComplete = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -201,16 +208,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Scale : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Vector3Field();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.value;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.value = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -218,16 +227,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.duration;
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -235,19 +246,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target rect : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(RectTransform);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.rectTarget;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.rectTarget = objField.value as RectTransform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rectTarget = objField.value as RectTransform;
+                });
+            }
 
             return rootBox;
         }

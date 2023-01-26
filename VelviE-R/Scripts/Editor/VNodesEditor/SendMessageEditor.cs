@@ -19,13 +19,12 @@ namespace VIEditor
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
-            return root; 
+            return root;
         }
         private VisualElement DrawObject(SendMessage t)
         {
             var rootBox = VUITemplate.GetTemplate("Target object : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(GameObject);
             objField.allowSceneObjects = true;
@@ -33,10 +32,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.gameobject;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.gameobject = objField.value as GameObject;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.gameobject = objField.value as GameObject;
+                });
+            }
 
             return rootBox;
         }
@@ -44,17 +46,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Method to execute : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.method;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.method = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.method = objField.value;
+                });
+            }
             return rootBox;
         }
     }

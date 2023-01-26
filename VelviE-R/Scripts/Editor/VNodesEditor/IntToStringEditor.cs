@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -40,10 +38,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.text;
 
+            if(!PortsUtils.PlayMode)
+            {
             objField.RegisterValueChangedCallback((x)=>
             {
                 t.text = objField.value as TMP_Text;
             });
+            }
 
             return rootBox;
         }
@@ -51,16 +52,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Append text : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.appendText;
 
+            if(!PortsUtils.PlayMode)
+            {
             objField.RegisterValueChangedCallback((x)=>
             {
                 t.appendText = objField.value;
             });
+            }
 
             return rootBox;
         }
@@ -88,7 +91,6 @@ namespace VIEditor
             {
                 var varlist = new List<string>();
                 PortsUtils.variable.ivar.ForEach((x) => { varlist.Add(x.Name); });
-
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
@@ -116,18 +118,16 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("PrefixSuffix : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
-            field.Add(objField);
-
-            objField.choices = Enum.GetNames(typeof(PrefixSuffix)).ToList();
             objField.value = t.prefixType.ToString();
+            field.Add(objField);            
 
+            if(!PortsUtils.PlayMode)
+            {
+                objField.choices = Enum.GetNames(typeof(PrefixSuffix)).ToList();
             objField.RegisterValueChangedCallback((x)=>
             {
-                if(!PortsUtils.PlayMode)
-                {
                     foreach(var vals in Enum.GetValues(typeof(PrefixSuffix)))
                     {
                         var astype = (PrefixSuffix)vals;
@@ -135,8 +135,8 @@ namespace VIEditor
                         if(astype.ToString() == x.newValue)
                             t.prefixType = astype;
                     }
-                }
             });
+            }
 
             return rootBox;
         }

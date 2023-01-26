@@ -53,22 +53,25 @@ namespace VIEditor
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -77,19 +80,19 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Min : ");
             var field = VUITemplate.GetField(rootBox);
 
-            Func<TextField> makeItem = () => 
+            Func<TextField> makeItem = () =>
             {
                 var vis = new TextField();
                 return vis;
             };
 
-            Action<VisualElement, int> bindItem = (e, i) => 
+            Action<VisualElement, int> bindItem = (e, i) =>
             {
                 int idx = i;
-                
+
                 (e as TextField).value = t.words[i];
 
-                (e as TextField).RegisterValueChangedCallback((x)=>
+                (e as TextField).RegisterValueChangedCallback((x) =>
                 {
                     t.words[idx] = x.newValue;
                 });

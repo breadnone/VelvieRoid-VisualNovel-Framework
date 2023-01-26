@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System;
 using VelvieR;
 
 namespace VIEditor
@@ -23,9 +21,9 @@ namespace VIEditor
             root.Add(DrawEnableOnStartBool(t));
             root.Add(DrawDisableOnFinishedBool(t));
             root.Add(DrawWaitBool(t));
-            
+
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
         public VisualElement DrawCanvas(FadeInOutCanvas t)
@@ -41,10 +39,13 @@ namespace VIEditor
 
             objField.value = t.canvas;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.canvas = objField.value as CanvasGroup;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.canvas = objField.value as CanvasGroup;
+                });
+            }
 
             return rootBox;
         }
@@ -58,24 +59,27 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            objField.choices = new List<string>{"Fade In", "Fade Out"};
+            objField.choices = new List<string> { "Fade In", "Fade Out" };
 
-            if(t.fadeIn)
-            objField.value = "Fade In";
+            if (t.fadeIn)
+                objField.value = "Fade In";
             else
-            objField.value = "Fade Out";
+                objField.value = "Fade Out";
 
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(x.newValue == "Fade In")
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    t.fadeIn = true;
-                }
-                else
-                {
-                    t.fadeIn = false;
-                }    
-            });
+                    if (x.newValue == "Fade In")
+                    {
+                        t.fadeIn = true;
+                    }
+                    else
+                    {
+                        t.fadeIn = false;
+                    }
+                });
+            }
 
             return rootBox;
         }
@@ -91,10 +95,13 @@ namespace VIEditor
 
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.fadeIn = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.fadeIn = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -102,17 +109,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("DisableOnComplete : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
+            objField.value = t.disableOnComplete;
             field.Add(objField);
 
-            objField.value = t.disableOnComplete;
-
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.disableOnComplete = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.disableOnComplete = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -120,17 +128,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("EnableOnStart : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
+            objField.value = t.enableOnStart;
             field.Add(objField);
 
-            objField.value = t.enableOnStart;
-
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.enableOnStart = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.enableOnStart = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -138,16 +147,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
+            objField.value = t.duration;
             field.Add(objField);
 
-            objField.value = t.duration;
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = x.newValue;
+                });
+            }
 
             return rootBox;
         }

@@ -32,7 +32,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target to duplicate : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(GameObject);
             objField.allowSceneObjects = true;
@@ -40,10 +39,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetObject;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetObject = objField.value as GameObject;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetObject = objField.value as GameObject;
+                });
+            }
 
             return rootBox;
         }
@@ -51,16 +53,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Position : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Vector3Field();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.position;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.position = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.position = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -68,7 +72,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Copy transform : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -76,10 +79,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.target;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.target = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.target = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -87,16 +93,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Amount : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new IntegerField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.amount;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.amount = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.amount = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -104,16 +112,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Custom name : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.customName;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.customName = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.customName = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -121,16 +131,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Prefix : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.prefixes;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.prefixes = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.prefixes = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -138,16 +150,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Add to manager : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.addToGameObjectManager;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.addToGameObjectManager = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.addToGameObjectManager = objField.value;
+                });
+            }
 
             return rootBox;
         }

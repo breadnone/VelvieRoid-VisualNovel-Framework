@@ -18,7 +18,7 @@ namespace VIEditor
 
             root.Add(DrawObject(t));
             root.Add(DrawBool(t));
-            
+
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
@@ -28,7 +28,7 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("GameObject : ");
             var field = VUITemplate.GetField(rootBox);
 
-            Func<VisualElement> makeItem = () => 
+            Func<VisualElement> makeItem = () =>
             {
                 var vis = new VisualElement();
                 var t = new ObjectField();
@@ -42,54 +42,56 @@ namespace VIEditor
 
                 t.objectType = typeof(GameObject);
                 t.allowSceneObjects = true;
-
                 tt.objectType = typeof(Transform);
                 tt.allowSceneObjects = true;
-
                 vis.Add(t);
                 vis.Add(tv);
                 vis.Add(tt);
                 return vis;
             };
 
-            Action<VisualElement, int> bindItem = (e, i) => 
+            Action<VisualElement, int> bindItem = (e, i) =>
             {
-                foreach(var vis in e.Children().ToList())
+                foreach (var vis in e.Children().ToList())
                 {
-                    if(vis.name == "obj")
+                    if (vis.name == "obj")
                     {
                         var astype = vis as ObjectField;
                         astype.value = t.go[i].gameobject;
 
-                        astype.RegisterValueChangedCallback((x)=>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if(!PortsUtils.PlayMode)
-                            t.go[i].gameobject = x.newValue as GameObject;
-                        });
-
+                            astype.RegisterValueChangedCallback((x) =>
+                            {
+                                t.go[i].gameobject = x.newValue as GameObject;
+                            });
+                        }
                     }
-                    else if(vis.name == "trans")
+                    else if (vis.name == "trans")
                     {
                         var astype = vis as ObjectField;
                         astype.value = t.go[i].target;
 
-                        astype.RegisterValueChangedCallback((x)=>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if(!PortsUtils.PlayMode)
-                            t.go[i].target = x.newValue as Transform;
-                        });
-
+                            astype.RegisterValueChangedCallback((x) =>
+                            {
+                                t.go[i].target = x.newValue as Transform;
+                            });
+                        }
                     }
-                    else if(vis.name == "vec")
+                    else if (vis.name == "vec")
                     {
                         var astype = vis as Vector3Field;
                         astype.value = t.go[i].position;
 
-                        astype.RegisterValueChangedCallback((x)=>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if(!PortsUtils.PlayMode)
-                            t.go[i].position = x.newValue;
-                        });
+                            astype.RegisterValueChangedCallback((x) =>
+                            {
+                                t.go[i].position = x.newValue;
+                            });
+                        }
                     }
                 }
             };
@@ -113,24 +115,28 @@ namespace VIEditor
             field.style.flexDirection = FlexDirection.Column;
             field.Add(objField);
 
-            btnAdd.clicked += ()=>
+            if (!PortsUtils.PlayMode)
             {
-                t.go.Add(new GameObjectClass());
-                objField.Rebuild();
-            };
-            btnRem.clicked += ()=>
-            {
-                if(objField.selectedItem != null)
+                btnAdd.clicked += () =>
                 {
-                    t.go.RemoveAt(objField.selectedIndex);
-                }
-                else
+                    t.go.Add(new GameObjectClass());
+                    objField.Rebuild();
+                };
+                btnRem.clicked += () =>
                 {
-                    if(t.go.Count > 0)
-                    t.go.RemoveAt(t.go.Count - 1);
-                }
-                objField.Rebuild();
-            };
+                    if (objField.selectedItem != null)
+                    {
+                        t.go.RemoveAt(objField.selectedIndex);
+                    }
+                    else
+                    {
+                        if (t.go.Count > 0)
+                            t.go.RemoveAt(t.go.Count - 1);
+                    }
+                    objField.Rebuild();
+                };
+            }
+
             var visEl = new VisualElement();
             visEl.style.flexDirection = FlexDirection.Row;
             field.Add(visEl);
@@ -144,17 +150,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("IsLocal : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.isLocal;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.isLocal = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.isLocal = objField.value;
+                });
+            }
             return rootBox;
         }
     }

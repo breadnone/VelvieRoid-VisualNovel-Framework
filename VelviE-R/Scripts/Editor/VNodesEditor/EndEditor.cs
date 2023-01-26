@@ -1,10 +1,6 @@
-using UnityEngine;
 using UnityEditor;
 using VelvieR;
-using UnityEditor.UIElements;
-using System;
 using UnityEngine.UIElements;
-using System.Linq;
 
 // NOTE to future maintainer, have fun refactoring this -____-
 //I'm the creator, will NEVER revisit this forbidden hell ever again! 

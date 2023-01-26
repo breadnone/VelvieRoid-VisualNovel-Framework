@@ -3,8 +3,6 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace VIEditor
@@ -33,26 +31,29 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Type : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.effects.ToString();
-            objField.choices = Enum.GetNames(typeof(VStageEffects)).ToList();
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                foreach(var astype in Enum.GetValues(typeof(VStageEffects)))
-                {
-                    var asori = (VStageEffects)astype;
+                objField.choices = Enum.GetNames(typeof(VStageEffects)).ToList();
 
-                    if(x.newValue == asori.ToString())
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    foreach (var astype in Enum.GetValues(typeof(VStageEffects)))
                     {
-                        t.effects = asori;
-                        break;
+                        var asori = (VStageEffects)astype;
+
+                        if (x.newValue == asori.ToString())
+                        {
+                            t.effects = asori;
+                            break;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -67,10 +68,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.vstage;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.vstage = objField.value as VStageUtil;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.vstage = objField.value as VStageUtil;
+                });
+            }
 
             return rootBox;
         }
@@ -83,10 +87,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.power;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.power = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.power = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -99,10 +106,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.duration;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -115,10 +125,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.loopCount;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.loopCount = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.loopCount = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -131,10 +144,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = x.newValue;
+                });
+            }
 
             return rootBox;
         }

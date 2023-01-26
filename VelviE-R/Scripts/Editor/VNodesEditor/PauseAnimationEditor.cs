@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -26,13 +25,13 @@ namespace VIEditor
             root.Add(DrawType(t));
             root.Add(dummyTwo);
 
-            if(!t.isResume)
-            dummyTwo.Add(DrawToggleAll(t));
+            if (!t.isResume)
+                dummyTwo.Add(DrawToggleAll(t));
             else
-            dummyTwo.Add(DrawToggleAllResume(t));
+                dummyTwo.Add(DrawToggleAllResume(t));
 
-            if(!t.pauseAll)
-            DrawObject(t);
+            if (!t.pauseAll)
+                DrawObject(t);
 
             root.Add(dummy);
             //Always add this at the end!
@@ -45,17 +44,19 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Object to pause : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(GameObject);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.targetobject;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetobject = objField.value as GameObject;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetobject = objField.value as GameObject;
+                });
+            }
 
             dummy.Add(rootBox);
         }
@@ -63,78 +64,83 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Pause all : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.pauseAll;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.pauseAll = x.newValue;
-
-                if(x.newValue)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    if(dummy.childCount > 0)
+                    t.pauseAll = x.newValue;
+
+                    if (x.newValue)
                     {
-                        foreach(var list in dummy.Children().ToList())
+                        if (dummy.childCount > 0)
                         {
-                            list.RemoveFromHierarchy();
+                            foreach (var list in dummy.Children().ToList())
+                            {
+                                list.RemoveFromHierarchy();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    DrawObject(t);
-                    t.targetobject = null;
-                }
-            });
+                    else
+                    {
+                        DrawObject(t);
+                        t.targetobject = null;
+                    }
+                });
+            }
+
             return rootBox;
         }
         private VisualElement DrawToggleAllResume(PauseAnimation t)
         {
             var rootBox = VUITemplate.GetTemplate("Resume all : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.pauseAll;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.pauseAll = x.newValue;
-
-                if(x.newValue)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    if(dummy.childCount > 0)
+                    t.pauseAll = x.newValue;
+
+                    if (x.newValue)
                     {
-                        foreach(var list in dummy.Children().ToList())
+                        if (dummy.childCount > 0)
                         {
-                            list.RemoveFromHierarchy();
+                            foreach (var list in dummy.Children().ToList())
+                            {
+                                list.RemoveFromHierarchy();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    DrawObject(t);
-                    t.targetobject = null;
-                }
-            });
+                    else
+                    {
+                        DrawObject(t);
+                        t.targetobject = null;
+                    }
+                });
+            }
+
             return rootBox;
         }
         private VisualElement DrawType(PauseAnimation t)
         {
             var rootBox = VUITemplate.GetTemplate("Operation : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            objField.choices = new List<string>{"Pause", "Resume"};
+            objField.choices = new List<string> { "Pause", "Resume" };
 
-            if(t.isResume)
+            if (t.isResume)
             {
                 objField.value = "Resume";
             }
@@ -143,16 +149,16 @@ namespace VIEditor
                 objField.value = "Pause";
             }
 
-            objField.RegisterValueChangedCallback((x)=>
+            objField.RegisterValueChangedCallback((x) =>
             {
-                if(dummyTwo.childCount > 0)
+                if (dummyTwo.childCount > 0)
                 {
-                    foreach(var i in dummyTwo.Children().ToList())
+                    foreach (var i in dummyTwo.Children().ToList())
                     {
                         i.RemoveFromHierarchy();
                     }
                 }
-                if(x.newValue == "Pause")
+                if (x.newValue == "Pause")
                 {
                     t.isResume = false;
                     dummyTwo.Add(DrawToggleAll(t));
@@ -163,7 +169,7 @@ namespace VIEditor
                     dummyTwo.Add(DrawToggleAllResume(t));
                 }
             });
-            
+
             return rootBox;
         }
     }

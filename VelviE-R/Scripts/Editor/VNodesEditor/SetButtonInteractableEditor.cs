@@ -26,11 +26,9 @@ namespace VIEditor
             var objField = new ObjectField();
             objField.objectType = typeof(UnityEngine.UI.Button);
             objField.allowSceneObjects = true;
-
             var fld = rootBox.userData as VisualElement;
             objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             fld.Add(objField);
-
             objField.value = t.button;
 
             if(!PortsUtils.PlayMode)

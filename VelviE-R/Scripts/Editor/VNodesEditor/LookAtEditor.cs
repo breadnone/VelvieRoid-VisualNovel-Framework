@@ -22,9 +22,6 @@ namespace VIEditor
             root.Add(DrawObjectFollowing(t));
             root.Add(DrawLookAtType(t));
 
-            
-            
-
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
@@ -33,16 +30,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Enable : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.enable;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.enable = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.enable = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -50,7 +49,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target to look : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -58,10 +56,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetToFollow as Transform;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetToFollow = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetToFollow = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -69,7 +70,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Object looking : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -77,10 +77,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.objectFollowing;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.objectFollowing = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.objectFollowing = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -88,28 +91,27 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Mode : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.vecType.ToString();
-            objField.choices = Enum.GetNames(typeof(RotateType)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.choices = Enum.GetNames(typeof(RotateType)).ToList();
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    foreach(var asEnum in Enum.GetValues(typeof(RotateType)))
+                    foreach (var asEnum in Enum.GetValues(typeof(RotateType)))
                     {
                         var asetype = (RotateType)asEnum;
 
-                        if(x.newValue == asetype.ToString())
+                        if (x.newValue == asetype.ToString())
                         {
                             t.vecType = asetype;
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

@@ -15,7 +15,6 @@ namespace VIEditor
         {
             var root = new VisualElement();
             var t = target as SetPortrait;
-
             var port = VUITemplate.PortraitTemplate(t.Character);
 
             if (t.ActivePortrait != null && t.ActivePortrait.portraitSprite != null)
@@ -55,8 +54,8 @@ namespace VIEditor
 
                 });
             }
-            portraitL = port.child;
 
+            portraitL = port.child;
             root.Add(DrawCharacter(t));
             root.Add(DrawStage(t));
             root.Add(DrawPortrait(t));

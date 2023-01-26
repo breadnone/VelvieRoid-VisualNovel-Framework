@@ -14,7 +14,6 @@ namespace VIEditor
     [CustomEditor(typeof(If))]
     public class IfEditor : Editor
     {
-        private VisualElement Root;
         private VisualElement firstSlot;
         private VisualElement secondSlot;
         public override VisualElement CreateInspectorGUI()
@@ -22,7 +21,6 @@ namespace VIEditor
             firstSlot = new VisualElement();
             secondSlot = new VisualElement();
             VisualElement root = new VisualElement();
-            Root = root;
             var t = target as If;
             Undo.RecordObject(t, "If undo object");
 
@@ -139,7 +137,6 @@ namespace VIEditor
             Label txtLabel = new Label();
             txtLabel.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
             txtLabel.text = "Condition : ";
-
             firstSlot.Add(txtLabel);
 
             if (!isDummy)
@@ -196,16 +193,19 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("True", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.True;
-                dropd.text = t.ECondition.ToString();
-            });
-            dropd.menu.AppendAction("False", (x) =>
-            {
-                t.ECondition = EnumCondition.False;
-                dropd.text = t.ECondition.ToString();
-            });
+                dropd.menu.AppendAction("True", (x) =>
+                {
+                    t.ECondition = EnumCondition.True;
+                    dropd.text = t.ECondition.ToString();
+                });
+                dropd.menu.AppendAction("False", (x) =>
+                {
+                    t.ECondition = EnumCondition.False;
+                    dropd.text = t.ECondition.ToString();
+                });
+            }
 
             return dropd;
         }
@@ -215,19 +215,22 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("VListContains", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.VListContains;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("VListContains", (x) =>
+                {
+                    t.ECondition = EnumCondition.VListContains;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
 
-            dropd.menu.AppendAction("VListExist", (x) =>
-            {
-                t.ECondition = EnumCondition.VListContains;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("VListExist", (x) =>
+                {
+                    t.ECondition = EnumCondition.VListContains;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -248,42 +251,45 @@ namespace VIEditor
             else
                 dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction(">", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                dropd.text = ">";
-                t.ECondition = EnumCondition.BiggerThan;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction(">=", (x) =>
-            {
-                dropd.text = ">=";
-                t.ECondition = EnumCondition.BiggerThanEqual;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("<", (x) =>
-            {
-                dropd.text = "<";
-                t.ECondition = EnumCondition.SmallerThan;
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("<=", (x) =>
-            {
-                t.ECondition = EnumCondition.SmallerThanEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("Equal", (x) =>
-            {
-                t.ECondition = EnumCondition.Equal;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction(">", (x) =>
+                {
+                    dropd.text = ">";
+                    t.ECondition = EnumCondition.BiggerThan;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction(">=", (x) =>
+                {
+                    dropd.text = ">=";
+                    t.ECondition = EnumCondition.BiggerThanEqual;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("<", (x) =>
+                {
+                    dropd.text = "<";
+                    t.ECondition = EnumCondition.SmallerThan;
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("<=", (x) =>
+                {
+                    t.ECondition = EnumCondition.SmallerThanEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("Equal", (x) =>
+                {
+                    t.ECondition = EnumCondition.Equal;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -293,42 +299,45 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("Equal", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.Equal;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("EqualCaseInsensitive", (x) =>
-            {
-                t.ECondition = EnumCondition.EqualCaseInsensitive;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("StartsWith", (x) =>
-            {
-                t.ECondition = EnumCondition.StartsWith;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("EndsWith", (x) =>
-            {
-                t.ECondition = EnumCondition.EndsWith;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("Length", (x) =>
-            {
-                t.ECondition = EnumCondition.Length;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("Equal", (x) =>
+                {
+                    t.ECondition = EnumCondition.Equal;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("EqualCaseInsensitive", (x) =>
+                {
+                    t.ECondition = EnumCondition.EqualCaseInsensitive;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("StartsWith", (x) =>
+                {
+                    t.ECondition = EnumCondition.StartsWith;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("EndsWith", (x) =>
+                {
+                    t.ECondition = EnumCondition.EndsWith;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("Length", (x) =>
+                {
+                    t.ECondition = EnumCondition.Length;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -338,18 +347,21 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("DistanceEqual", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.DistanceEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("DistanceNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.DistanceNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("DistanceEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.DistanceEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("DistanceNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.DistanceNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -358,54 +370,57 @@ namespace VIEditor
             ToolbarMenu dropd = new ToolbarMenu();
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
-            dropd.menu.AppendAction("Equal", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.Equal;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NameEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NameEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("NameNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.NameNotEqual;
-                dropd.text = "NameNotEqual";
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("InstanceIdEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.InstanceIdEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("InstanceIdNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.InstanceIdNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("PositionEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.PositionEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("PositionNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.PositionNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("Equal", (x) =>
+                {
+                    t.ECondition = EnumCondition.Equal;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NameEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NameEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("NameNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.NameNotEqual;
+                    dropd.text = "NameNotEqual";
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("InstanceIdEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.InstanceIdEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("InstanceIdNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.InstanceIdNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("PositionEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.PositionEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("PositionNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.PositionNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -416,30 +431,33 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("LocalPositionNotEqual", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.ECondition = EnumCondition.LocalPositionNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("LocalPositionEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.LocalPositionEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("ScaleEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.ScaleEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
-            dropd.menu.AppendAction("ScaleNotEqual", (x) =>
-            {
-                t.ECondition = EnumCondition.ScaleNotEqual;
-                dropd.text = t.ECondition.ToString();
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("LocalPositionNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.LocalPositionNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("LocalPositionEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.LocalPositionEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("ScaleEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.ScaleEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                dropd.menu.AppendAction("ScaleNotEqual", (x) =>
+                {
+                    t.ECondition = EnumCondition.ScaleNotEqual;
+                    dropd.text = t.ECondition.ToString();
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -449,11 +467,14 @@ namespace VIEditor
             dropd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             dropd.text = t.ECondition.ToString();
 
-            dropd.menu.AppendAction("<None>", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                dropd.text = "<None>";
-                PortsUtils.SetActiveAssetDirty();
-            });
+                dropd.menu.AppendAction("<None>", (x) =>
+                {
+                    dropd.text = "<None>";
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             return dropd;
         }
@@ -482,26 +503,29 @@ namespace VIEditor
                 vis.text = t.LocalorValue;
             }
 
-            vis.menu.AppendAction("LocalVariable", (x) =>
+            if (!PortsUtils.PlayMode)
             {
-                vis.text = "LocalVariable";
-                t.LocalVariable = null;
-                t.ECondition = EnumCondition.None;
-                t.LocalorValue = "LocalVariable";
-                DrawLocalComparer(t);
+                vis.menu.AppendAction("LocalVariable", (x) =>
+                {
+                    vis.text = "LocalVariable";
+                    t.LocalVariable = null;
+                    t.ECondition = EnumCondition.None;
+                    t.LocalorValue = "LocalVariable";
+                    DrawLocalComparer(t);
 
-                PortsUtils.SetActiveAssetDirty();
-            });
-            vis.menu.AppendAction("Value", (x) =>
-            {
-                vis.text = "Value";
-                t.LocalVariable = null;
-                t.ECondition = EnumCondition.None;
-                t.LocalorValue = "Value";
-                DrawValue(t);
+                    PortsUtils.SetActiveAssetDirty();
+                });
+                vis.menu.AppendAction("Value", (x) =>
+                {
+                    vis.text = "Value";
+                    t.LocalVariable = null;
+                    t.ECondition = EnumCondition.None;
+                    t.LocalorValue = "Value";
+                    DrawValue(t);
 
-                PortsUtils.SetActiveAssetDirty();
-            });
+                    PortsUtils.SetActiveAssetDirty();
+                });
+            }
 
             subroot.Add(txtLabel);
             subroot.Add(vis);
@@ -544,23 +568,26 @@ namespace VIEditor
 
             if (PortsUtils.variable.ivar.Count > 0)
             {
-                vis.menu.AppendAction("<None>", (x) =>
+                if (!PortsUtils.PlayMode)
                 {
-                    vis.text = "<None>";
-                    t.LocalVariable = null;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-
-                foreach (var vars in PortsUtils.variable.ivar)
-                {
-                    if (vars != null && t.Variable != null && vars.GetVtype() == t.Variable.GetVtype())
+                    vis.menu.AppendAction("<None>", (x) =>
                     {
-                        vis.menu.AppendAction(vars.Name, (x) =>
+                        vis.text = "<None>";
+                        t.LocalVariable = null;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+
+                    foreach (var vars in PortsUtils.variable.ivar)
+                    {
+                        if (vars != null && t.Variable != null && vars.GetVtype() == t.Variable.GetVtype())
                         {
-                            vis.text = vars.Name;
-                            t.LocalVariable = vars;
-                            PortsUtils.SetActiveAssetDirty();
-                        });
+                            vis.menu.AppendAction(vars.Name, (x) =>
+                            {
+                                vis.text = vars.Name;
+                                t.LocalVariable = vars;
+                                PortsUtils.SetActiveAssetDirty();
+                            });
+                        }
                     }
                 }
             }
@@ -731,7 +758,6 @@ namespace VIEditor
                     {
                         tmp.RegisterValueChangedCallback((x) =>
                         {
-
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VVector2).value = tmp.value;
 
@@ -785,10 +811,8 @@ namespace VIEditor
                     {
                         tmp.RegisterValueChangedCallback((x) =>
                         {
-
                             if (t.LocalVariable != null)
                                 (t.LocalVariable as VVector4).value = tmp.value;
-
                         });
                     }
                 }

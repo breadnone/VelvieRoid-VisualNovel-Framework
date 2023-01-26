@@ -32,30 +32,32 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Type : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.isVector3)
+            if (t.isVector3)
                 objField.value = "Vector3";
             else
                 objField.value = "Vector2";
-            
-            objField.choices = new List<string>{"Vector3", "Vector2"};
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                RemoveChild();
-                t.variable = null;
+                objField.choices = new List<string> { "Vector3", "Vector2" };
 
-                if(x.newValue == "Vector3")
-                    t.isVector3 = true;
-                else
-                    t.isVector3 = false;
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    RemoveChild();
+                    t.variable = null;
 
-                dummySlot.Add(DrawVars(t));
-            });
+                    if (x.newValue == "Vector3")
+                        t.isVector3 = true;
+                    else
+                        t.isVector3 = false;
+
+                    dummySlot.Add(DrawVars(t));
+                });
+            }
 
             return rootBox;
         }
@@ -63,12 +65,12 @@ namespace VIEditor
         {
             var vtype = VTypes.Vector3;
 
-            if(!t.isVector3)
+            if (!t.isVector3)
             {
                 vtype = VTypes.Vector2;
             }
 
-            var varTemplate = VUITemplate.VariableTemplate(type:vtype);
+            var varTemplate = VUITemplate.VariableTemplate(type: vtype);
 
             if (t.variable == null)
             {
@@ -90,32 +92,35 @@ namespace VIEditor
             {
                 var varlist = new List<string>();
 
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(x.GetVtype() == vtype)
-                        varlist.Add(x.Name); 
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (x.GetVtype() == vtype)
+                        varlist.Add(x.Name);
                 });
 
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -139,13 +144,15 @@ namespace VIEditor
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.thisTarget;
-            
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.thisTarget = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.thisTarget = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -153,19 +160,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target object : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.thatTarget;
-            
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.thatTarget = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.thatTarget = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }

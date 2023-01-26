@@ -28,22 +28,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Text component : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(TMP_Text);
             objField.objectType = typeof(TMP_Text);
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.text;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.text = x.newValue as TMP_Text;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -51,20 +49,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Format : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.format;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.format = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -72,20 +68,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Start : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.start;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.start = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -93,20 +87,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("End : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.end;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.end = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -114,20 +106,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.waitUntilFinished = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

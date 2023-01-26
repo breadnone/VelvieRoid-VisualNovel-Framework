@@ -28,19 +28,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("TextmeshPro : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(TMP_Text);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.text;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.text = objField.value as TMP_Text;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.text = objField.value as TMP_Text;
+                });
+            }
 
             return rootBox;
         }
@@ -48,7 +49,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Words : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
@@ -61,27 +61,31 @@ namespace VIEditor
             objField.multiline = true;
             objField.value = t.content;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.content = objField.value;
-            });
-
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.content = objField.value;
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawTypeWrite(SetText t)
         {
             var rootBox = VUITemplate.GetTemplate("Typewriter : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.isTypewriter;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.isTypewriter = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.isTypewriter = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -89,16 +93,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -106,16 +112,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("PausesBetweenWords : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.pauseBetweenWords;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.pauseBetweenWords = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.pauseBetweenWords = objField.value;
+                });
+            }
 
             return rootBox;
         }

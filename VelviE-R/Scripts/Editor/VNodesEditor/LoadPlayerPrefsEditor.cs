@@ -1,11 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
 using VelvieR;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System;
-using System.Linq;
 
 namespace VIEditor
 {
@@ -18,29 +14,30 @@ namespace VIEditor
             var root = new VisualElement();
             var t = target as LoadPlayerPrefs;
             dummySlot = new VisualElement();
-
             root.Add(DrawKey(t));
             root.Add(dummySlot);
             dummySlot.Add(DrawVars(t));
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
-            return root; 
+            return root;
         }
         private VisualElement DrawKey(LoadPlayerPrefs t)
         {
             var rootBox = VUITemplate.GetTemplate("Key : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.key;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.key = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.key = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -69,27 +66,29 @@ namespace VIEditor
             {
                 var varlist = new List<string>();
                 PortsUtils.variable.ivar.ForEach((x) => { varlist.Add(x.Name); });
-
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.localVariable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.localVariable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.localVariable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.localVariable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }

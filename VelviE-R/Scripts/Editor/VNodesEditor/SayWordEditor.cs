@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -30,12 +29,9 @@ public class SayWordEditor : Editor
         myInspector.Add(DrawThumbnailEffects(t));
         myInspector.Add(DrawEffectMagnitude(t));
         myInspector.Add(DrawThumbnailLoopCount(t));
-
         myInspector.Add(dummySlotProps);
-
         myInspector.Add(DrawWordsField(t));
         myInspector.Add(DrawVDialogue(t));
-        //myInspector.Add(DrawTypingEffect(t));
         myInspector.Add(DrawWaitForClick(t));
         myInspector.Add(DrawDelay(t));
 
@@ -80,7 +76,6 @@ public class SayWordEditor : Editor
         strContent.style.whiteSpace = WhiteSpace.Normal;
         strContent.style.unityOverflowClipBox = OverflowClipBox.ContentBox;
         strContent.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-
         strContent.multiline = true;
 
         if (!PortsUtils.PlayMode)
@@ -275,6 +270,7 @@ public class SayWordEditor : Editor
 
         List<string> menus = new List<string> { "Enable", "Disable" };
         wait.choices = menus;
+
         if (!PortsUtils.PlayMode)
         {
             wait.RegisterValueChangedCallback((x) =>
@@ -293,6 +289,7 @@ public class SayWordEditor : Editor
                 }
             });
         }
+
         boxEnumWait.Add(visCon);
 
         if (t.WaitForClick == WaitForClick.Enable)
@@ -337,6 +334,7 @@ public class SayWordEditor : Editor
 
         if (t.CharacterSound != null)
             auCharaClip.value = t.CharacterSound;
+
         if (!PortsUtils.PlayMode)
         {
             auCharaClip.RegisterValueChangedCallback((x) =>
@@ -499,6 +497,7 @@ public class SayWordEditor : Editor
         sym.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         sym.value = t.CustomSymbols;
         visConSymbol.Add(sym);
+
         if (!PortsUtils.PlayMode)
         {
             sym.RegisterValueChangedCallback((x) =>
@@ -506,13 +505,14 @@ public class SayWordEditor : Editor
                 t.CustomSymbols = sym.value;
             });
         }
+
         boxSubTwo.Add(visConSymbol);
         return boxAu;
     }
     public Box DrawVDialogue(SayWord t)
     {
         var vdialog = VUITemplate.VDialogTemplate("VDialog : ");
-        var vdialogueCom = RePoolVDialogues();
+        var vdialogueCom = VEditorFunc.EditorGetVDialogues();
 
         if (t.VDialogue != null)
         {
@@ -533,28 +533,31 @@ public class SayWordEditor : Editor
             vdialog.child.value = "<None>";
         }
 
-        vdialog.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
+            vdialog.child.RegisterCallback<ChangeEvent<string>>((evt) =>
             {
-                vdialog.child.value = "<None>";
-                t.VDialogue = null;
-                WarningCheck(t);
-                EditorUtility.SetDirty(t);
-            }
-            else
-            {
-                t.VDialogue = Array.Find(RePoolVDialogues(), x => x.velvieDialogueName == evt.newValue);
-
-                if (t.VDialogue == null)
+                if (String.IsNullOrEmpty(evt.newValue) || evt.newValue == "<None>")
                 {
                     vdialog.child.value = "<None>";
+                    t.VDialogue = null;
+                    WarningCheck(t);
+                    EditorUtility.SetDirty(t);
                 }
+                else
+                {
+                    t.VDialogue = Array.Find(VEditorFunc.EditorGetVDialogues(), x => x.velvieDialogueName == evt.newValue);
 
-                WarningCheck(t);
-                EditorUtility.SetDirty(t);
-            }
-        });
+                    if (t.VDialogue == null)
+                    {
+                        vdialog.child.value = "<None>";
+                    }
+
+                    WarningCheck(t);
+                    EditorUtility.SetDirty(t);
+                }
+            });
+        }
 
         return vdialog.root;
     }
@@ -593,10 +596,6 @@ public class SayWordEditor : Editor
         return boxEnder;
     }
 
-    public VelvieDialogue[] RePoolVDialogues()
-    {
-        return VEditorFunc.EditorGetVDialogues();
-    }
     public Box DrawCharacters(SayWord t)
     {
         var vis = VUITemplate.CharacterTemplate();
@@ -1057,24 +1056,27 @@ public class SayWordEditor : Editor
             objElementThree.text = "PingPong";
         }
 
-        objElementThree.menu.AppendAction("Clamp", (x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if (t.AnimatableThumbnailProp != null)
+            objElementThree.menu.AppendAction("Clamp", (x) =>
             {
-                objElementThree.text = "Clamp";
-                t.AnimatableThumbnailProp.loopClamp = true;
-                EditorUtility.SetDirty(t.gameObject);
-            }
-        });
-        objElementThree.menu.AppendAction("PingPong", (x) =>
-        {
-            if (t.AnimatableThumbnailProp != null)
+                if (t.AnimatableThumbnailProp != null)
+                {
+                    objElementThree.text = "Clamp";
+                    t.AnimatableThumbnailProp.loopClamp = true;
+                    EditorUtility.SetDirty(t.gameObject);
+                }
+            });
+            objElementThree.menu.AppendAction("PingPong", (x) =>
             {
-                objElementThree.text = "PingPong";
-                t.AnimatableThumbnailProp.loopClamp = false;
-                EditorUtility.SetDirty(t.gameObject);
-            }
-        });
+                if (t.AnimatableThumbnailProp != null)
+                {
+                    objElementThree.text = "PingPong";
+                    t.AnimatableThumbnailProp.loopClamp = false;
+                    EditorUtility.SetDirty(t.gameObject);
+                }
+            });
+        }
 
         ////
         var visHumanLike = new Box();
@@ -1098,18 +1100,21 @@ public class SayWordEditor : Editor
             objElementHuman.text = "Linear";
         }
 
-        objElementHuman.menu.AppendAction("NaturalPauses", (x) =>
+        if (!PortsUtils.PlayMode)
         {
-            objElementHuman.text = "NaturalPauses";
-            t.HumanLikePause = true;
-            EditorUtility.SetDirty(t.gameObject);
-        });
-        objElementHuman.menu.AppendAction("Linear", (x) =>
-        {
-            objElementHuman.text = "Linear";
-            t.HumanLikePause = false;
-            EditorUtility.SetDirty(t.gameObject);
-        });
+            objElementHuman.menu.AppendAction("NaturalPauses", (x) =>
+            {
+                objElementHuman.text = "NaturalPauses";
+                t.HumanLikePause = true;
+                EditorUtility.SetDirty(t.gameObject);
+            });
+            objElementHuman.menu.AppendAction("Linear", (x) =>
+            {
+                objElementHuman.text = "Linear";
+                t.HumanLikePause = false;
+                EditorUtility.SetDirty(t.gameObject);
+            });
+        }
         ///
 
         var thumbnailSummary = new Box();
@@ -1121,16 +1126,12 @@ public class SayWordEditor : Editor
         lblThmSummary.text = "\n<b>NOTE: </b>\nAnimatableProps needs higher framerates and \nmore sprites to work properly.\n\n12 frames and 12 sprite are recommended.\n";
         thumbnailSummary.Add(lblThmSummary);
 
-
         visHumanLike.Add(lblNameHuman);
         visHumanLike.Add(objElementHuman);
-
         visThree.Add(lblNameThree);
         visThree.Add(objElementThree);
-
         visTwo.Add(lblNameTwo);
         visTwo.Add(objElementTwo);
-
         vis.Add(lblName);
         vis.Add(objElement);
         rootBox.Add(vis);

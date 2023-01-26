@@ -25,7 +25,7 @@ namespace VIEditor
             dummy.Add(DrawRbodSlot(t));
             root.Add(dummySlot);
 
-            if(t.is2D)
+            if (t.is2D)
             {
                 dummySlot.Add(DrawRbodyTwoD(t));
                 dummySlot.Add(DrawRbodyVecTwo(t));
@@ -45,17 +45,19 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("RigidBody2D : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(Rigidbody2D);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.rbody2d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.rbody2d = x.newValue as Rigidbody2D;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rbody2d = x.newValue as Rigidbody2D;
+                });
+            }
 
             return rootBox;
         }
@@ -64,16 +66,18 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("RigidBody : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(Rigidbody);
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.rbody3d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.rbody3d = objField.value as Rigidbody;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rbody3d = objField.value as Rigidbody;
+                });
+            }
 
             return rootBox;
         }
@@ -82,15 +86,17 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Value : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Vector2Field();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.value2d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.value2d = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value2d = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -99,15 +105,17 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Value : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Vector3Field();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.value3d;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.value3d = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value3d = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -116,45 +124,46 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Is2D : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new Toggle();
-
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.is2D;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.is2D = objField.value;
-                
-                if(dummySlot != null && dummySlot.childCount > 0)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var child in dummySlot.Children().ToList())
+                    t.is2D = objField.value;
+
+                    if (dummySlot != null && dummySlot.childCount > 0)
                     {
-                        child.RemoveFromHierarchy();
+                        foreach (var child in dummySlot.Children().ToList())
+                        {
+                            child.RemoveFromHierarchy();
+                        }
                     }
-                }
 
-                if(dummy != null && dummy.childCount > 0)
-                {
-                    foreach(var child in dummy.Children().ToList())
+                    if (dummy != null && dummy.childCount > 0)
                     {
-                        child.RemoveFromHierarchy();
+                        foreach (var child in dummy.Children().ToList())
+                        {
+                            child.RemoveFromHierarchy();
+                        }
                     }
-                }
 
-                dummy.Add(DrawRbodSlot(t));
+                    dummy.Add(DrawRbodSlot(t));
 
-                if(t.is2D)
-                {
-                    dummySlot.Add(DrawRbodyTwoD(t));
-                    dummySlot.Add(DrawRbodyVecTwo(t));
-                }
-                else
-                {
-                    dummySlot.Add(DrawRbodyThreeD(t));
-                    dummySlot.Add(DrawRbodyVecThree(t));
-                }
-
-            });
+                    if (t.is2D)
+                    {
+                        dummySlot.Add(DrawRbodyTwoD(t));
+                        dummySlot.Add(DrawRbodyVecTwo(t));
+                    }
+                    else
+                    {
+                        dummySlot.Add(DrawRbodyThreeD(t));
+                        dummySlot.Add(DrawRbodyVecThree(t));
+                    }
+                });
+            }
 
             return rootBox;
         }
@@ -163,11 +172,10 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("ForceMode : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new DropdownField();
-
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            if(t.is2D)
+            if (t.is2D)
             {
                 objField.value = t.forcemode2d.ToString();
                 objField.choices = Enum.GetNames(typeof(ForceMode2D)).ToList();
@@ -178,31 +186,34 @@ namespace VIEditor
                 objField.choices = Enum.GetNames(typeof(ForceMode)).ToList();
             }
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if(t.is2D)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    foreach(var num in Enum.GetValues(typeof(ForceMode2D)))
+                    if (t.is2D)
                     {
-                        var astype = (ForceMode2D)num;
-                        if(astype.ToString() == x.newValue)
+                        foreach (var num in Enum.GetValues(typeof(ForceMode2D)))
                         {
-                            t.forcemode2d = astype;
+                            var astype = (ForceMode2D)num;
+                            if (astype.ToString() == x.newValue)
+                            {
+                                t.forcemode2d = astype;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    foreach(var num in Enum.GetValues(typeof(ForceMode)))
+                    else
                     {
-                        var astype = (ForceMode)num;
-                        if(astype.ToString() == x.newValue)
+                        foreach (var num in Enum.GetValues(typeof(ForceMode)))
                         {
-                            t.forcemode3d = astype;
+                            var astype = (ForceMode)num;
+                            if (astype.ToString() == x.newValue)
+                            {
+                                t.forcemode3d = astype;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

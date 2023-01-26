@@ -3,7 +3,6 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 namespace VIEditor
@@ -24,7 +23,6 @@ namespace VIEditor
             root.Add(DrawInterpolate(t));
             root.Add(DrawDuration(t));
             root.Add(DrawResetSpeed(t));
-
             root.Add(DrawFixedTime(t));
 
             //Always add this at the end!

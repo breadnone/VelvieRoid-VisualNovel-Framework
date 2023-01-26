@@ -40,12 +40,10 @@ namespace VIEditor
 
             root.Add(dummyOne);
             root.Add(DrawGoProp(t));
-
             root.Add(dummyVec);
             root.Add(dummyAngle);
             dummyVec.Add(DrawVec(t));
             dummyAngle.Add(DrawAngle(t));
-
             dummyTarget.Add(DrawTarget(t));
             root.Add(dummyTarget);
             root.Add(DrawToggleAnim(t));
@@ -88,16 +86,14 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Find tag : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
+            objField.value = t.findViaTag;
             field.Add(objField);
 
-            objField.value = t.findViaTag;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     foreach (var child in dummyOne.Children().ToList())
                     {
@@ -114,8 +110,8 @@ namespace VIEditor
                     {
                         dummyOne.Add(DrawName(t));
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -126,13 +122,12 @@ namespace VIEditor
 
             var objField = new Toggle();
             objField.style.width = field.style.width;
+            objField.value = t.animate;
             field.Add(objField);
 
-            objField.value = t.animate;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.animate = x.newValue;
 
@@ -144,8 +139,8 @@ namespace VIEditor
                     {
                         dummyAnim.SetEnabled(false);
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -153,20 +148,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Name : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
+            objField.value = t.objectName;
             field.Add(objField);
 
-            objField.value = t.objectName;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.objectName = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -174,20 +167,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
+            objField.value = t.duration;
             field.Add(objField);
 
-            objField.value = t.duration;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.duration = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -195,20 +186,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Angle : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
+            objField.value = t.angle;
             field.Add(objField);
 
-            objField.value = t.angle;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.angle = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -219,17 +208,16 @@ namespace VIEditor
 
             var objField = new TextField();
             objField.style.width = field.style.width;
+            objField.value = t.objectName;
             field.Add(objField);
 
-            objField.value = t.objectName;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.objectName = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -237,16 +225,15 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Operation : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
+            objField.value = t.goProp.ToString();
             field.Add(objField);
 
-            objField.value = t.goProp.ToString();
-            objField.choices = Enum.GetNames(typeof(GameObjectProperty)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.choices = Enum.GetNames(typeof(GameObjectProperty)).ToList();
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
                     foreach (var asEnum in Enum.GetValues(typeof(GameObjectProperty)))
                     {
@@ -278,8 +265,8 @@ namespace VIEditor
                             dummyAngle.SetEnabled(false);
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -287,20 +274,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Set to : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Vector3Field();
             objField.style.width = field.style.width;
+            objField.value = t.vec;
             field.Add(objField);
 
-            objField.value = t.vec;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.vec = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -312,17 +297,16 @@ namespace VIEditor
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.style.width = field.style.width;
+            objField.value = t.target;
             field.Add(objField);
 
-            objField.value = t.target;
-
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.target = x.newValue as Transform;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

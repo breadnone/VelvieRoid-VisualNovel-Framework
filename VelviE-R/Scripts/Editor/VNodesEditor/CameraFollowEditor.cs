@@ -25,7 +25,6 @@ namespace VIEditor
             root.Add(DrawFollowType(t));
             root.Add(DrawLeanProp(t));
             root.Add(DrawLookAt(t));
-            
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
@@ -36,7 +35,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Target to follow : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Transform);
             objField.allowSceneObjects = true;
@@ -44,10 +42,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetToFollow as Transform;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetToFollow = objField.value as Transform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetToFollow = objField.value as Transform;
+                });
+            }
 
             return rootBox;
         }
@@ -55,7 +56,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Camera : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Camera);
             objField.allowSceneObjects = true;
@@ -63,10 +63,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.cam;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.cam = objField.value as Camera;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.cam = objField.value as Camera;
+                });
+            }
 
             return rootBox;
         }
@@ -78,24 +81,28 @@ namespace VIEditor
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.followType.ToString();
-            objField.choices = Enum.GetNames(typeof(FollowTypes)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
-            {
-                if(!PortsUtils.PlayMode)
-                {
-                    foreach(var asEnum in Enum.GetValues(typeof(FollowTypes)))
-                    {
-                        var asetype = (FollowTypes)asEnum;
 
-                        if(x.newValue == asetype.ToString())
+            if (!PortsUtils.PlayMode)
+            {
+                objField.choices = Enum.GetNames(typeof(FollowTypes)).ToList();
+
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                    {
+                        foreach (var asEnum in Enum.GetValues(typeof(FollowTypes)))
                         {
-                            t.followType = asetype;
+                            var asetype = (FollowTypes)asEnum;
+
+                            if (x.newValue == asetype.ToString())
+                            {
+                                t.followType = asetype;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -106,25 +113,25 @@ namespace VIEditor
 
             var objField = new DropdownField();
             objField.style.width = field.style.width;
+            objField.value = t.followProperty.ToString();
             field.Add(objField);
 
-            objField.value = t.followProperty.ToString();
-            objField.choices = Enum.GetNames(typeof(LeanProp)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.choices = Enum.GetNames(typeof(LeanProp)).ToList();
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    foreach(var asEnum in Enum.GetValues(typeof(LeanProp)))
+                    foreach (var asEnum in Enum.GetValues(typeof(LeanProp)))
                     {
                         var asetype = (LeanProp)asEnum;
 
-                        if(x.newValue == asetype.ToString())
+                        if (x.newValue == asetype.ToString())
                         {
                             t.followProperty = asetype;
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -138,10 +145,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.lookAtTarget;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.lookAtTarget = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.lookAtTarget = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -155,10 +165,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.enable;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.enable = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.enable = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -172,10 +185,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.offset;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.offset = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.offset = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -189,10 +205,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.smooth;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.smooth = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.smooth = objField.value;
+                });
+            }
 
             return rootBox;
         }

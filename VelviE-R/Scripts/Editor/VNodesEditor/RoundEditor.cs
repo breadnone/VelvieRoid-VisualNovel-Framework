@@ -4,10 +4,6 @@ using VelvieR;
 using UnityEngine.UIElements;
 using System.Linq;
 
-
-// NOTE to future maintainer, have fun refactoring this -____-
-//I'm the creator, will NEVER revisit this forbidden hell ever again! 
-
 namespace VIEditor
 {
     [CustomEditor(typeof(Round))]
@@ -33,20 +29,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Round up/down : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.roundUp;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.roundUp = x.newValue;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -54,21 +48,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Type : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
 
-            objField.choices = new List<string>{"Float", "Double"};
+            objField.choices = new List<string> { "Float", "Double" };
             objField.value = t.vtype.ToString();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     RemoveChild();
 
-                    if(x.newValue == "Float")
+                    if (x.newValue == "Float")
                     {
                         t.vtype = VTypes.Float;
                         t.variable = null;
@@ -80,14 +73,14 @@ namespace VIEditor
                     }
 
                     dummySlot.Add(DrawVars(t));
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
         private VisualElement DrawVars(Round t)
         {
-            var varTemplate = VUITemplate.VariableTemplate(type:t.vtype);
+            var varTemplate = VUITemplate.VariableTemplate(type: t.vtype);
 
             if (t.variable == null)
             {
@@ -108,32 +101,35 @@ namespace VIEditor
             if (PortsUtils.variable.ivar.Count > 0)
             {
                 var varlist = new List<string>();
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(x.GetVtype() == t.vtype)
-                    varlist.Add(x.Name); 
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (x.GetVtype() == t.vtype)
+                        varlist.Add(x.Name);
                 });
 
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using VelvieR;
@@ -16,14 +15,13 @@ namespace VIEditor
             var t = target as VMenu;
 
             root.style.flexDirection = FlexDirection.Column;
-
             root.Add(DrawMenu(t));
             root.Add(DrawMainText(t));
             root.Add(DrawCustomMenus(t));
             root.Add(DrawRandomBool(t));
             root.Add(DrawContinueBool(t));
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
         private Box DrawMenu(VMenu t)
@@ -63,24 +61,22 @@ namespace VIEditor
             var tmp = root.userData as VisualElement;
             var obj = new TextField();
             tmp.Add(obj);
-
             obj.style.flexDirection = FlexDirection.Column;
             obj.style.overflow = Overflow.Visible;
             obj.style.whiteSpace = WhiteSpace.Normal;
             obj.style.unityOverflowClipBox = OverflowClipBox.ContentBox;
             obj.style.height = 50;
             obj.value = t.MainText;
-
             obj.multiline = true;
             obj.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
-            obj.RegisterCallback<FocusOutEvent>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                obj.RegisterCallback<FocusOutEvent>((x) =>
                 {
                     t.MainText = obj.value;
-                }
-            });
+                });
+            }
 
             return root;
         }
@@ -99,16 +95,15 @@ namespace VIEditor
             var obj = new Toggle();
             obj.style.width = 230;
             box.Add(obj);
-
             obj.value = t.Randomize;
 
-            obj.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                obj.RegisterValueChangedCallback((x) =>
                 {
                     t.Randomize = obj.value;
-                }
-            });
+                });
+            }
 
             return box;
         }
@@ -127,16 +122,15 @@ namespace VIEditor
             var obj = new Toggle();
             obj.style.width = 230;
             box.Add(obj);
-
             obj.value = t.ContinueThisBlock;
 
-            obj.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode)
+                obj.RegisterValueChangedCallback((x) =>
                 {
                     t.ContinueThisBlock = obj.value;
-                }
-            });
+                });
+            }
 
             return box;
         }
@@ -273,24 +267,24 @@ namespace VIEditor
             btnAdd.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             btnAdd.style.height = 20;
 
-            if(!PortsUtils.PlayMode)
+            if (!PortsUtils.PlayMode)
             {
-            btnAdd.clicked += () =>
-            {
-                t.VmenuPools.Add(new VMenuPools());
-                obj.Rebuild();
-            };
+                btnAdd.clicked += () =>
+                {
+                    t.VmenuPools.Add(new VMenuPools());
+                    obj.Rebuild();
+                };
             }
             var btnRem = new Button { text = "REMOVE" };
             btnRem.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             btnRem.style.height = 20;
-            if(!PortsUtils.PlayMode)
+            if (!PortsUtils.PlayMode)
             {
-            btnRem.clicked += () =>
-            {
-                t.VmenuPools.RemoveAt(obj.selectedIndex);
-                obj.Rebuild();
-            };
+                btnRem.clicked += () =>
+                {
+                    t.VmenuPools.RemoveAt(obj.selectedIndex);
+                    obj.Rebuild();
+                };
             }
             btnContainer.Add(btnAdd);
             btnContainer.Add(btnRem);
@@ -397,23 +391,23 @@ namespace VIEditor
                             asList.Add("<None>");
                             txt.choices = asList;
 
-                            txt.RegisterCallback<ChangeEvent<string>>((evt) =>
+                            if (!PortsUtils.PlayMode)
                             {
-                                if (PortsUtils.PlayMode)
-                                    return;
-
-                                var getlist = FindNode(name: evt.newValue);
-                                if (getlist != null)
+                                txt.RegisterCallback<ChangeEvent<string>>((evt) =>
                                 {
-                                    t.VmenuPools[i].vnode = getlist.vnodeProperty.nodeName;
-                                    t.VmenuPools[i].vnodeId = getlist.vnodeProperty.nodeId;
-                                }
-                                else
-                                {
-                                    t.VmenuPools[i].vnode = string.Empty;
-                                    t.VmenuPools[i].vnodeId = string.Empty;
-                                }
-                            });
+                                    var getlist = FindNode(name: evt.newValue);
+                                    if (getlist != null)
+                                    {
+                                        t.VmenuPools[i].vnode = getlist.vnodeProperty.nodeName;
+                                        t.VmenuPools[i].vnodeId = getlist.vnodeProperty.nodeId;
+                                    }
+                                    else
+                                    {
+                                        t.VmenuPools[i].vnode = string.Empty;
+                                        t.VmenuPools[i].vnodeId = string.Empty;
+                                    }
+                                });
+                            }
                         }
                     }
                     else if (child.name == "menuExclude")
@@ -441,17 +435,20 @@ namespace VIEditor
                             asexc.value = asexc.choices[1];
                         }
 
-                        asexc.RegisterCallback<ChangeEvent<string>>((evt) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if ((string)evt.newValue == "Selected")
+                            asexc.RegisterCallback<ChangeEvent<string>>((evt) =>
                             {
-                                t.VmenuPools[i].exclude = true;
-                            }
-                            else
-                            {
-                                t.VmenuPools[i].exclude = false;
-                            }
-                        });
+                                if ((string)evt.newValue == "Selected")
+                                {
+                                    t.VmenuPools[i].exclude = true;
+                                }
+                                else
+                                {
+                                    t.VmenuPools[i].exclude = false;
+                                }
+                            });
+                        }
                     }
                     else if (child.name == "menuGraph")
                     {
@@ -488,20 +485,23 @@ namespace VIEditor
                             t.VmenuPools[i].vnodeId = string.Empty;
                         }
 
-                        tb.RegisterCallback<ChangeEvent<string>>((evt) =>
+                        if (!PortsUtils.PlayMode)
                         {
-                            if (evt.newValue != "<None>")
+                            tb.RegisterCallback<ChangeEvent<string>>((evt) =>
                             {
-                                t.VmenuPools[i].vgraph = Array.Find(instMenu, x => x.vcorename == (string)evt.newValue);
-                            }
-                            else
-                            {
-                                t.VmenuPools[i].vnode = string.Empty;
-                                t.VmenuPools[i].vnodeId = string.Empty;
-                            }
+                                if (evt.newValue != "<None>")
+                                {
+                                    t.VmenuPools[i].vgraph = Array.Find(instMenu, x => x.vcorename == (string)evt.newValue);
+                                }
+                                else
+                                {
+                                    t.VmenuPools[i].vnode = string.Empty;
+                                    t.VmenuPools[i].vnodeId = string.Empty;
+                                }
 
-                            RePoolJumpsAndNodes(e, i, t);
-                        });
+                                RePoolJumpsAndNodes(e, i, t);
+                            });
+                        }
                     }
                 }
             }

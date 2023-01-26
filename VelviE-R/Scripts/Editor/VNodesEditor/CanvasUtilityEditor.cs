@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -62,7 +60,7 @@ namespace VIEditor
                 dummy.Add(DrawEnumRenderMode(t));
             }
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
 
@@ -70,18 +68,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Canvas : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Canvas);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.canvas;
-            objField.RegisterValueChangedCallback((x) =>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.canvas = objField.value as Canvas;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.canvas = objField.value as Canvas;
+                });
+            }
 
             return rootBox;
         }
@@ -94,66 +94,70 @@ namespace VIEditor
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.canvasUtil.ToString();
-            objField.choices = Enum.GetNames(typeof(Canvasutilityv)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x) =>
+
+            if (!PortsUtils.PlayMode)
             {
-                foreach (var venum in Enum.GetValues(typeof(Canvasutilityv)))
+                objField.choices = Enum.GetNames(typeof(Canvasutilityv)).ToList();
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    var asetype = (Canvasutilityv)venum;
-
-                    if (x.newValue == asetype.ToString())
+                    foreach (var venum in Enum.GetValues(typeof(Canvasutilityv)))
                     {
-                        t.canvasUtil = asetype;
-                    }
+                        var asetype = (Canvasutilityv)venum;
 
-                    if (x.newValue == Canvasutilityv.SetResolution.ToString())
-                    {
-                        if (dummy.childCount > 0)
+                        if (x.newValue == asetype.ToString())
                         {
-                            foreach (var child in dummy.Children().ToList())
-                            {
-                                child.RemoveFromHierarchy();
-                            }
+                            t.canvasUtil = asetype;
                         }
 
-                        dummy.Add(DrawRectVector(t));
-                    }
-                    else if (x.newValue == Canvasutilityv.SetSortOder.ToString())
-                    {
-                        if (dummy.childCount > 0)
+                        if (x.newValue == Canvasutilityv.SetResolution.ToString())
                         {
-                            foreach (var child in dummy.Children().ToList())
+                            if (dummy.childCount > 0)
                             {
-                                child.RemoveFromHierarchy();
+                                foreach (var child in dummy.Children().ToList())
+                                {
+                                    child.RemoveFromHierarchy();
+                                }
                             }
-                        }
 
-                        dummy.Add(DrawOrder(t));
-                    }
-                    else if(x.newValue == Canvasutilityv.SetRenderMode.ToString())
-                    {
-                        if (dummy.childCount > 0)
-                        {
-                            foreach (var child in dummy.Children().ToList())
-                            {
-                                child.RemoveFromHierarchy();
-                            }
+                            dummy.Add(DrawRectVector(t));
                         }
+                        else if (x.newValue == Canvasutilityv.SetSortOder.ToString())
+                        {
+                            if (dummy.childCount > 0)
+                            {
+                                foreach (var child in dummy.Children().ToList())
+                                {
+                                    child.RemoveFromHierarchy();
+                                }
+                            }
 
-                        dummy.Add(DrawEnumRenderMode(t));
-                    }
-                    else
-                    {
-                        if (dummy.childCount > 0)
+                            dummy.Add(DrawOrder(t));
+                        }
+                        else if (x.newValue == Canvasutilityv.SetRenderMode.ToString())
                         {
-                            foreach (var child in dummy.Children().ToList())
+                            if (dummy.childCount > 0)
                             {
-                                child.RemoveFromHierarchy();
+                                foreach (var child in dummy.Children().ToList())
+                                {
+                                    child.RemoveFromHierarchy();
+                                }
+                            }
+
+                            dummy.Add(DrawEnumRenderMode(t));
+                        }
+                        else
+                        {
+                            if (dummy.childCount > 0)
+                            {
+                                foreach (var child in dummy.Children().ToList())
+                                {
+                                    child.RemoveFromHierarchy();
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -161,7 +165,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("ScreenResolution : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Vector2Field();
             objField.style.width = field.style.width;
             field.Add(objField);
@@ -177,13 +180,16 @@ namespace VIEditor
                 objField.value = t.resolution;
             }
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (x.newValue != Vector2.zero)
-                    t.resolution = x.newValue;
-                else
-                    t.resolution = Handles.GetMainGameViewSize();
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    if (x.newValue != Vector2.zero)
+                        t.resolution = x.newValue;
+                    else
+                        t.resolution = Handles.GetMainGameViewSize();
+                });
+            }
 
             return rootBox;
         }
@@ -195,12 +201,15 @@ namespace VIEditor
             var objField = new IntegerField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.order;
-            objField.RegisterValueChangedCallback((x) =>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.order = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.order = x.newValue;
+                });
+            }
 
             return rootBox;
         }
@@ -209,24 +218,27 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Set canvas : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.renderMode.ToString();
-            objField.choices = Enum.GetNames(typeof(RenderMode)).ToList();
-            objField.RegisterCallback<ChangeEvent<string>>((x) =>
-            {
-                foreach (var venum in Enum.GetValues(typeof(RenderMode)))
-                {
-                    var asetype = (RenderMode)venum;
 
-                    if (x.newValue == asetype.ToString())
+            if (!PortsUtils.PlayMode)
+            {
+                objField.choices = Enum.GetNames(typeof(RenderMode)).ToList();
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
+                {
+                    foreach (var venum in Enum.GetValues(typeof(RenderMode)))
                     {
-                        t.renderMode = asetype;
+                        var asetype = (RenderMode)venum;
+
+                        if (x.newValue == asetype.ToString())
+                        {
+                            t.renderMode = asetype;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

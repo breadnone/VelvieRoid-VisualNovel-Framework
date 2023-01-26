@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -14,7 +11,7 @@ namespace VIEditor
         public override VisualElement CreateInspectorGUI()
         {
             var t = target as WaitSeconds;
-            
+
             var root = new VisualElement();
             root.style.flexDirection = FlexDirection.Column;
 
@@ -35,9 +32,9 @@ namespace VIEditor
             objSeconds.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             objSeconds.value = t.Seconds;
 
-            if(!PortsUtils.PlayMode)
+            if (!PortsUtils.PlayMode)
             {
-                objSeconds.RegisterValueChangedCallback((x)=>
+                objSeconds.RegisterValueChangedCallback((x) =>
                 {
                     t.Seconds = objSeconds.value;
                 });
@@ -59,17 +56,20 @@ namespace VIEditor
             objScale.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             objScale.value = t.UnscaledTime;
 
-            objScale.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.UnscaledTime = objScale.value;
-            });
+                objScale.RegisterValueChangedCallback((x) =>
+                {
+                    t.UnscaledTime = objScale.value;
+                });
+            }
 
             boxTwo.Add(lblScale);
             boxTwo.Add(objScale);
             root.Add(boxTwo);
 
             //Always add this at the end!
-            VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
+            VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
             return root;
         }
     }

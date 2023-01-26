@@ -45,32 +45,35 @@ namespace VIEditor
             if (PortsUtils.variable.ivar.Count > 0)
             {
                 var varlist = new List<string>();
-                PortsUtils.variable.ivar.ForEach((x) => 
-                { 
-                    if(x.GetVtype() == VTypes.Integer)
-                        varlist.Add(x.Name); 
+                PortsUtils.variable.ivar.ForEach((x) =>
+                {
+                    if (x.GetVtype() == VTypes.Integer)
+                        varlist.Add(x.Name);
                 });
 
                 varlist.Add("<None>");
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -78,17 +81,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Min : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new IntegerField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.min;
-            
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.min = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.min = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -96,17 +100,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Max : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new IntegerField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.max;
-            
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.max = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.max = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -114,17 +119,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Shuffle : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.shuffle;
-            
-            objField.RegisterValueChangedCallback((x)=>
+
+            if (!PortsUtils.PlayMode)
             {
-                t.shuffle = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.shuffle = objField.value;
+                });
+            }
 
             return rootBox;
         }

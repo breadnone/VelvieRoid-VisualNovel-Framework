@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System;
 using VelvieR;
 using VIEditor;
 
@@ -24,29 +20,29 @@ public class JumpEditor : Editor
         boxJump.style.flexDirection = FlexDirection.Row;
 
         Label strJump = new Label();
-        strJump.style.width = 120;
+        strJump.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
         strJump.style.marginLeft = 5;
         strJump.text = "VGraph : ";
         boxJump.Add(strJump);
 
         var auJump = new ObjectField();
-        auJump.style.width = 210;
+        auJump.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
         auJump.objectType = typeof(VCoreUtil);
         boxJump.Add(auJump);
 
         if (t.VGraph != null)
             auJump.value = t.VGraph;
 
-        auJump.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if(!PortsUtils.PlayMode)
+            auJump.RegisterValueChangedCallback((x) =>
             {
                 if (auJump.value != null)
                     t.VGraph = auJump.value as VCoreUtil;
                 else
                     t.VGraph = null;
-            }
-        });
+            });
+        }
 
         //Jump String
         var boxSStrJump = new Box();
@@ -67,21 +63,21 @@ public class JumpEditor : Editor
         if (t.VGraph != null)
             auStrJump.value = t.JumpsToLabel;
 
-        auStrJump.RegisterValueChangedCallback((x) =>
+        if (!PortsUtils.PlayMode)
         {
-            if(!PortsUtils.PlayMode)
+            auStrJump.RegisterValueChangedCallback((x) =>
             {
                 if (auStrJump.value != null)
                     t.JumpsToLabel = auStrJump.value;
                 else
                     t.JumpsToLabel = null;
-            }
-        });
+            });
+        }
 
         myInspector.Add(boxJump);
         myInspector.Add(boxSStrJump);
         //Always add this at the end!
-        VUITemplate.DrawSummary(myInspector, t, ()=> t.OnVSummary());
+        VUITemplate.DrawSummary(myInspector, t, () => t.OnVSummary());
         return myInspector;
     }
 }

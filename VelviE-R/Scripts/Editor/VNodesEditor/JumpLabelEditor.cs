@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
 using VIEditor;
@@ -42,22 +38,22 @@ public class JumpLabelEditor : Editor
         if (!String.IsNullOrEmpty(t.Label))
             auStrJump.value = t.Label;
 
-            if(!PortsUtils.PlayMode)
-            {
-        auStrJump.RegisterCallback<FocusOutEvent>((x)=>
+        if (!PortsUtils.PlayMode)
         {
+            auStrJump.RegisterCallback<FocusOutEvent>((x) =>
+            {
                 if (auStrJump.value != null)
                     t.Label = auStrJump.value;
                 else
                     t.Label = null;
-                
+
                 WarningCheck(t);
-        });
-            }
+            });
+        }
         myInspector.Add(boxSStrJump);
 
         //Always add this at the end!
-        VUITemplate.DrawSummary(myInspector, t, ()=> t.OnVSummary());
+        VUITemplate.DrawSummary(myInspector, t, () => t.OnVSummary());
         return myInspector;
     }
     private void WarningCheck(JumpLabel t)
@@ -65,6 +61,6 @@ public class JumpLabelEditor : Editor
         int currentIndex = PortsUtils.VGraph.listV.selectedIndex;
         PortsUtils.VGraph.RefreshListV();
         PortsUtils.VGraph.listV.SetSelection(currentIndex);
-        PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();        
+        PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();
     }
 }

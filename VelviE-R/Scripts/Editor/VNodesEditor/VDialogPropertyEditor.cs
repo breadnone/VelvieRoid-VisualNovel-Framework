@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -46,13 +43,13 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Vdialog : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(VelvieDialogue);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.vdialog;
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -75,13 +72,13 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Write indicator : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
 
             if (t.vdialog != null)
                 objField.value = t.writeIndicatorString;
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -97,7 +94,7 @@ namespace VIEditor
             //Enum slot writing speed
 
             root.child.value = t.textSpeed.ToString();
-            
+
             if (!PortsUtils.PlayMode)
             {
                 root.child.RegisterValueChangedCallback(x =>
@@ -106,7 +103,7 @@ namespace VIEditor
 
                     foreach (var numsVals in enumss)
                     {
-                        if(numsVals == null)
+                        if (numsVals == null)
                             continue;
 
                         if (numsVals.ToString() == x.newValue)
@@ -124,15 +121,14 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Show effect : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.choices = Enum.GetNames(typeof(ShowHideEffect)).ToList();
 
             if (t.vdialog != null)
                 objField.value = t.showEffect.ToString();
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -155,15 +151,14 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Dialog type : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.choices = Enum.GetNames(typeof(DialogType)).ToList();
 
             if (t.vdialog != null)
                 objField.value = t.dialogType.ToString();
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -186,13 +181,13 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Enable write indic : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
 
             if (t.vdialog != null)
                 objField.value = t.enableWritingIndicator;
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -203,19 +198,20 @@ namespace VIEditor
                     }
                 });
             }
+
             return rootBox;
         }
         private VisualElement DrawSetAsDefault(VDialogProperty t)
         {
             var rootBox = VUITemplate.GetTemplate("Set as default : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
 
             if (t.vdialog != null)
                 objField.value = t.setThisAsdefaultDialog;
+
             if (!PortsUtils.PlayMode)
             {
                 objField.RegisterValueChangedCallback((x) =>
@@ -226,6 +222,7 @@ namespace VIEditor
                     }
                 });
             }
+
             return rootBox;
         }
     }

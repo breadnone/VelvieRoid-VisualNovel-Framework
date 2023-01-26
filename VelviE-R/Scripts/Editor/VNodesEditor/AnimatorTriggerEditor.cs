@@ -2,10 +2,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using VelvieR;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace VIEditor
@@ -19,7 +15,7 @@ namespace VIEditor
             var t = target as AnimatorTrigger;
             root.Add(DrawObj(t));
             root.Add(DrawParam(t));
-            
+
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, t.OnVSummary);
             return root;
@@ -29,16 +25,18 @@ namespace VIEditor
             var rootBox = VUITemplate.GetTemplate("Animator : ");
             var field = VUITemplate.GetField(rootBox);
             var objField = new ObjectField();
-
             objField.objectType = typeof(Animator);
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.animator;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.animator = objField.value as Animator;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animator = objField.value as Animator;
+                });
+            }
 
             return rootBox;
         }
@@ -51,10 +49,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.parameter;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.parameter = x.newValue;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.parameter = x.newValue;
+                });
+            }
 
             return rootBox;
         }

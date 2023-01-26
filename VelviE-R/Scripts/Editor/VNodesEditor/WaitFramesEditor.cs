@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -14,7 +11,6 @@ namespace VIEditor
         public override VisualElement CreateInspectorGUI()
         {
             var t = target as WaitFrames;
-            
             var root = new VisualElement();
             root.style.flexDirection = FlexDirection.Column;
 
@@ -46,6 +42,7 @@ namespace VIEditor
             box.Add(lblSeconds);
             box.Add(visCon);
             root.Add(box);
+            
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, ()=> t.OnVSummary());
             return root;

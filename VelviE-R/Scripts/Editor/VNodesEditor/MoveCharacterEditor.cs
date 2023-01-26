@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VelvieR;
 using UnityEditor;
@@ -557,15 +555,18 @@ namespace VIEditor
             tbMenu.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
             tbMenu.text = t.EaseType.ToString();
 
-            foreach (var mvtype in Enum.GetValues(typeof(LeanTweenType)))
+            if (!PortsUtils.PlayMode)
             {
-                var astype = (LeanTweenType)mvtype;
-                tbMenu.menu.AppendAction(astype.ToString(), (x) =>
+                foreach (var mvtype in Enum.GetValues(typeof(LeanTweenType)))
                 {
-                    tbMenu.text = astype.ToString();
-                    t.EaseType = astype;
-                    PortsUtils.SetActiveAssetDirty();
-                });
+                    var astype = (LeanTweenType)mvtype;
+                    tbMenu.menu.AppendAction(astype.ToString(), (x) =>
+                    {
+                        tbMenu.text = astype.ToString();
+                        t.EaseType = astype;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                }
             }
 
             box.Add(lbl);
@@ -585,32 +586,34 @@ namespace VIEditor
                 root.child.value = "<None>";
 
             }
-
-            root.child.RegisterCallback<ChangeEvent<string>>((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
+                root.child.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    t.MainStage = null;
-                    t.FromStage = null;
-                    t.ToStage = null;
-                    tbm.SetEnabled(false);
-                    tbmTo.SetEnabled(false);
-                    toEl.SetEnabled(false);
-                    fromEl.SetEnabled(false);
-                    ShufflingMenu(t);
-                }
-                else
-                {
-                    var stages = VEditorFunc.EditorGetVStageUtils();
-                    t.MainStage = Array.Find(stages, xx => xx.vstageName == x.newValue);
-                    tbm.SetEnabled(true);
-                    tbmTo.SetEnabled(true);
-                    toEl.SetEnabled(true);
-                    fromEl.SetEnabled(true);
-                    PortsUtils.SetActiveAssetDirty();
-                    ShufflingMenu(t);
-                }
-            });
+                    if (String.IsNullOrEmpty(x.newValue) || x.newValue == "<None>")
+                    {
+                        t.MainStage = null;
+                        t.FromStage = null;
+                        t.ToStage = null;
+                        tbm.SetEnabled(false);
+                        tbmTo.SetEnabled(false);
+                        toEl.SetEnabled(false);
+                        fromEl.SetEnabled(false);
+                        ShufflingMenu(t);
+                    }
+                    else
+                    {
+                        var stages = VEditorFunc.EditorGetVStageUtils();
+                        t.MainStage = Array.Find(stages, xx => xx.vstageName == x.newValue);
+                        tbm.SetEnabled(true);
+                        tbmTo.SetEnabled(true);
+                        toEl.SetEnabled(true);
+                        fromEl.SetEnabled(true);
+                        PortsUtils.SetActiveAssetDirty();
+                        ShufflingMenu(t);
+                    }
+                });
+            }
 
             return root.root;
         }

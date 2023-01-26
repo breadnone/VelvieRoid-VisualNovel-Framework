@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using System;
 using VelvieR;
 
 namespace VIEditor
@@ -32,16 +29,19 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Zoom value : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
+
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.to;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.to = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.to = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -49,16 +49,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.duration;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -66,16 +68,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Animate : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.animate;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.animate = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.animate = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -83,16 +87,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -100,17 +106,19 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Camera : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(Camera);
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.cam;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.cam = objField.value as Camera;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.cam = objField.value as Camera;
+                });
+            }
 
             return rootBox;
         }

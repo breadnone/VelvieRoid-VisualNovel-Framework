@@ -18,7 +18,7 @@ namespace VIEditor
         {
             var root = new VisualElement();
             var t = target as DoubleToString;
-            
+
             root.Add(DrawVars(t));
             root.Add(DrawObject(t));
             root.Add(DrawType(t));
@@ -26,13 +26,12 @@ namespace VIEditor
 
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, () => t.OnVSummary());
-            return root; 
+            return root;
         }
         private VisualElement DrawObject(DoubleToString t)
         {
             var rootBox = VUITemplate.GetTemplate("Text component : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(TMP_Text);
             objField.allowSceneObjects = true;
@@ -40,10 +39,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.text;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.text = objField.value as TMP_Text;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.text = objField.value as TMP_Text;
+                });
+            }
 
             return rootBox;
         }
@@ -51,16 +53,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Append text : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new TextField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.appendText;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.appendText = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.appendText = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -93,22 +97,25 @@ namespace VIEditor
                 varTemplate.child.choices = varlist;
             }
 
-            varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
+            if (!PortsUtils.PlayMode)
             {
-                if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
+                varTemplate.child.RegisterCallback<ChangeEvent<string>>((evt) =>
                 {
-                    if (evt.newValue == "<None>")
+                    if (!PortsUtils.PlayMode && PortsUtils.variable.ivar.Count > 0)
                     {
-                        t.variable = null;
-                        PortsUtils.SetActiveAssetDirty();
+                        if (evt.newValue == "<None>")
+                        {
+                            t.variable = null;
+                            PortsUtils.SetActiveAssetDirty();
+                        }
+                        else
+                        {
+                            t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
+                            PortsUtils.SetActiveAssetDirty();
+                        }
                     }
-                    else
-                    {
-                        t.variable = PortsUtils.variable.ivar.Find(x => x.Name == evt.newValue);
-                        PortsUtils.SetActiveAssetDirty();
-                    }
-                }
-            });
+                });
+            }
 
             return varTemplate.root;
         }
@@ -116,27 +123,29 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("PrefixSuffix : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
             field.Add(objField);
-
-            objField.choices = Enum.GetNames(typeof(PrefixSuffix)).ToList();
             objField.value = t.prefixType.ToString();
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
-                {
-                    foreach(var vals in Enum.GetValues(typeof(PrefixSuffix)))
-                    {
-                        var astype = (PrefixSuffix)vals;
+                objField.choices = Enum.GetNames(typeof(PrefixSuffix)).ToList();
 
-                        if(astype.ToString() == x.newValue)
-                            t.prefixType = astype;
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    if (!PortsUtils.PlayMode)
+                    {
+                        foreach (var vals in Enum.GetValues(typeof(PrefixSuffix)))
+                        {
+                            var astype = (PrefixSuffix)vals;
+
+                            if (astype.ToString() == x.newValue)
+                                t.prefixType = astype;
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

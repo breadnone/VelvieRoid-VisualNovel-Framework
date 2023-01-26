@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using System;
 using UnityEditor.UIElements;
 using VelvieR;
-using System.Linq;
 
 namespace VIEditor
 {
@@ -29,7 +25,6 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Object to destroy : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(GameObject);
             objField.allowSceneObjects = true;
@@ -37,26 +32,33 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.targetObject;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.targetObject = objField.value as GameObject;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.targetObject = objField.value as GameObject;
+                });
+            }
+            
             return rootBox;
         }
         private VisualElement DrawDelay(Destroy t)
         {
             var rootBox = VUITemplate.GetTemplate("Delay in seconds : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.destroyAfter;
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.destroyAfter = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.destroyAfter = objField.value;
+                });
+            }
+
             return rootBox;
         }
     }

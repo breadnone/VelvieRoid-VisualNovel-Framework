@@ -27,19 +27,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Slider : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(UnityEngine.UI.Slider);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
             field.Add(objField);
-
             objField.value = t.slider;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.slider = objField.value as UnityEngine.UI.Slider;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.slider = objField.value as UnityEngine.UI.Slider;
+                });
+            }
 
             return rootBox;
         }
@@ -47,16 +48,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Typewriter : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.isTypewriter;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.isTypewriter = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.isTypewriter = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -64,16 +67,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaitUntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.waitUntilFinished;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.waitUntilFinished = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.waitUntilFinished = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -81,16 +86,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Lerp : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.lerp;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.lerp = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.lerp = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -98,16 +105,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
             field.Add(objField);
             objField.value = t.duration;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.duration = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.duration = objField.value;
+                });
+            }
 
             return rootBox;
         }
@@ -121,10 +130,13 @@ namespace VIEditor
             field.Add(objField);
             objField.value = t.value;
 
-            objField.RegisterValueChangedCallback((x) =>
+            if (!PortsUtils.PlayMode)
             {
-                t.value = objField.value;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.value = objField.value;
+                });
+            }
 
             return rootBox;
         }

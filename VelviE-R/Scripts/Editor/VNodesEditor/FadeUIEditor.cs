@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -29,7 +27,6 @@ namespace VIEditor
             root.Add(DrawEnableOnStart(t));
             root.Add(DrawDisableOnFinished(t));
 
-
             //Always add this at the end!
             VUITemplate.DrawSummary(root, t, t.OnVSummary);
             return root;
@@ -38,19 +35,20 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("UI object : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new ObjectField();
             objField.objectType = typeof(RectTransform);
             objField.allowSceneObjects = true;
             objField.style.width = field.style.width;
+            objField.value = t.rect;
             field.Add(objField);
 
-            objField.value = t.rect;
-
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                t.rect = objField.value as RectTransform;
-            });
+                objField.RegisterValueChangedCallback((x) =>
+                {
+                    t.rect = objField.value as RectTransform;
+                });
+            }
 
             return rootBox;
         }
@@ -58,18 +56,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Fade from : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.fadeFrom;
-            objField.RegisterValueChangedCallback((x)=>
+            field.Add(objField);
+
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.fadeFrom = objField.value;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -77,37 +75,39 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Fade to : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.fadeTo;
-            objField.RegisterValueChangedCallback((x)=>
+            field.Add(objField);
+
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.fadeTo = objField.value;
-                }
-            });
-
+                });
+            }
             return rootBox;
         }
         private VisualElement DrawDuration(FadeUI t)
         {
             var rootBox = VUITemplate.GetTemplate("Duration : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new FloatField();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.duration;
-            objField.RegisterValueChangedCallback((x)=>
+            field.Add(objField);
+
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    t.duration = objField.value;
-                }
-            });
+                    if (!PortsUtils.PlayMode)
+                    {
+                        t.duration = objField.value;
+                    }
+                });
+            }
 
             return rootBox;
         }
@@ -115,18 +115,21 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Loop count : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new IntegerField();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.loopCount;
-            objField.RegisterValueChangedCallback((x)=>
+            field.Add(objField);
+
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
-                    t.loopCount = objField.value;
-                }
-            });
+                    if (!PortsUtils.PlayMode)
+                    {
+                        t.loopCount = objField.value;
+                    }
+                });
+            }
 
             return rootBox;
         }
@@ -134,19 +137,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("WaituntilFinished : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.waitUntilFinished;
+            field.Add(objField);
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.waitUntilFinished = objField.value;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -154,19 +156,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("DisableOnComplete : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.disableOnComplete;
+            field.Add(objField);
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.disableOnComplete = objField.value;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -174,19 +175,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("EnableOnStart : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.enableOnStart;
+            field.Add(objField);
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.enableOnStart = objField.value;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -194,19 +194,18 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("PingPong : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new Toggle();
             objField.style.width = field.style.width;
-            field.Add(objField);
             objField.value = t.pingPong;
+            field.Add(objField);
 
-            objField.RegisterValueChangedCallback((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.RegisterValueChangedCallback((x) =>
                 {
                     t.pingPong = objField.value;
-                }
-            });
+                });
+            }
 
             return rootBox;
         }
@@ -214,30 +213,28 @@ namespace VIEditor
         {
             var rootBox = VUITemplate.GetTemplate("Ease : ");
             var field = VUITemplate.GetField(rootBox);
-
             var objField = new DropdownField();
             objField.style.width = field.style.width;
+            objField.value = t.ease.ToString();
             field.Add(objField);
 
-            objField.value = t.ease.ToString();
-            objField.choices = Enum.GetNames(typeof(LeanTweenType)).ToList();
-
-            objField.RegisterCallback<ChangeEvent<string>>((x)=>
+            if (!PortsUtils.PlayMode)
             {
-                if(!PortsUtils.PlayMode)
+                objField.choices = Enum.GetNames(typeof(LeanTweenType)).ToList();
+
+                objField.RegisterCallback<ChangeEvent<string>>((x) =>
                 {
-                    foreach(var asEnum in Enum.GetValues(typeof(LeanTweenType)))
+                    foreach (var asEnum in Enum.GetValues(typeof(LeanTweenType)))
                     {
                         var asetype = (LeanTweenType)asEnum;
 
-                        if(x.newValue == asetype.ToString())
+                        if (x.newValue == asetype.ToString())
                         {
                             t.ease = asetype;
-     
                         }
                     }
-                }
-            });
+                });
+            }
 
             return rootBox;
         }

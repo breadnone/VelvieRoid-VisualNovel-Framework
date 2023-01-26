@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
@@ -13,7 +12,6 @@ public class CallEditor : Editor
 {
     private ToolbarMenu txtfld;
     private ToolbarMenu objfld;
-    private UnityAction ComboBox;
     private Call thisCall;
     private Label summary;
     public override VisualElement CreateInspectorGUI()
@@ -27,7 +25,6 @@ public class CallEditor : Editor
             t.TriggerId = Guid.NewGuid().ToString() + UnityEngine.Random.Range(0, int.MaxValue);
 
         myInspector.style.flexDirection = FlexDirection.Column;
-
         myInspector.Add(DrawVGraph(t));
         myInspector.Add(DrawVNodeName(t));
         myInspector.Add(DrawContinueState(t));
@@ -93,6 +90,9 @@ public class CallEditor : Editor
         objfld.menu.MenuItems().Clear();
         var loadasset = VEditorFunc.EditorGetVCoreUtils();
 
+        if(PortsUtils.PlayMode)
+            return;
+
         foreach (var loadAset in loadasset)
         {
             objfld.menu.AppendAction(loadAset.vcorename, a =>
@@ -122,11 +122,13 @@ public class CallEditor : Editor
         objField.style.marginLeft = 4;
         objField.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
 
+        if(!PortsUtils.PlayMode)
+        {
         txtfld.RegisterCallback<MouseEnterEvent>((x) =>
         {
-            if(!PortsUtils.PlayMode)
             RePoolNodeComboBox(t);
         });
+        }
 
         //Draw combobox
         RePoolNodeComboBox(t);
@@ -135,6 +137,9 @@ public class CallEditor : Editor
     }
     private void RePoolNodeComboBox(Call t)
     {
+        if(PortsUtils.PlayMode)
+            return;
+
         if (txtfld == null)
             return;
 
@@ -367,10 +372,6 @@ public class CallEditor : Editor
             if (PortsUtils.activeVGraphAssets != null)
                 EditorUtility.SetDirty(PortsUtils.activeVGraphAssets);
         }
-    }
-    public void RepopulateNodesGraphs()
-    {
-        RePoolNodeComboBox(thisCall);
     }
 
     private void PersistentInvoker(Call t)
