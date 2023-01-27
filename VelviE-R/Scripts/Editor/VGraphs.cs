@@ -25,7 +25,7 @@ namespace VIEditor
         {
             if (evt.ctrlKey && !vHold)
             {
-                Debug.Log("CTRL RELEASED!!!");
+                //Debug.Log("CTRL RELEASED!!!");
                 ctrlHold = false;
                 vHold = false;
                 cHold = false;
@@ -90,7 +90,7 @@ namespace VIEditor
                 }
 
                 copiedNodes = null;
-                Debug.Log("RESETS COPY/PASTE STATES!");
+                //Debug.Log("RESETS COPY/PASTE STATES!");
             }
 
             evt.StopImmediatePropagation();
@@ -100,13 +100,13 @@ namespace VIEditor
             if (evt.keyCode == KeyCode.V && ctrlHold)
             {
                 vHold = true;
-                Debug.Log("V PRESSED!");
+                //Debug.Log("V PRESSED!");
             }
 
             if (evt.ctrlKey)
             {
                 ctrlHold = true;
-                Debug.Log("CTRL PRESSED!");
+               //Debug.Log("CTRL PRESSED!");
             }
 
             if (evt.keyCode == KeyCode.C && ctrlHold)
@@ -117,7 +117,7 @@ namespace VIEditor
                     var tmpLis = listV.selectedItems.ToList();
                     copiedNodes = tmpLis.Cast<VelvieBlockComponent>().ToList();
                     cHold = true;
-                    Debug.Log("COPIED!" + copiedNodes.Count);
+                    //Debug.Log("COPIED!" + copiedNodes.Count);
                 }
             }
             //evt.StopImmediatePropagation();
