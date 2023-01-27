@@ -842,9 +842,14 @@ namespace VIEditor
             VEditorFunc.SetUIDynamicSize(listV, 100, true);
             VEditorFunc.SetUIDynamicSize(listV, 100, false);
             listV.focusable = true;
-            listV.RegisterCallback<KeyDownEvent>(CtrlVShortcutHandler, TrickleDown.TrickleDown);
-            listV.RegisterCallback<KeyUpEvent>(CTRLVUp);
             listV.pickingMode = PickingMode.Position;
+
+            if(!PortsUtils.PlayMode)
+            {
+                listV.RegisterCallback<KeyDownEvent>(CtrlVShortcutHandler, TrickleDown.TrickleDown);
+                listV.RegisterCallback<KeyUpEvent>(CTRLVUp);
+            }
+            
         }
         public void ShowSelectedVblockSerializedFields(bool refresh = false)
         {
