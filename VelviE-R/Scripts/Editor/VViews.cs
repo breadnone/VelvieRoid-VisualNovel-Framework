@@ -280,7 +280,6 @@ namespace VIEditor
             txtDescription.value = GetNonDuplicateName(txtDescription.name, vnode: vnode);
 
             vnode.contentContainer.Add(txtDescription);
-            activeVnode = vnode;
             string tmpGuid = Guid.NewGuid().ToString() + (int)UnityEngine.Random.Range(0, int.MaxValue);
 
             VPortsInstance vportinstance = new VPortsInstance
@@ -444,6 +443,5 @@ namespace VIEditor
             var t = new Vector2((vviewRect.width / 2f) - graphView.x, (vviewRect.height / 2f) - graphView.y);
             return t / graphViewScale;
         }
-        public VNodes activeVnode { get; set; }
     }
 }
