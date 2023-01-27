@@ -76,8 +76,8 @@ namespace VIEditor
                                     if (listV.selectedIndex + 1 < listV.itemsSource.Count - 1)
                                         prevIndex = listV.selectedIndex + 1;
 
-                                    AddVBlockLabel(copiedNodes[u].headerValue, copiedNodes[u].vcolor, copiedNodes[u].name, scrollToItem: false, onComplete: () => listV.selectedIndex = prevIndex);
-                                    //vbcom.vblocks.InsertRange(listV.selectedIndex + 1, copiedNodes);
+                                    AddVBlockLabel(copiedNodes[u].headerValue, copiedNodes[u].vcolor, copiedNodes[u].name, scrollToItem: false, onComplete: () => listV.selectedIndex = prevIndex, comToCopy: copiedNodes[u].attachedComponent);
+                                    var g = copiedNodes[u].attachedComponent;
 
                                     if (u == copiedNodes.Count - 1)
                                     {
@@ -317,7 +317,6 @@ namespace VIEditor
                     vt.InsertVNodeComponentMenu(components.headerValue, components.name, components.vcolor);
                 }
             }
-
         }
 
         private GraphViewChange OnGraphChange(GraphViewChange change)
@@ -565,7 +564,7 @@ namespace VIEditor
         }
         //Add VBlock to the inspector's scrollview
         public ListView listV { get; set; } = null;
-        public void AddVBlockLabel(string titleCon, VColor col, string componentName, VNodes playModeNode = null, bool scrollToItem = true, Action onComplete = null)
+        public void AddVBlockLabel(string titleCon, VColor col, string componentName, VNodes playModeNode = null, bool scrollToItem = true, Action onComplete = null, AttachedComponent comToCopy = null)
         {
             if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null)
             {
@@ -588,7 +587,7 @@ namespace VIEditor
                 {
                     if (listV.selectedItem != null)
                     {
-                        vcoreObj = VBlockUtils.AddVBlockComponent(componentName, listV.selectedIndex);
+                        vcoreObj = VBlockUtils.AddVBlockComponent(componentName, listV.selectedIndex, comToCopy);
                         selIndex = listV.selectedIndex;
                     }
                     else

@@ -40,7 +40,7 @@ namespace VIEditor
             return vb;
         }
         //Add vblock component to VGraphContainer gameObject in hierarchy
-        public static VCoreUtil AddVBlockComponent(string strComponent, int? index = null)
+        public static VCoreUtil AddVBlockComponent(string strComponent, int? index = null, AttachedComponent comToCopy = null)
         {
             if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null && !String.IsNullOrEmpty(strComponent))
             {
@@ -51,8 +51,6 @@ namespace VIEditor
                     
                 PortsUtils.activeVObject.AddComponent(getvcomp.monoComponent);
                 var vcoreUtil = PortsUtils.activeVObject.GetComponent<VCoreUtil>();
-                var typeComponent = PortsUtils.activeVObject.GetComponent(getvcomp.monoComponent);
-
                 string nodeNames = null;
 
                 foreach (var nname in PortsUtils.activeVNode.contentContainer.Children())
@@ -108,6 +106,12 @@ namespace VIEditor
                     {
                         lastComponentAdded = allcomps[allcomps.Count - counter];
                     }
+                }
+
+                //Copy/paste functionality only
+                if(comToCopy != null)
+                {
+                    EditorUtility.CopySerialized(comToCopy.component, lastComponentAdded);
                 }
 
                 allcomps[allcomps.Count - counter].hideFlags = HideFlags.HideInInspector;
