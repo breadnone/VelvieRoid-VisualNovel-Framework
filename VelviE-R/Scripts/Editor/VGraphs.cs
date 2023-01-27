@@ -14,6 +14,115 @@ namespace VIEditor
 {
     public class VGraphs : GraphViewEditorWindow
     {
+        private bool ctrlHold = false; private bool vHold = false; private bool cHold = false;
+        private List<VelvieBlockComponent> copiedNodes;
+        private int? copiedIndex;
+
+        //TODO. Unmanaged impl here isn't right by any means. 
+        //Although they're visually correct. Will not bring this up on meeting. *FingerCrossed
+        //Stress testing needed and should not be done like this anyway! 
+        public void CTRLVUp(KeyUpEvent evt)
+        {
+            if (evt.ctrlKey && !vHold)
+            {
+                Debug.Log("CTRL RELEASED!!!");
+                ctrlHold = false;
+                vHold = false;
+                cHold = false;
+            }
+
+            if (evt.keyCode != KeyCode.V || listV.selectedItem == null)
+            {
+                evt.StopImmediatePropagation();
+                return;
+            }
+
+            if (ctrlHold && vHold)
+            {
+                //Ececutes, do something
+
+                //Resets the event
+                ctrlHold = false; vHold = false; cHold = false;
+
+                if (copiedNodes != null && copiedNodes.Count > 0)
+                {
+                    //cast itemSource
+                    var vbcores = VEditorFunc.EditorGetVCoreUtils();
+                    List<VelvieBlockComponent> foundblocks = new List<VelvieBlockComponent>();
+                    Enumerate();
+
+                    void Enumerate()
+                    {
+
+                        VelvieBlockComponent t = null;
+
+                        for (int i = 0; i < vbcores.Length; i++)
+                        {
+                            for (int j = 0; j < vbcores[i].vBlockCores.Count; j++)
+                            {
+                                var vbcom = vbcores[i].vBlockCores[j];
+
+                                for (int u = 0; u < copiedNodes.Count; u++)
+                                {
+                                    if (t == null)
+                                        t = vbcom.vblocks.Find(x => x.vnodeName == copiedNodes[u].vnodeName && x.vnodeId == copiedNodes[u].vnodeId);
+
+                                    if (t == null)
+                                        continue;
+
+                                    var strName = t.attachedComponent.component.GetType().ToString();
+                                    int prevIndex = 0;
+
+                                    if (listV.selectedIndex + 1 < listV.itemsSource.Count - 1)
+                                        prevIndex = listV.selectedIndex + 1;
+
+                                    AddVBlockLabel(copiedNodes[u].headerValue, copiedNodes[u].vcolor, copiedNodes[u].name, scrollToItem: false, onComplete: () => listV.selectedIndex = prevIndex);
+                                    //vbcom.vblocks.InsertRange(listV.selectedIndex + 1, copiedNodes);
+
+                                    if (u == copiedNodes.Count - 1)
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                copiedNodes = null;
+                Debug.Log("RESETS COPY/PASTE STATES!");
+            }
+
+            evt.StopImmediatePropagation();
+        }
+        public void CtrlVShortcutHandler(KeyDownEvent evt)
+        {
+            if (evt.keyCode == KeyCode.V && ctrlHold)
+            {
+                vHold = true;
+                Debug.Log("V PRESSED!");
+            }
+
+            if (evt.ctrlKey)
+            {
+                ctrlHold = true;
+                Debug.Log("CTRL PRESSED!");
+            }
+
+            if (evt.keyCode == KeyCode.C && ctrlHold)
+            {
+                if (listV != null && listV.selectedItems.Count() > 0)
+                {
+                    copiedNodes = new List<VelvieBlockComponent>();
+                    var tmpLis = listV.selectedItems.ToList();
+                    copiedNodes = tmpLis.Cast<VelvieBlockComponent>().ToList();
+                    cHold = true;
+                    Debug.Log("COPIED!" + copiedNodes.Count);
+                }
+            }
+            //evt.StopImmediatePropagation();
+        }
+
         public VViews graphView { get; set; }
         public VToolbars activeVToolbar { get; set; }
         private MiniMap miniMap;
@@ -456,7 +565,7 @@ namespace VIEditor
         }
         //Add VBlock to the inspector's scrollview
         public ListView listV { get; set; } = null;
-        public void AddVBlockLabel(string titleCon, VColor col, string componentName, VNodes playModeNode = null)
+        public void AddVBlockLabel(string titleCon, VColor col, string componentName, VNodes playModeNode = null, bool scrollToItem = true, Action onComplete = null)
         {
             if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null)
             {
@@ -616,21 +725,29 @@ namespace VIEditor
 
                 if (!PortsUtils.PlayMode)
                 {
-                    listV.schedule.Execute(() =>
+                    if (scrollToItem)
                     {
-                        if (selIndex.HasValue)
+                        listV.schedule.Execute(() =>
                         {
-                            listV.SetSelection(selIndex.Value + 1);
-                        }
-                        else
-                        {
-                            listV.SetSelection(listV.itemsSource.Count - 1);
-                        }
+                            if (selIndex.HasValue)
+                            {
+                                listV.SetSelection(selIndex.Value + 1);
+                            }
+                            else
+                            {
+                                listV.SetSelection(listV.itemsSource.Count - 1);
+                            }
 
-                        listV.ScrollToItem(listV.selectedIndex);
-                        PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();
 
-                    }).ExecuteLater(0);
+                            listV.ScrollToItem(listV.selectedIndex);
+
+                            PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();
+
+                        }).ExecuteLater(0);
+                    }
+
+                    if (onComplete != null)
+                        onComplete.Invoke();
                 }
             }
         }
@@ -717,13 +834,17 @@ namespace VIEditor
             listV.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
             listV.showBorder = true;
             listV.selectionType = SelectionType.Multiple;
-            listV.reorderMode = ListViewReorderMode.Animated;
+            listV.reorderMode = ListViewReorderMode.Simple;
             listV.reorderable = true;
             listV.horizontalScrollingEnabled = false;
             listV.style.alignContent = Align.Center;
             listV.style.flexGrow = new StyleFloat(1);
             VEditorFunc.SetUIDynamicSize(listV, 100, true);
             VEditorFunc.SetUIDynamicSize(listV, 100, false);
+            listV.focusable = true;
+            listV.RegisterCallback<KeyDownEvent>(CtrlVShortcutHandler, TrickleDown.TrickleDown);
+            listV.RegisterCallback<KeyUpEvent>(CTRLVUp);
+            listV.pickingMode = PickingMode.Position;
         }
         public void ShowSelectedVblockSerializedFields(bool refresh = false)
         {
