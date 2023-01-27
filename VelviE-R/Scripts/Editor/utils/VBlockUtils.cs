@@ -45,6 +45,10 @@ namespace VIEditor
             if (PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null && !String.IsNullOrEmpty(strComponent))
             {
                 var getvcomp = GetVBlockComponent(strComponent);
+
+                if(PortsUtils.activeVObject == null)
+                    PortsUtils.activeVObject = PortsUtils.FindVGraphObject();
+                    
                 PortsUtils.activeVObject.AddComponent(getvcomp.monoComponent);
                 var vcoreUtil = PortsUtils.activeVObject.GetComponent<VCoreUtil>();
                 var typeComponent = PortsUtils.activeVObject.GetComponent(getvcomp.monoComponent);
