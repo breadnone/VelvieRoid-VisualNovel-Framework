@@ -121,7 +121,6 @@ public class SayWordEditor : Editor
             {
                 tbMenu.value = "<None>";
                 t.Thumbnail = null;
-                EditorUtility.SetDirty(t);
             }
             if (!PortsUtils.PlayMode)
             {
@@ -166,7 +165,6 @@ public class SayWordEditor : Editor
         {
             tbMenu.value = "<None>";
             t.Thumbnail = null;
-            EditorUtility.SetDirty(t);
         }
 
     }
@@ -199,7 +197,6 @@ public class SayWordEditor : Editor
             {
                 tbMenu.value = "<None>";
                 t.Portrait = null;
-                EditorUtility.SetDirty(t);
             }
             if (!PortsUtils.PlayMode)
             {
@@ -244,7 +241,6 @@ public class SayWordEditor : Editor
         {
             tbMenu.value = "<None>";
             t.Portrait = null;
-            EditorUtility.SetDirty(t);
         }
     }
     public Box DrawWaitForClick(SayWord t)
