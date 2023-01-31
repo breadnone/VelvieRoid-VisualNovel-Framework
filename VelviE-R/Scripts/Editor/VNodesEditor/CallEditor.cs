@@ -79,6 +79,7 @@ public class CallEditor : Editor
                 if(!found)
                 {
                     boxGraph.child.value = "<None>";
+                    t.VGraph = null;
                 }
             });
         }
