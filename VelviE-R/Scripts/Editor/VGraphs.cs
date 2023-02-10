@@ -106,7 +106,7 @@ namespace VIEditor
             if (evt.ctrlKey)
             {
                 ctrlHold = true;
-               //Debug.Log("CTRL PRESSED!");
+                //Debug.Log("CTRL PRESSED!");
             }
 
             if (evt.keyCode == KeyCode.C && ctrlHold)
@@ -317,6 +317,15 @@ namespace VIEditor
                     vt.InsertVNodeComponentMenu(components.headerValue, components.name, components.vcolor);
                 }
             }
+
+                if(EditorPrefs.HasKey("v-writer-v-mode") && EditorPrefs.GetBool("v-writer-v-mode"))
+                {
+                    if(writerInspectorBox != null)
+                        writerInspectorBox.RemoveFromHierarchy();
+
+                    PortsUtils.VGraph?.WriterInspector(true);
+                    PortsUtils.MockupIsActive = true;
+                }
         }
 
         private GraphViewChange OnGraphChange(GraphViewChange change)
@@ -511,7 +520,6 @@ namespace VIEditor
                 parentInspectorBox.style.width = new StyleLength(new Length(40, LengthUnit.Percent));
                 parentInspectorBox.name = "parentInspectorBox";
                 rootVisualElement.Add(parentInspectorBox);
-                parentInspectorBox.Add(new ResizableElement());
 
                 var paneTop = new VisualElement();
                 paneTop.style.alignContent = Align.Center;
@@ -843,15 +851,18 @@ namespace VIEditor
             listV.focusable = true;
             listV.pickingMode = PickingMode.Position;
 
-            if(!PortsUtils.PlayMode)
+            if (!PortsUtils.PlayMode)
             {
                 listV.RegisterCallback<KeyDownEvent>(CtrlVShortcutHandler, TrickleDown.TrickleDown);
                 listV.RegisterCallback<KeyUpEvent>(CTRLVUp);
             }
-            
+
         }
         public void ShowSelectedVblockSerializedFields(bool refresh = false)
         {
+            if (PortsUtils.MockupIsActive)
+                return;
+
             if (listV != null && PortsUtils.activeVGraphAssets != null && PortsUtils.activeVNode != null && listV.selectedItem != null)
             {
                 if (inspectorWindow == null)
@@ -1020,6 +1031,61 @@ namespace VIEditor
                     InspectorWindow(new Box());
             }
             PortsUtils.SetActiveAssetDirty();
+        }
+        public VisualElement writerInspectorBox { get; set; }
+        public bool WriterIsActive { get; set; }
+        public void WriterInspector(bool show = true)
+        {
+            WriterIsActive = show;
+
+            if (writerInspectorBox != null)
+            {
+                writerInspectorBox.RemoveFromHierarchy();
+            }
+
+            if (show)
+            {
+                if (inspectorIsActive)
+                    HideInspector();
+
+                if (parentInspectorBox != null)
+                {
+                    parentInspectorBox.RemoveFromHierarchy();
+                    parentInspectorBox = null;
+                }
+
+                writerInspectorBox = new VisualElement();
+                writerInspectorBox.style.flexDirection = FlexDirection.Row;
+                writerInspectorBox.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+                writerInspectorBox.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
+                writerInspectorBox.name = "writerInspectorBox";
+                rootVisualElement.Add(writerInspectorBox);
+
+                var paneLeft = new VisualElement();
+                paneLeft.style.backgroundColor = Color.white;
+                paneLeft.style.alignContent = Align.Center;
+                var paneRight = new VisualElement();
+                paneRight.style.backgroundColor = Color.grey;
+                paneRight.style.alignContent = Align.Center;
+                paneLeft.name = "left";
+                paneRight.name = "right";
+
+                VEditorFunc.SetUIDynamicSize(paneLeft, 100, false);
+                VEditorFunc.SetUIDynamicSize(paneRight, 100, false);
+                VEditorFunc.SetUIDynamicSize(paneLeft, 40, true);
+                VEditorFunc.SetUIDynamicSize(paneRight, 60, true);
+
+                writerInspectorBox.Add(paneLeft);
+                writerInspectorBox.Add(paneRight);
+
+                (VisualElement, VisualElement) objDat = (paneLeft, paneRight);
+                writerInspectorBox.userData = ((VisualElement, VisualElement))objDat;
+
+                paneLeft.Add(VDubTool.DrawWriterTitle());
+                paneLeft.Add(VDubTool.DrawSearchField());
+                paneLeft.Add(VDubTool.MockupElement());
+                paneRight.Add(VDubTool.SplitContainerRightPane());
+            }
         }
     }
 }

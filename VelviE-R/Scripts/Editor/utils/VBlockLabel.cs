@@ -12,6 +12,9 @@ namespace VIEditor
         private bool SetManipulator = false;
         public Label VBlockContent { get; set; }
         public Label VBlockLineNumber { get; set; }
+        public Action WriterDelegate {get;set;}
+        public bool IsWriterMmode {get;set;}
+        public int MockupIndex {get;set;}
         public bool VBlockToggle
         {
             get
@@ -27,7 +30,7 @@ namespace VIEditor
                     vtoggle.value = value;
             }
         }
-        private Toggle vtoggle;
+        public Toggle vtoggle;
         public VBlockLabel(string titleCon, VColor col, int defHeight, int defWidth, int blockCounter, bool manipulator)
         {
             VBlockId = Guid.NewGuid().ToString();
@@ -158,19 +161,37 @@ namespace VIEditor
         {
             if(!PortsUtils.PlayMode)
             {
-                if(PortsUtils.VGraph.listV == null || PortsUtils.VGraph.listV.selectedItem == null && PortsUtils.PlayMode)
-                    return;
-
-                VBlockUtils.activeListVIndex = PortsUtils.VGraph.listV.selectedIndex;
-
-                if (e.button == 1)
+                if(!IsWriterMmode)
                 {
-                    PortsUtils.VGraph.listV.ClearSelection();
-                    PortsUtils.VGraph.listV.SetSelection(VBlockUtils.activeListVIndex);
-                }
+                    if(PortsUtils.VGraph.listV == null || PortsUtils.VGraph.listV.selectedItem == null)
+                        return;
 
-                PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();
+                    VBlockUtils.activeListVIndex = PortsUtils.VGraph.listV.selectedIndex;
+
+                    if (e.button == 1)
+                    {
+                        PortsUtils.VGraph.listV.ClearSelection();
+                        PortsUtils.VGraph.listV.SetSelection(VBlockUtils.activeListVIndex);
+                    }
+
+                    PortsUtils.VGraph?.ShowSelectedVblockSerializedFields();
+                }
+                else
+                {
+                    if(WriterDelegate != null && !VDubTool.MockupIsWriting)
+                    {
+                        WriterDelegate.Invoke();
+                    }
+
+                    if(VDubTool.MockupIsWriting)
+                    {
+                        VDubTool.DubItemList.selectedIndex = MockupIndex;
+                        VDubTool.DubItemList.SetSelection(MockupIndex);
+                        e.StopImmediatePropagation();
+                    }
+                }
             }
+
         }
         public void UnregisterCallB() { this.UnregisterCallback<MouseDownEvent>(RegisterCallB); }
 
@@ -209,6 +230,7 @@ namespace VIEditor
 
                     astype.enable = b;
                 }
+
                 PortsUtils.VGraph.listV.Rebuild();
                 PortsUtils.VGraph.listV.ClearSelection();
             }

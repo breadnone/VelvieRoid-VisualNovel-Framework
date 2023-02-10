@@ -10,6 +10,7 @@ namespace VIEditor
 {
     public class VToolbars
     {
+        public VisualElement MockupElementWindow { get; set; }
         public VGraphs vgraph { get; set; }
         public List<Toolbar> Toolbars = new List<Toolbar>();
         public Toolbar entityToolbar;
@@ -25,9 +26,9 @@ namespace VIEditor
                     if (buttons[i] == null)
                         continue;
 
-                    if(contexts != null && contexts.Count > 0 && contexts[i] != null)
+                    if (contexts != null && contexts.Count > 0 && contexts[i] != null)
                         buttons[i].RemoveManipulator(contexts[i]);
-                        
+
                     buttons[i].RemoveFromHierarchy();
                 }
             }
@@ -88,65 +89,65 @@ namespace VIEditor
                 cntx = new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) =>
                 {
 
-                evt.menu.AppendAction("Set Color/Red", (x) =>
-                {
-                    btn.style.backgroundColor = Color.red;
-                    vgContainer.graphState.entityBackgroundColor = Color.red;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Blue", (x) =>
-                {
-                    btn.style.backgroundColor = Color.blue;
-                    vgContainer.graphState.entityBackgroundColor = Color.blue;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Magenta", (x) =>
-                {
-                    btn.style.backgroundColor = Color.magenta;
-                    vgContainer.graphState.entityBackgroundColor = Color.magenta;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Grey", (x) =>
-                {
-                    btn.style.backgroundColor = Color.grey;
-                    vgContainer.graphState.entityBackgroundColor = Color.grey;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Black", (x) =>
-                {
-                    btn.style.backgroundColor = Color.black;
-                    vgContainer.graphState.entityBackgroundColor = Color.black;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Yellow", (x) =>
-                {
-                    btn.style.backgroundColor = Color.yellow;
-                    vgContainer.graphState.entityBackgroundColor = Color.yellow;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/Green", (x) =>
-                {
-                    btn.style.backgroundColor = Color.green;
-                    vgContainer.graphState.entityBackgroundColor = Color.green;
-                    PortsUtils.SetActiveAssetDirty();
-                });
-                evt.menu.AppendAction("Set Color/White", (x) =>
-                {
-                    btn.style.backgroundColor = Color.white;
-                    vgContainer.graphState.entityBackgroundColor = Color.white;
-                    PortsUtils.SetActiveAssetDirty();
-                });
+                    evt.menu.AppendAction("Set Color/Red", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.red;
+                        vgContainer.graphState.entityBackgroundColor = Color.red;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Blue", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.blue;
+                        vgContainer.graphState.entityBackgroundColor = Color.blue;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Magenta", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.magenta;
+                        vgContainer.graphState.entityBackgroundColor = Color.magenta;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Grey", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.grey;
+                        vgContainer.graphState.entityBackgroundColor = Color.grey;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Black", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.black;
+                        vgContainer.graphState.entityBackgroundColor = Color.black;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Yellow", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.yellow;
+                        vgContainer.graphState.entityBackgroundColor = Color.yellow;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/Green", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.green;
+                        vgContainer.graphState.entityBackgroundColor = Color.green;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
+                    evt.menu.AppendAction("Set Color/White", (x) =>
+                    {
+                        btn.style.backgroundColor = Color.white;
+                        vgContainer.graphState.entityBackgroundColor = Color.white;
+                        PortsUtils.SetActiveAssetDirty();
+                    });
 
-                evt.menu.AppendAction("Delete", (x) =>
-                {
-                    GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
+                    evt.menu.AppendAction("Delete", (x) =>
+                    {
+                        GameObject obj = GameObject.Find(vgContainer.vgraphGOname);
 
-                    if (obj != null)
-                        GameObject.DestroyImmediate(obj);
+                        if (obj != null)
+                            GameObject.DestroyImmediate(obj);
 
-                    box.Remove(btn);
-                    PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
-                });
+                        box.Remove(btn);
+                        PortsUtils.LoadAssets(PortsUtils.activeVGraphAssets, false);
+                    });
 
                 });
             }
@@ -304,10 +305,10 @@ namespace VIEditor
             toolbarTwo.style.backgroundColor = Color.yellow;
 
             var nodeInspectorBtn = new Button();
-            
-            if(!PortsUtils.PlayMode)
+
+            if (!PortsUtils.PlayMode)
             {
-                nodeInspectorBtn.clicked += (() => 
+                nodeInspectorBtn.clicked += (() =>
                 {
                     PortsUtils.VGraph.HideInspector();
                 });
@@ -319,8 +320,8 @@ namespace VIEditor
             toolbarTwo.Add(nodeInspectorBtn);
 
             var minimapBtn = new Button();
-            
-            if(!PortsUtils.PlayMode)
+
+            if (!PortsUtils.PlayMode)
                 minimapBtn.clicked += (() => PortsUtils.VGraph.EnableMinimap());
 
             minimapBtn.style.backgroundColor = Color.blue;
@@ -388,7 +389,7 @@ namespace VIEditor
 
             toolbarTwo.Add(clickableMenu);
             var inventoryMenu = new ToolbarMenu { text = "Create VInventorySystem", variant = ToolbarMenu.Variant.Default };
-            
+
             //TODO disable this for now
             inventoryMenu.SetEnabled(false);
             inventoryMenu.style.backgroundColor = Color.green;
@@ -401,7 +402,7 @@ namespace VIEditor
 
             toolbarTwo.Add(inventoryMenu);
             var questMenu = new ToolbarMenu { text = "Create VQuestSystem", variant = ToolbarMenu.Variant.Default };
-            
+
             //TODO disable this for now
             questMenu.SetEnabled(false);
             questMenu.style.backgroundColor = Color.green;
@@ -426,41 +427,59 @@ namespace VIEditor
             toolbarThree.style.backgroundColor = Color.gray;
 
             var addVNode = new Button();
-            
-            if(!PortsUtils.PlayMode)
-                addVNode.clicked += (() => VGraphUtil.CreateVGraph());
-            
-            VEditorFunc.SetUIDynamicSize(addVNode, 10, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(addVNode, 100, isWidth:false);
+
+            if (!PortsUtils.PlayMode)
+            {
+                addVNode.clicked += (() => 
+                {
+                    if (EditorPrefs.HasKey("v-writer-slowMode") && EditorPrefs.GetBool("v-writer-slowMode"))
+                    {
+                        return;
+                    }
+
+                    VGraphUtil.CreateVGraph();
+                });
+            }
+
+            VEditorFunc.SetUIDynamicSize(addVNode, 10, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(addVNode, 100, isWidth: false);
             addVNode.style.backgroundColor = Color.grey;
             addVNode.text = "ADD VGraph";
             toolbarThree.Add(addVNode);
 
             var addvnodeTool = new Button();
-            
-            if(!PortsUtils.PlayMode)
+
+            if (!PortsUtils.PlayMode)
                 addvnodeTool.clicked += AddVNode;
 
-            VEditorFunc.SetUIDynamicSize(addvnodeTool, 10, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(addvnodeTool, 100, isWidth:false);
+            VEditorFunc.SetUIDynamicSize(addvnodeTool, 10, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(addvnodeTool, 100, isWidth: false);
             addvnodeTool.style.backgroundColor = Color.grey;
             addvnodeTool.text = "+ VNode";
             toolbarThree.Add(addvnodeTool);
 
             var delvnodeTool = new Button();
-            
-            if(!PortsUtils.PlayMode)
-                delvnodeTool.clicked += () => PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion");
-            
-            VEditorFunc.SetUIDynamicSize(delvnodeTool, 10, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(delvnodeTool, 100, isWidth:false);
+
+            if (!PortsUtils.PlayMode)
+                delvnodeTool.clicked += () => 
+                {
+                    if (EditorPrefs.HasKey("v-writer-slowMode") && EditorPrefs.GetBool("v-writer-slowMode"))
+                    {
+                        return;
+                    }
+
+                    PortsUtils.VGraph?.graphView?.DeleteSelectedVNodes("singleDeletion");
+                };
+
+            VEditorFunc.SetUIDynamicSize(delvnodeTool, 10, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(delvnodeTool, 100, isWidth: false);
             delvnodeTool.style.backgroundColor = Color.grey;
             delvnodeTool.text = "- VNode";
             toolbarThree.Add(delvnodeTool);
 
             var toolbarSearchField = new ToolbarSearchField();
-            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 20, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 100, isWidth:false);
+            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 20, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(toolbarSearchField, 100, isWidth: false);
             toolbarSearchField.style.cursor = default(UnityEngine.UIElements.Cursor);
 
             if (!PortsUtils.PlayMode)
@@ -477,8 +496,8 @@ namespace VIEditor
 
             toolbarThree.Add(toolbarSearchField);
             var variableBtn = new Button();
-            VEditorFunc.SetUIDynamicSize(variableBtn, 17, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(variableBtn, 100, isWidth:false);
+            VEditorFunc.SetUIDynamicSize(variableBtn, 10, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(variableBtn, 100, isWidth: false);
 
             if (!PortsUtils.PlayMode)
             {
@@ -496,13 +515,13 @@ namespace VIEditor
                 };
             }
 
-            variableBtn.text = "Variable Drawer";
+            variableBtn.text = "Drawer";
             variableBtn.style.backgroundColor = Color.grey;
             toolbarThree.Add(variableBtn);
 
             var bwBtn = new Button();
-            VEditorFunc.SetUIDynamicSize(bwBtn, 17, isWidth:true);
-            VEditorFunc.SetUIDynamicSize(bwBtn, 100, isWidth:false);
+            VEditorFunc.SetUIDynamicSize(bwBtn, 10, isWidth: true);
+            VEditorFunc.SetUIDynamicSize(bwBtn, 100, isWidth: false);
 
             if (!PortsUtils.PlayMode)
             {
@@ -520,9 +539,44 @@ namespace VIEditor
                 };
             }
 
-            bwBtn.text = "Background Scheduler";
+            bwBtn.text = "Scheduler";
             bwBtn.style.backgroundColor = Color.grey;
             toolbarThree.Add(bwBtn);
+
+            var dropDmenu = new DropdownField();
+            dropDmenu.value = "NormalMode";
+            dropDmenu.choices = new List<string> { "NormalMode", "VN_Mode" };
+            toolbarThree.Add(dropDmenu);
+
+            if (EditorPrefs.HasKey("v-writer-v-mode") && EditorPrefs.GetBool("v-writer-v-mode"))
+            {
+                dropDmenu.value = "VN_Mode";
+                nodeInspectorBtn.SetEnabled(false);
+                PortsUtils.MockupIsActive = true;
+            }
+
+            if (!PortsUtils.PlayMode)
+            {
+                dropDmenu.RegisterValueChangedCallback(x =>
+                {
+                    if (x.newValue == "NormalMode")
+                    {
+                        nodeInspectorBtn.SetEnabled(true);
+                        EditorPrefs.SetBool("v-writer-v-mode", false);
+                        PortsUtils.VGraph?.WriterInspector(false);
+                        PortsUtils.MockupIsActive = false;
+                    }
+                    else
+                    {
+                        nodeInspectorBtn.SetEnabled(false);
+                        EditorPrefs.SetBool("v-writer-v-mode", true);
+                        PortsUtils.VGraph?.WriterInspector(true);
+                        PortsUtils.MockupIsActive = true;
+                    }
+                });
+            }
+
+
 
             Toolbars.Add(toolbarThree);
 
@@ -532,7 +586,7 @@ namespace VIEditor
             toolbarFourth.style.borderBottomColor = Color.gray;
             toolbarFourth.style.borderBottomWidth = 5;
             toolbarFourth.style.position = Position.Relative;
-            VEditorFunc.SetUIDynamicSize(toolbarFourth, 17, isWidth:false);
+            VEditorFunc.SetUIDynamicSize(toolbarFourth, 17, isWidth: false);
             toolbarFourth.style.backgroundColor = Color.grey;
             toolbarFourth.name = "toolbarFourth";
             Toolbars.Add(toolbarFourth);

@@ -26,6 +26,7 @@ namespace VIEditor
         private static VelvieBlockComponent GetVBlockComponent(string strComponent)
         {
             VelvieBlockComponent vb = null;
+            
             if (vblockComponents.Count > 0)
             {
                 foreach (var type in vblockComponents)
