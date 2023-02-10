@@ -13,7 +13,7 @@ namespace VIEditor
     {
         private readonly Vector2 defaultNodeSize = new Vector2(100f, 150f);
         private bool copied = false;
-
+        #region ContextMenu
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             if (!PortsUtils.PlayMode)
@@ -21,7 +21,11 @@ namespace VIEditor
                 if (evt.target is GraphView)
                 {
                     evt.menu.AppendAction("Add VNode", (e) => AddVNode("VNode", PortsUtils.VGraph, Vector2.zero, true));
-                    evt.menu.AppendAction("Center", (e) => { viewTransform.position = Vector3.zero; viewTransform.scale = Vector3.one; });
+                    evt.menu.AppendAction("Center", (e) => 
+                    { 
+                        viewTransform.position = Vector3.zero; viewTransform.scale = Vector3.one; 
+                    });
+                    
                     evt.menu.AppendAction("Clear Selection", (e) => ClearSelection());
 
                     evt.menu.AppendAction("Paste", (e) =>
@@ -73,6 +77,7 @@ namespace VIEditor
                 }
             }
         }
+        #endregion
         public void AddCacheToList()
         {
             foreach (var t in selection)

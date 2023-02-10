@@ -27,6 +27,9 @@ static class EditorStartupInit
     {
         if (state.ToString().Equals("EnteredPlayMode"))
         {
+            if(PortsUtils.MockupIsActive && VDubTool.MockupIsWriting)
+                VDubTool.StopVDubtool();
+                
             PortsUtils.LastPlayedVContainer = PortsUtils.activeVGraphAssets;
             PortsUtils.PlayMode = true;
         }
@@ -244,7 +247,9 @@ static class HierarchyMonitor
         bool wasRemoved = false;
         bool wasRenamed = false;
         GameObject renamedGameobject = null;
-        CheckNames();
+
+        if(all != null && all.Length > 0)
+            CheckNames();
 
         void CheckNames()
         {
@@ -279,7 +284,7 @@ static class HierarchyMonitor
             if (vgraphs.Count != all.Length)
             {
                 bool runOnce = false;
-                //it was deleted. Immediately remove VGraphContainer .asset
+
                 for (int i = 0; i < vgraphs.Count; i++)
                 {
                     if (vgraphs[i] == null)

@@ -19,6 +19,7 @@ namespace VIEditor
     /////NOTE : Most editor custom classes are in EditorClassUtils.cs
     public static class PortsUtils
     {
+        public static bool MockupIsActive{get;set;}
         public static VInventory ActiveInventory { get; set; }
         public static VCharacterContainer VCharaContainer { get; set; }
         public static Variables variable { get; set; }

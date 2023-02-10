@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 using System;
-using UnityEngine.Events;
 
 namespace VelvieR
 {
@@ -34,6 +32,8 @@ namespace VelvieR
         [SerializeField] private int frameRate = 3;
         [SerializeField] private bool humanLikePause;
         [SerializeField] private string customSymbols = string.Empty;
+        //Rounded number is a must here due to the api doesn't support floating point
+        [SerializeField] public int recDurationForEditor = 5;
         public string CustomSymbols { get { return customSymbols; } set { customSymbols = value; } }
         public bool HumanLikePause { get { return humanLikePause; } set { humanLikePause = value; } }
         public int FrameRate { get { return frameRate; } set { frameRate = value; } }
